@@ -1,8 +1,8 @@
-#region OpenPLZ API - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
@@ -20,6 +20,7 @@
 #endregion
 
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using OpenPlzApi;
 using OpenPlzApi.DataLayer;
@@ -29,6 +30,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Bind configuration
 var appConfiguration = builder.Configuration.Get<AppConfiguration>();
+
+// Enable cross-origin resource sharing 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .WithMethods("GET")
+              .WithHeaders(HeaderNames.Accept);
+    });
+});
 
 // Add controller support
 builder.Services.AddControllers()
@@ -97,5 +109,6 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("v1/swagger.json", "OpenPLZ API v1");
 });
 
+app.UseCors();
 app.MapControllers();
 app.Run();
