@@ -1,8 +1,8 @@
-﻿#region OpenPLZ API - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
@@ -39,38 +39,40 @@ namespace OpenPlzApi.DE
         public GovernmentRegionResponse(GovernmentRegion governmentRegion)
             : base(governmentRegion)
         {
+            AdministrativeHeadquarters = governmentRegion.AdministrativeHeadquarters;
+            FederalState = governmentRegion.FederalState != null ? new FederalStateSummary(governmentRegion.FederalState) : null;
             Key = governmentRegion.RegionalKey;
             Name = governmentRegion.Name;
-            AdministrativeHeadquarters = governmentRegion.AdministrativeHeadquarters;
-            FederalStateKey = governmentRegion.FederalState?.RegionalKey;
         }
 
         /// <summary>
         /// Administrative headquarters (Verwaltungssitz des Regierungsbezirks)
         /// </summary>
         [Required]
-        [JsonPropertyOrder(7)]
+        [JsonPropertyOrder(4)]
         public string AdministrativeHeadquarters { get; }
 
         /// <summary>
-        /// Reference to federal state
+        /// Reference to federal state (Bundesland)
         /// </summary>
         [Required]
-        [JsonPropertyOrder(6)]
-        public string FederalStateKey { get; }
+        [JsonPropertyOrder(3)]
+        public FederalStateSummary FederalState { get; }
 
         /// <summary>
         /// Regional key (Regionalschlüssel)
         /// </summary>
+        /// <example>071</example>
         [Required]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
         /// Name (Bezirksname)
         /// </summary>
+        /// <example>früher: Reg.-Bez. Koblenz</example>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(2)]
         public string Name { get; }
     }
 }

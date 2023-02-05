@@ -1,8 +1,8 @@
-﻿#region OpenPLZ API - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
@@ -47,25 +47,25 @@ namespace OpenPlzApi.DE
         /// <summary>
         /// Regional key (Regionalschlüssel)
         /// </summary>
-        /// <example>101</example>
+        /// <example>07/example>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
         /// Name (Bundeslandname)
         /// </summary>
-        /// <example>101</example>
+        /// <example>Rheinland-Pfalz</example>
         [Required]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(2)]
         public string Name { get; }
 
         /// <summary>
         /// Seat of government (Sitz der Landesregierung)
         /// </summary>
-        /// <example>101</example>
+        /// <example>Mainz</example>
         [Required]
-        [JsonPropertyOrder(6)]
+        [JsonPropertyOrder(3)]
         public string SeatOfGovernment { get; }
     }
 }

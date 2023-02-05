@@ -1,8 +1,8 @@
-﻿#region OpenPLZ API - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
@@ -20,8 +20,6 @@
 #endregion
 
 using OpenPlzApi.DataLayer;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace OpenPlzApi
 {
@@ -36,22 +34,6 @@ namespace OpenPlzApi
         /// <param name="entity">Assigns data from <see cref="BaseEntity"/> based instance</param>
         public BaseResponse(BaseEntity entity)
         {
-            Source = entity.Source;
-            TimeStamp = entity.TimeStamp;
         }
-
-        /// <summary>
-        /// From where was this entity imported?
-        /// </summary>
-        [Required]
-        [JsonPropertyOrder(2)]
-        public string Source { get; }
-
-        /// <summary>
-        /// When was this entity imported?
-        /// </summary>
-        [Required]
-        [JsonPropertyOrder(3)]
-        public DateOnly TimeStamp { get; }
     }
 }

@@ -1,8 +1,8 @@
-﻿#region OpenPLZ API - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
@@ -43,6 +43,11 @@ namespace OpenPlzApi.DataLayer.DE
         /// Reference to district
         /// </summary>
         public virtual District District { get; set; }
+
+        /// <summary>
+        /// Reference to federal state
+        /// </summary>
+        public virtual FederalState FederalState { get; set; }
 
         /// <summary>
         /// Multiple postcodes available? 
@@ -90,6 +95,8 @@ namespace OpenPlzApi.DataLayer.DE
         public Guid? AssociationId { get; set; }
         [Comment("Reference to district (Kreis)")]
         public Guid? DistrictId { get; set; }
+        [Comment("Reference to federal state (Bundesland)")]
+        public Guid FederalStateId { get; set; }
         #endregion Foreign keys
     }
 }

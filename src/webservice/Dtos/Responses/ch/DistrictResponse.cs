@@ -1,8 +1,8 @@
-﻿#region OpenPLZ API - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
@@ -37,32 +37,32 @@ namespace OpenPlzApi.CH
         public DistrictResponse(District district)
             : base(district)
         {
+            Canton = district.Canton != null ? new CantonSummary(district.Canton) : null;
             Key = district.Key;
             Name = district.Name;
-            CantonKey = district.Canton?.Key;
         }
 
         /// <summary>
-        /// Reference to canton
+        /// Reference to canton (Kanton)
         /// </summary>
         [Required]
-        [JsonPropertyOrder(6)]
-        public string CantonKey { get; }
+        [JsonPropertyOrder(3)]
+        public CantonSummary Canton { get; }
 
         /// <summary>
         /// Key (Bezirksnummer)
         /// </summary>
-        /// <example>ZH</example>
+        /// <example>1302</example>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
         /// Name (Bezirksname)
         /// </summary>
-        /// <example>ZH</example>
+        /// <example>Bezirk Laufen</example>
         [Required]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(2)]
         public string Name { get; }
     }
 }

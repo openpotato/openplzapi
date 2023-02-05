@@ -1,8 +1,8 @@
-﻿#region OpenPLZ API - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
@@ -39,42 +39,57 @@ namespace OpenPlzApi.AT
         public LocalityResponse(Locality locality)
             : base(locality)
         {
+            District = locality.Municipality?.District != null ? new DistrictSummary(locality.Municipality?.District) : null;
+            FederalProvince = locality.Municipality?.District?.FederalProvince != null ? new FederalProvinceSummary(locality.Municipality.District.FederalProvince) : null;
             Key = locality.Key;
+            Municipality = locality.Municipality != null ? new MunicipalitySummary(locality.Municipality) : null;
             Name = locality.Name;
             PostalCode = locality.PostalCode;
-            MunicipalityKey = locality.Municipality?.Key;
         }
+
+        /// <summary>
+        /// Reference to district (Bezirk)
+        /// </summary>
+        [Required]
+        [JsonPropertyOrder(5)]
+        public DistrictSummary District { get; }
+
+        /// <summary>
+        /// Reference to federal province (Bunudesland)
+        /// </summary>
+        [Required]
+        [JsonPropertyOrder(6)]
+        public FederalProvinceSummary FederalProvince { get; }
 
         /// <summary>
         /// Key (Ortschaftskennziffer)
         /// </summary>
-        /// <example>00001</example>
+        /// <example>17224</example>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
-        /// Reference to municipality
+        /// Reference to municipality (Gemeinde)
         /// </summary>
-        /// <example>10101</example>
         [Required]
-        [JsonPropertyOrder(7)]
-        public string MunicipalityKey { get; }
+        [JsonPropertyOrder(4)]
+        public MunicipalitySummary Municipality { get; }
 
         /// <summary>
         /// Name (Ortschaftsname)
         /// </summary>
-        /// <example>Eisenstadt</example>
+        /// <example>Wien, Leopoldstadt</example>
         [Required]
-        [JsonPropertyOrder(6)]
+        [JsonPropertyOrder(3)]
         public string Name { get; }
 
         /// <summary>
         /// Postal code (Postleitzahl)
         /// </summary>
-        /// <example>7000</example>
+        /// <example>1020</example>
         [Required]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(2)]
         public string PostalCode { get; }
     }
 }

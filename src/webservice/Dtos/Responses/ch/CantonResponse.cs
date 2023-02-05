@@ -1,8 +1,8 @@
-﻿#region OpenPLZ API - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
@@ -45,25 +45,25 @@ namespace OpenPlzApi.CH
         /// <summary>
         /// Code (Kantonskürzel)
         /// </summary>
-        /// <example>ZH</example>
+        /// <example>BL</example>
         [Required]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(2)]
         public string Code { get; }
 
         /// <summary>
         /// Key (Kantonsnummer)
         /// </summary>
-        /// <example>1</example>
+        /// <example>13</example>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
         /// Name (Kantonsname)
         /// </summary>
-        /// <example>Zürich</example>
+        /// <example>Basel-Landschaft</example>
         [Required]
-        [JsonPropertyOrder(6)]
+        [JsonPropertyOrder(3)]
         public string Name { get; }
     }
 }

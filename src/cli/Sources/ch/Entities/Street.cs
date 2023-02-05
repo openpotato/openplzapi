@@ -1,8 +1,8 @@
-﻿#region OpenPLZ API - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
@@ -53,11 +53,6 @@ namespace OpenPlzApi.CLI.Sources.CH
         /// Street type
         /// </summary>
         public StreetType Type { get; set; }
-                                            
-        /// <summary>
-        /// Is street valid?
-        /// </summary>
-        public bool Valid { get; set; }
 
         /// <summary>
         /// Embedded locality (Ort oder Stadt)

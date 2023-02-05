@@ -1,8 +1,8 @@
-﻿#region OpenPLZ API - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
@@ -47,7 +47,7 @@ namespace OpenPlzApi.DataLayer.DE
         public string Name { get; set; }
 
         #region Foreign keys
-        [Comment("Reference to locality (Ort oder Stadt)")]
+        [Comment("Reference to locality")]
         public Guid LocalityId { get; set; }
         #endregion Foreign keys
     }

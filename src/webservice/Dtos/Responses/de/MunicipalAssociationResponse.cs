@@ -1,8 +1,8 @@
-﻿#region OpenPLZ API - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
@@ -39,46 +39,57 @@ namespace OpenPlzApi.DE
         public MunicipalAssociationResponse(MunicipalAssociation municipalAssociation)
             : base(municipalAssociation)
         {
+            AdministrativeHeadquarters = municipalAssociation.AdministrativeHeadquarters;
+            District = municipalAssociation.District != null ? new DistrictSummary(municipalAssociation.District) : null;
+            FederalState = municipalAssociation.District?.FederalState != null ? new FederalStateSummary(municipalAssociation.District.FederalState) : null;
             Key = municipalAssociation.RegionalKey;
             Name = municipalAssociation.Name;
             Type = (MunicipalAssociationType)municipalAssociation.Type;
-            AdministrativeHeadquarters = municipalAssociation.AdministrativeHeadquarters;
-            DistrictKey = municipalAssociation.District?.RegionalKey;
         }
 
         /// <summary>
         /// Administrative headquarters (Verwaltungssitz des Gemeindeverbandes)
         /// </summary>
         [Required]
-        [JsonPropertyOrder(7)]
+        [JsonPropertyOrder(6)]
         public string AdministrativeHeadquarters { get; }
 
         /// <summary>
-        /// Reference to district
+        /// Reference to district (Kreis)
         /// </summary>
         [Required]
-        [JsonPropertyOrder(6)]
-        public string DistrictKey { get; }
+        [JsonPropertyOrder(4)]
+        public DistrictSummary District { get; }
+
+        /// <summary>
+        /// Reference to federal state (Bundesland)
+        /// </summary>
+        [Required]
+        [JsonPropertyOrder(5)]
+        public FederalStateSummary FederalState { get; }
 
         /// <summary>
         /// Regional key (Regionalschlüssel)
         /// </summary>
+        /// <example>07137</example>
         [Required]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
         /// Name (Name des Gemeindeverbandes)
         /// </summary>
+        /// <example>Bendorf, Stadt</example>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(2)]
         public string Name { get; }
 
         /// <summary>
         /// Type (Kennzeichen des Gemeindeverbandes)
         /// </summary>
+        /// <example>Verbandsfreie_Gemeinde</example>
         [Required]
-        [JsonPropertyOrder(8)]
+        [JsonPropertyOrder(3)]
         public MunicipalAssociationType Type { get; }
     }
 }

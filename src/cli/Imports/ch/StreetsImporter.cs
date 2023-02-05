@@ -1,8 +1,8 @@
-﻿#region OpenPLZ API - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
@@ -112,9 +112,7 @@ namespace OpenPlzApi.CLI.CH
                                 Id = locality.GetUniqueId(),
                                 Name = locality.Name,
                                 PostalCode = locality.PostalCode,
-                                CommuneId = locality.Commune.GetUniqueId(),
-                                Source = "cadastre.ch",
-                                TimeStamp = street.LastModified
+                                CommuneId = locality.Commune.GetUniqueId()
                             });
 
                             localityIdCache.Add(locality.GetUniqueId());
@@ -127,9 +125,7 @@ namespace OpenPlzApi.CLI.CH
                             Key = street.Key,
                             Name = street.Name,
                             LocalityId = locality.GetUniqueId(),
-                            Status = (StreetStatus)street.Status,
-                            Source = "cadastre.ch",
-                            TimeStamp = street.LastModified
+                            Status = (StreetStatus)street.Status
                         });
                     }
 

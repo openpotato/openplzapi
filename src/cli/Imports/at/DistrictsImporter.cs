@@ -1,8 +1,8 @@
-﻿#region OpenPLZ API - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
@@ -93,9 +93,7 @@ namespace OpenPlzApi.CLI.AT
                         {
                             Id = district.FederalProvince.GetUniqueId(),
                             Key = district.FederalProvince.Key,
-                            Name = district.FederalProvince.Name,
-                            Source = "statistik.at",
-                            TimeStamp = district.TimeStamp
+                            Name = district.FederalProvince.Name
                         });
 
                         federalProvinceIdCache.Add(district.FederalProvince.GetUniqueId());
@@ -106,11 +104,9 @@ namespace OpenPlzApi.CLI.AT
                     {
                         Id = district.GetUniqueId(),
                         Key = district.Key,
-                        Name = district.Name,
+                        Name = district.Name.GetFriendlyName(),
                         Code = district.Code,
-                        FederalProvinceId = district.FederalProvince.GetUniqueId(),
-                        Source = "statistik.at",
-                        TimeStamp = district.TimeStamp
+                        FederalProvinceId = district.FederalProvince.GetUniqueId()
                     });
 
                     await dbContext.SaveChangesAsync(cancellationToken);

@@ -1,8 +1,8 @@
-﻿#region OpenPLZ API - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
@@ -92,7 +92,6 @@ namespace OpenPlzApi.CLI.Sources.CH
                 Type = _csvReader.GetValue<StreetType>("STR_TYPE"),
                 Status = _csvReader.GetValue<StreetStatus>("STR_STATUS"),
                 Official = _csvReader.GetValue<bool>("STR_OFFICIAL"),
-                Valid = _csvReader.GetValue<bool>("STR_VALID"),
                 LastModified = _csvReader.GetValue<DateOnly>("STR_MODIFIED"),
             };
 
