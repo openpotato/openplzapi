@@ -19,7 +19,6 @@
  */
 #endregion
 
-using DocumentFormat.OpenXml.EMMA;
 using System;
 
 namespace OpenPlzApi.CLI.Sources.AT

@@ -92,11 +92,9 @@ namespace OpenPlzApi.CLI.AT
                         {
                             Id = street.Locality.GetUniqueId(),
                             Key = street.Locality.Key,
-                            Name = street.Locality.Name,
+                            Name = street.Locality.Name.GetFriendlyName(),
                             PostalCode = street.Locality.PostalCode,
-                            MunicipalityId = street.Locality.Municipality.GetUniqueId(),
-                            Source = "statistik.at",
-                            TimeStamp = street.TimeStamp
+                            MunicipalityId = street.Locality.Municipality.GetUniqueId()
                         });
 
                         localityIdCache.Add(street.Locality.GetUniqueId());
@@ -108,9 +106,7 @@ namespace OpenPlzApi.CLI.AT
                         Id = Guid.NewGuid(),
                         Key = street.Key,
                         Name = street.Name,
-                        LocalityId = street.Locality.GetUniqueId(),
-                        Source =  "statistik.at",
-                        TimeStamp = street.TimeStamp
+                        LocalityId = street.Locality.GetUniqueId()
                     });
 
                     await dbContext.SaveChangesAsync(cancellationToken);

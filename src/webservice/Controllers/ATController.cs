@@ -48,10 +48,10 @@ namespace OpenPlzApi.AT
         /// <summary>
         /// Returns all districts (Bezirke) within a federal province (Bundesland).
         /// </summary>
-        /// <param name="key">Key of the federal province</param>
+        /// <param name="key" example="7">Key of the federal province</param>
         /// <returns>List of districts</returns>
         [HttpGet("FederalProvinces/{key}/Districts")]
-        [Produces("text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json")]
         public async Task<IEnumerable<DistrictResponse>> GetDistrictsByFederalProvinceAsync(string key)
         {
             return await _dbContext.Set<District>()
@@ -68,7 +68,7 @@ namespace OpenPlzApi.AT
         /// </summary>
         /// <returns>List of federal provinces</returns>
         [HttpGet("FederalProvinces")]
-        [Produces("text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json")]
         public async Task<IEnumerable<FederalProvinceResponse>> GetFederalProvincesAsync()
         {
             return await _dbContext.Set<FederalProvince>()
@@ -82,12 +82,12 @@ namespace OpenPlzApi.AT
         /// Returns all localities whose postal code and/or name matches the given patterns.
         /// </summary>
         /// <param name="postalCode">Postal code or regular expression</param>
-        /// <param name="name">Name or regular expression</param>
+        /// <param name="name" example="Wien">Name or regular expression</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>Paged list of localities</returns>
         [HttpGet("Localities")]
-        [Produces("text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json")]
         public async Task<IEnumerable<LocalityResponse>> GetLocalitiesAsync(
             [FromQuery] string postalCode, 
             [FromQuery] string name,
@@ -97,7 +97,7 @@ namespace OpenPlzApi.AT
             if (!string.IsNullOrEmpty(name) || !string.IsNullOrEmpty(postalCode))
             {
                 return await _dbContext.Set<Locality>()
-                    .Include(x => x.Municipality)
+                    .Include(x => x.Municipality).ThenInclude(x => x.District).ThenInclude(x => x.FederalProvince)
                     .Where(x => string.IsNullOrEmpty(postalCode) || Regex.IsMatch(x.PostalCode, postalCode))
                     .Where(x => string.IsNullOrEmpty(name) || Regex.IsMatch(x.Name, name, RegexOptions.IgnoreCase))
                     .OrderBy(x => x.PostalCode).ThenBy(x => x.Name)
@@ -115,10 +115,10 @@ namespace OpenPlzApi.AT
         /// <summary>
         /// Returns all municipalities (Gemeinden) within a district (Bezirk).
         /// </summary>
-        /// <param name="key">Key of the district</param>
+        /// <param name="key" example="701">Key of the district</param>
         /// <returns>List of municipalities</returns>
         [HttpGet("Districts/{key}/Municipalities")]
-        [Produces("text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json")]
         public async Task<IEnumerable<MunicipalityResponse>> GetMunicipalitiesByDistrictAsync(string key)
         {
             return await _dbContext.Set<Municipality>()
@@ -133,14 +133,14 @@ namespace OpenPlzApi.AT
         /// <summary>
         /// Returns all municipalities (Gemeinden) within a federal province (Bundesland).
         /// </summary>
-        /// <param name="key">Key of the federal province</param>
+        /// <param name="key" example="7">Key of the federal province</param>
         /// <returns>List of municipalities</returns>
         [HttpGet("FederalProvinces/{key}/Municipalities")]
-        [Produces("text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json")]
         public async Task<IEnumerable<MunicipalityResponse>> GetMunicipalitiesByFederalProvinceAsync(string key)
         {
             return await _dbContext.Set<Municipality>()
-                .Include(x => x.District)
+                .Include(x => x.District).ThenInclude(x => x.FederalProvince)
                 .Where(x => x.District.FederalProvince.Key == key)
                 .OrderBy(x => x.Key)
                 .Select(x => new MunicipalityResponse(x))
@@ -152,13 +152,13 @@ namespace OpenPlzApi.AT
         /// Returns all streets whose name, postal code and/or name matches the given patterns.
         /// </summary>
         /// <param name="name">Name or regular expression</param>
-        /// <param name="postalCode">Postal code or regular expression</param>
+        /// <param name="postalCode" example="1020">Postal code or regular expression</param>
         /// <param name="locality">Locality or regular expression</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>Paged list of streets</returns>
         [HttpGet("Streets")]
-        [Produces("text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json")]
         public async Task<IEnumerable<StreetResponse>> GetStreetsAsync(
             [FromQuery] string name, 
             [FromQuery] string postalCode, 
@@ -169,7 +169,7 @@ namespace OpenPlzApi.AT
             if (!string.IsNullOrEmpty(name) || !string.IsNullOrEmpty(postalCode) || !string.IsNullOrEmpty(locality))
             {
                 return await _dbContext.Set<Street>()
-                    .Include(x => x.Locality).ThenInclude(x => x.Municipality)
+                    .Include(x => x.Locality).ThenInclude(x => x.Municipality).ThenInclude(x => x.District).ThenInclude(x => x.FederalProvince)
                     .Where(x => string.IsNullOrEmpty(name) || Regex.IsMatch(x.Name, name, RegexOptions.IgnoreCase))
                     .Where(x => string.IsNullOrEmpty(postalCode) || Regex.IsMatch(x.Locality.PostalCode, postalCode))
                     .Where(x => string.IsNullOrEmpty(locality) || Regex.IsMatch(x.Locality.Name, locality, RegexOptions.IgnoreCase))

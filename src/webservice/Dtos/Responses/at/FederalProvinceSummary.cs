@@ -19,59 +19,43 @@
  */
 #endregion
 
+using OpenPlzApi.DataLayer.AT;
 using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-namespace OpenPlzApi.DE
+namespace OpenPlzApi.AT
 {
     /// <summary>
-    /// Municipality type (Gemeindekennzeichen)
+    /// Reduced representation of an Austrian federal province (Bundesland)
     /// </summary>
     [SwaggerSchema(ReadOnly = true)]
-    public enum MunicipalityType
+    public class FederalProvinceSummary
     {
         /// <summary>
-        /// No type available
+        /// Initializes a new instance of the <see cref="FederalProvinceSummary"/> class.
         /// </summary>
-        None = 0,
+        /// <param name="federalProvince">Assigns data from <see cref="FederalProvince"/></param>
+        public FederalProvinceSummary(FederalProvince federalProvince)
+        {
+            Key = federalProvince.Key;
+            Name = federalProvince.Name;
+        }
 
         /// <summary>
-        /// Markt
+        /// Key (Bundeslandkennziffer)
         /// </summary>
-        Markt = 60,
+        /// <example>9</example>
+        [Required]
+        [JsonPropertyOrder(1)]
+        public string Key { get; }
 
         /// <summary>
-        /// Kreisfreie Stadt
+        /// Name (Bundeslandname)
         /// </summary>
-        Kreisfreie_Stadt = 61,
-
-        /// <summary>
-        /// Stadtkreis
-        /// </summary>
-        Stadtkreis = 62,
-
-        /// <summary>
-        /// Stadt
-        /// </summary>
-        Stadt = 63,
-
-        /// <summary>
-        /// Kreisangehörige Gemeinde
-        /// </summary>
-        Kreisangehörige_Gemeinde = 64,
-
-        /// <summary>
-        /// Gemeindefreies Gebiet (Bewohnt)
-        /// </summary>
-        Gemeindefreies_Gebiet_Bewohnt = 65,
-
-        /// <summary>
-        /// Gemeindefreies Gebiet (Unbewohnt)
-        /// </summary>
-        Gemeindefreies_Gebiet_Unbewohnt = 66,
-
-        /// <summary>
-        /// Große Kreisstadt
-        /// </summary>
-        Große_Kreisstadt = 67
+        /// <example>Wien</example>
+        [Required]
+        [JsonPropertyOrder(2)]
+        public string Name { get; }
     }
 }

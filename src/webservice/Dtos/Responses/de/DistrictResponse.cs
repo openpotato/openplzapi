@@ -39,53 +39,56 @@ namespace OpenPlzApi.DE
         public DistrictResponse(District district)
             : base(district)
         {
+            AdministrativeHeadquarters = district.AdministrativeHeadquarters;
+            FederalState = district.FederalState != null ? new FederalStateSummary(district.FederalState) : null;
+            GovernmentRegion = district.GovernmentRegion != null ? new GovernmentRegionSummary(district.GovernmentRegion) : null;
             Key = district.RegionalKey;
             Name = district.Name;
             Type = (DistrictType)district.Type;
-            AdministrativeHeadquarters = district.AdministrativeHeadquarters;
-            FederalStateKey = district.FederalState?.RegionalKey;
-            GovernmentRegionKey = district.GovernmentRegion?.RegionalKey;
         }
 
         /// <summary>
         /// Administrative headquarters (Sitz der Kreisverwaltung)
         /// </summary>
         [Required]
-        [JsonPropertyOrder(8)]
+        [JsonPropertyOrder(6)]
         public string AdministrativeHeadquarters { get; }
 
         /// <summary>
-        /// Reference to federal state 
+        /// Reference to federal state (Bundesland)
         /// </summary>
         [Required]
-        [JsonPropertyOrder(6)]
-        public string FederalStateKey { get; }
+        [JsonPropertyOrder(5)]
+        public FederalStateSummary FederalState { get; }
 
         /// <summary>
-        /// Reference to government region 
+        /// Reference to government region (Regierungsbezirk)
         /// </summary>
-        [JsonPropertyOrder(7)]
-        public string GovernmentRegionKey { get; }
+        [JsonPropertyOrder(4)]
+        public GovernmentRegionSummary GovernmentRegion { get; }
 
         /// <summary>
         /// Regional key (Regionalschlüssel)
         /// </summary>
+        /// <example>07137</example>
         [Required]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
         /// Name (Kreisname)
         /// </summary>
+        /// <example>Mayen-Koblenz</example>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(2)]
         public string Name { get; }
 
         /// <summary>
         /// Type (Kennzeichen)
         /// </summary>
+        /// <example>Landkreis</example>
         [Required]
-        [JsonPropertyOrder(9)]
+        [JsonPropertyOrder(3)]
         public DistrictType Type { get; }
     }
 }

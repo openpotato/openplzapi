@@ -45,6 +45,11 @@ namespace OpenPlzApi.DataLayer.DE
         public virtual District District { get; set; }
 
         /// <summary>
+        /// Reference to federal state
+        /// </summary>
+        public virtual FederalState FederalState { get; set; }
+
+        /// <summary>
         /// Multiple postcodes available? 
         /// </summary>
         [Required]
@@ -90,6 +95,8 @@ namespace OpenPlzApi.DataLayer.DE
         public Guid? AssociationId { get; set; }
         [Comment("Reference to district (Kreis)")]
         public Guid? DistrictId { get; set; }
+        [Comment("Reference to federal state (Bundesland)")]
+        public Guid FederalStateId { get; set; }
         #endregion Foreign keys
     }
 }

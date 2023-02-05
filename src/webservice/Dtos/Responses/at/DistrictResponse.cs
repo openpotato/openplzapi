@@ -40,40 +40,40 @@ namespace OpenPlzApi.AT
             : base(district)
         {
             Code = district.Code;
+            FederalProvince = district.FederalProvince != null ? new FederalProvinceSummary(district.FederalProvince) : null;
             Key = district.Key;
             Name = district.Name;
-            FederalProvinceKey = district.FederalProvince?.Key;
         }
 
         /// <summary>
         /// Code (Bezirkskodierung)
         /// </summary>
-        /// <example>101</example>
+        /// <example>902</example>
         [Required]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(2)]
         public string Code { get; }
 
         /// <summary>
-        /// Reference to federal province
+        /// Reference to federal province (Bundesland)
         /// </summary>
         [Required]
-        [JsonPropertyOrder(7)]
-        public string FederalProvinceKey { get; }
+        [JsonPropertyOrder(4)]
+        public FederalProvinceSummary FederalProvince { get; }
 
         /// <summary>
         /// Key (Bezirkskennziffer)
         /// </summary>
-        /// <example>101</example>
+        /// <example>900</example>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
         /// Name (Bezirksname)
         /// </summary>
-        /// <example>Eisenstadt(Stadt)</example>
+        /// <example>Wien  2., Leopoldstadt</example>
         [Required]
-        [JsonPropertyOrder(6)]
+        [JsonPropertyOrder(3)]
         public string Name { get; }
     }
 }

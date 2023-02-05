@@ -12,7 +12,7 @@ using OpenPlzApi.DataLayer;
 namespace OpenPlzAPI.DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221130110013_Initial")]
+    [Migration("20230204100149_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace OpenPlzAPI.DataLayer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -39,7 +39,7 @@ namespace OpenPlzAPI.DataLayer.Migrations
 
                     b.Property<Guid>("FederalProvinceId")
                         .HasColumnType("uuid")
-                        .HasComment("Reference to federal province");
+                        .HasComment("Reference to federal province (Bundesland)");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -50,16 +50,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasComment("Name (Bezirksname)");
-
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
 
                     b.HasKey("Id");
 
@@ -90,16 +80,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasComment("Name (Bundeslandname)");
-
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
 
                     b.HasKey("Id");
 
@@ -138,16 +118,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("text")
                         .HasComment("Postal code (Postleitzahl)");
 
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MunicipalityId");
@@ -175,7 +145,7 @@ namespace OpenPlzAPI.DataLayer.Migrations
 
                     b.Property<Guid>("DistrictId")
                         .HasColumnType("uuid")
-                        .HasComment("Reference to district");
+                        .HasComment("Reference to district (Bezirk)");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -195,19 +165,9 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("text")
                         .HasComment("Postal code (Postleitzahl des Gemeindeamtes)");
 
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
                     b.Property<int>("Status")
                         .HasColumnType("integer")
                         .HasComment("Status (Gemeindestatus)");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
 
                     b.HasKey("Id");
 
@@ -243,16 +203,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("text")
                         .HasComment("Name (Straßenname)");
 
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
-
                     b.HasKey("Id");
 
                     b.HasIndex("LocalityId");
@@ -287,16 +237,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasComment("Name (Kantonsname)");
-
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
 
                     b.HasKey("Id");
 
@@ -335,16 +275,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("text")
                         .HasComment("Short name (Gemeindename, kurz)");
 
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DistrictId");
@@ -378,16 +308,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasComment("Name (Bezirksname)");
-
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
 
                     b.HasKey("Id");
 
@@ -423,16 +343,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("text")
                         .HasComment("Postal code (Postleitzahl)");
 
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CommuneId");
@@ -460,26 +370,16 @@ namespace OpenPlzAPI.DataLayer.Migrations
 
                     b.Property<Guid>("LocalityId")
                         .HasColumnType("uuid")
-                        .HasComment("Reference to locality (Ort oder Stadt)");
+                        .HasComment("Reference to locality");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasComment("Name (Straßenname)");
 
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
                     b.Property<int>("Status")
                         .HasColumnType("integer")
                         .HasComment("Status (Straßenstatus)");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
 
                     b.HasKey("Id");
 
@@ -525,16 +425,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("text")
                         .HasComment("Regional key (Regionalschlüssel)");
 
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
-
                     b.Property<int>("Type")
                         .HasColumnType("integer")
                         .HasComment("Type (Kreiskennzeichen)");
@@ -575,16 +465,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("text")
                         .HasComment("Seat of government (Sitz der Landesregierung)");
 
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RegionalKey")
@@ -621,16 +501,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("text")
                         .HasComment("Regional key (Regionalschlüssel)");
 
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FederalStateId");
@@ -664,16 +534,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasComment("Postal code (Postleitzahl)");
-
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
 
                     b.HasKey("Id");
 
@@ -716,16 +576,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("text")
                         .HasComment("Regional key (Regionalschlüssel)");
 
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
-
                     b.Property<int>("Type")
                         .HasColumnType("integer")
                         .HasComment("Type (Kennzeichen)");
@@ -758,6 +608,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("uuid")
                         .HasComment("Reference to district (Kreis)");
 
+                    b.Property<Guid>("FederalStateId")
+                        .HasColumnType("uuid")
+                        .HasComment("Reference to federal state (Bundesland)");
+
                     b.Property<bool>("MultiplePostalCodes")
                         .HasColumnType("boolean")
                         .HasComment("Multiple postcodes available?");
@@ -782,16 +636,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("text")
                         .HasComment("Short Name (Verkürzter Gemeindename)");
 
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
-
                     b.Property<int>("Type")
                         .HasColumnType("integer")
                         .HasComment("Type (Gemeindekennzeichen)");
@@ -802,6 +646,8 @@ namespace OpenPlzAPI.DataLayer.Migrations
 
                     b.HasIndex("DistrictId")
                         .HasDatabaseName("IX_Municipalities_DistrictId1");
+
+                    b.HasIndex("FederalStateId");
 
                     b.HasIndex("RegionalKey")
                         .IsUnique();
@@ -821,22 +667,12 @@ namespace OpenPlzAPI.DataLayer.Migrations
 
                     b.Property<Guid>("LocalityId")
                         .HasColumnType("uuid")
-                        .HasComment("Reference to locality (Ort oder Stadt)");
+                        .HasComment("Reference to locality");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasComment("Name (Straßenname)");
-
-                    b.Property<string>("Source")
-                        .HasColumnType("text")
-                        .HasColumnOrder(2)
-                        .HasComment("Import source");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("date")
-                        .HasColumnOrder(1)
-                        .HasComment("Time stamp");
 
                     b.HasKey("Id");
 
@@ -996,9 +832,17 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .WithMany()
                         .HasForeignKey("DistrictId");
 
+                    b.HasOne("OpenPlzApi.DataLayer.DE.FederalState", "FederalState")
+                        .WithMany()
+                        .HasForeignKey("FederalStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Association");
 
                     b.Navigation("District");
+
+                    b.Navigation("FederalState");
                 });
 
             modelBuilder.Entity("OpenPlzApi.DataLayer.DE.Street", b =>

@@ -96,9 +96,7 @@ namespace OpenPlzApi.CLI.DE
                                 Id = street.Locality.GetUniqueId(),
                                 PostalCode = street.Locality.PostalCode,
                                 Name = street.Locality.Name,
-                                MunicipalityId = street.Locality.GetUniqueMunicipalityId(),
-                                Source = "OSM",
-                                TimeStamp = timeStamp
+                                MunicipalityId = street.Locality.GetUniqueMunicipalityId()
                             });
 
                             localityIdCache.Add(street.Locality.GetUniqueId());
@@ -109,9 +107,7 @@ namespace OpenPlzApi.CLI.DE
                         {
                             Id = Guid.NewGuid(),
                             Name = street.Name,
-                            LocalityId = street.Locality.GetUniqueId(),
-                            Source = "OSM",
-                            TimeStamp = timeStamp
+                            LocalityId = street.Locality.GetUniqueId()
                         });
 
                         await dbContext.SaveChangesAsync(cancellationToken);

@@ -39,24 +39,57 @@ namespace OpenPlzApi.DE
         public StreetResponse(Street street)
             : base(street)
         {
+            District = street.Locality?.Municipality?.District != null ? new DistrictSummary(street.Locality?.Municipality.District) : null;
+            FederalState = street.Locality?.Municipality?.FederalState != null ? new FederalStateSummary(street.Locality?.Municipality.FederalState) : null;
+            Locality = street.Locality?.Name;
+            Municipality = street.Locality?.Municipality != null ? new MunicipalitySummary(street.Locality?.Municipality) : null;
             Name = street.Name;
-            Locality = street.Locality != null ? new LocalityResponse(street.Locality) : null;
+            PostalCode = street.Locality?.PostalCode;
         }
 
         /// <summary>
-        /// Reference to locality
+        /// Reference to district (Kreis)
         /// </summary>
-        /// <example>10101</example>
         [Required]
         [JsonPropertyOrder(5)]
-        public virtual LocalityResponse Locality { get; }
+        public DistrictSummary District { get; }
+
+        /// <summary>
+        /// Reference to federal state (Bundesland)
+        /// </summary>
+        [Required]
+        [JsonPropertyOrder(6)]
+        public FederalStateSummary FederalState { get; }
+
+        /// <summary>
+        /// Locality (Ortsname)
+        /// </summary>
+        /// <example>Bendorf</example>
+        [Required]
+        [JsonPropertyOrder(3)]
+        public string Locality { get; }
+
+        /// <summary>
+        /// Reference to municipality
+        /// </summary>
+        [Required]
+        [JsonPropertyOrder(4)]
+        public MunicipalitySummary Municipality { get; }
 
         /// <summary>
         /// Name (Straßenname)
         /// </summary>
-        /// <example>10101</example>
+        /// <example>Engerser Landstr.</example>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(1)]
         public string Name { get; }
+
+        /// <summary>
+        /// Postal code (Postleitzahl)
+        /// </summary>
+        /// <example>56170</example>
+        [Required]
+        [JsonPropertyOrder(2)]
+        public string PostalCode { get; }
     }
 }

@@ -94,8 +94,6 @@ namespace OpenPlzApi.CLI.CH
                         Key = canton.Key,
                         Name = canton.Name,
                         Code = canton.Code,
-                        Source = "bfs.admin.ch",
-                        TimeStamp = (DateOnly)communeRegister.TimeStamp
                     });
 
                     await dbContext.SaveChangesAsync(cancellationToken);
@@ -123,8 +121,6 @@ namespace OpenPlzApi.CLI.CH
                         Key = district.Key,
                         Name = district.Name,
                         CantonId =district.Canton.GetUniqueId(),
-                        Source = "bfs.admin.ch",
-                        TimeStamp = (DateOnly)communeRegister.TimeStamp
                     });
 
                     await dbContext.SaveChangesAsync(cancellationToken);
@@ -153,8 +149,6 @@ namespace OpenPlzApi.CLI.CH
                         Name = commune.Name,
                         ShortName = commune.ShortName,
                         DistrictId = commune.District.GetUniqueId(),
-                        Source = "bfs.admin.ch",
-                        TimeStamp = (DateOnly)communeRegister.TimeStamp
                     });
 
 

@@ -112,9 +112,7 @@ namespace OpenPlzApi.CLI.CH
                                 Id = locality.GetUniqueId(),
                                 Name = locality.Name,
                                 PostalCode = locality.PostalCode,
-                                CommuneId = locality.Commune.GetUniqueId(),
-                                Source = "cadastre.ch",
-                                TimeStamp = street.LastModified
+                                CommuneId = locality.Commune.GetUniqueId()
                             });
 
                             localityIdCache.Add(locality.GetUniqueId());
@@ -127,9 +125,7 @@ namespace OpenPlzApi.CLI.CH
                             Key = street.Key,
                             Name = street.Name,
                             LocalityId = locality.GetUniqueId(),
-                            Status = (StreetStatus)street.Status,
-                            Source = "cadastre.ch",
-                            TimeStamp = street.LastModified
+                            Status = (StreetStatus)street.Status
                         });
                     }
 

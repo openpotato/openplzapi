@@ -46,17 +46,17 @@ namespace OpenPlzApi.AT
         /// <summary>
         /// Key (Bundeslandkennziffer)
         /// </summary>
-        /// <example>1</example>
+        /// <example>9</example>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
         /// Name (Bundeslandname)
         /// </summary>
-        /// <example>Burgenland</example>
+        /// <example>Wien</example>
         [Required]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(2)]
         public string Name { get; }
     }
 }

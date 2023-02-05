@@ -1,4 +1,5 @@
-﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
+﻿
+#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
@@ -19,50 +20,52 @@
  */
 #endregion
 
-using Microsoft.EntityFrameworkCore;
-using System;
+using OpenPlzApi.DataLayer.AT;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-namespace OpenPlzApi.DataLayer.AT
+namespace OpenPlzApi.AT
 {
     /// <summary>
-    /// Representation of an Austrian district (Politischer Bezirk)
+    /// Reduced representation of an Austrian district (Bezirk)
     /// </summary>
-    [Table(DbTables.AT.Districts, Schema = DbSchemas.AT)]
-    [Index(nameof(Code), IsUnique = true)]
-    [Comment("Representation of an Austrian district (Politischer Bezirk)")]
-    public class District : BaseEntity
+    [SwaggerSchema(ReadOnly = true)]
+    public class DistrictSummary
     {
         /// <summary>
-        /// Reference to federal province
+        /// Initializes a new instance of the <see cref="DistrictSummary"/> class.
         /// </summary>
-        public virtual FederalProvince FederalProvince { get; set; }
+        /// <param name="district">Assigns data from <see cref="District"/></param>
+        public DistrictSummary(District district)
+        {
+            Code = district.Code;
+            Key = district.Key;
+            Name = district.Name;
+        }
 
         /// <summary>
         /// Code (Bezirkskodierung)
         /// </summary>
+        /// <example>902</example>
         [Required]
-        [Comment("Code (Bezirkskodierung)")]
-        public string Code { get; set; }
+        [JsonPropertyOrder(2)]
+        public string Code { get; }
 
         /// <summary>
         /// Key (Bezirkskennziffer)
         /// </summary>
+        /// <example>900</example>
         [Required]
-        [Comment("Key (Bezirkskennziffer)")]
-        public string Key { get; set; }
+        [JsonPropertyOrder(1)]
+        public string Key { get; }
 
         /// <summary>
         /// Name (Bezirksname)
         /// </summary>
+        /// <example>Wien  2., Leopoldstadt</example>
         [Required]
-        [Comment("Name (Bezirksname)")]
-        public string Name { get; set; }
-
-        #region Foreign keys
-        [Comment("Reference to federal province (Bundesland)")]
-        public Guid FederalProvinceId { get; set; }
-        #endregion Foreign keys
+        [JsonPropertyOrder(3)]
+        public string Name { get; }
     }
 }

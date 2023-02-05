@@ -35,7 +35,7 @@ namespace OpenPlzApi.DataLayer.CH
     public class Commune : BaseEntity
     {
         /// <summary>
-        /// Reference to district
+        /// Reference to district 
         /// </summary>
         public virtual District District { get; set; }
 

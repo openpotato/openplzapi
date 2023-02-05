@@ -92,7 +92,6 @@ namespace OpenPlzApi.CLI.Sources.CH
                 Type = _csvReader.GetValue<StreetType>("STR_TYPE"),
                 Status = _csvReader.GetValue<StreetStatus>("STR_STATUS"),
                 Official = _csvReader.GetValue<bool>("STR_OFFICIAL"),
-                Valid = _csvReader.GetValue<bool>("STR_VALID"),
                 LastModified = _csvReader.GetValue<DateOnly>("STR_MODIFIED"),
             };
 

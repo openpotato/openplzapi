@@ -45,25 +45,25 @@ namespace OpenPlzApi.CH
         /// <summary>
         /// Code (Kantonskürzel)
         /// </summary>
-        /// <example>ZH</example>
+        /// <example>BL</example>
         [Required]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(2)]
         public string Code { get; }
 
         /// <summary>
         /// Key (Kantonsnummer)
         /// </summary>
-        /// <example>1</example>
+        /// <example>13</example>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
         /// Name (Kantonsname)
         /// </summary>
-        /// <example>Zürich</example>
+        /// <example>Basel-Landschaft</example>
         [Required]
-        [JsonPropertyOrder(6)]
+        [JsonPropertyOrder(3)]
         public string Name { get; }
     }
 }

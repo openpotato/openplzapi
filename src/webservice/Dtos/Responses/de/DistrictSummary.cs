@@ -19,50 +19,52 @@
  */
 #endregion
 
-using Microsoft.EntityFrameworkCore;
-using System;
+using OpenPlzApi.DataLayer.DE;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-namespace OpenPlzApi.DataLayer.AT
+namespace OpenPlzApi.DE
 {
     /// <summary>
-    /// Representation of an Austrian district (Politischer Bezirk)
+    /// Reduced representation of a German district (Kreis)
     /// </summary>
-    [Table(DbTables.AT.Districts, Schema = DbSchemas.AT)]
-    [Index(nameof(Code), IsUnique = true)]
-    [Comment("Representation of an Austrian district (Politischer Bezirk)")]
-    public class District : BaseEntity
+    [SwaggerSchema(ReadOnly = true)]
+    public class DistrictSummary
     {
         /// <summary>
-        /// Reference to federal province
+        /// Initializes a new instance of the <see cref="DistrictSummary"/> class.
         /// </summary>
-        public virtual FederalProvince FederalProvince { get; set; }
+        /// <param name="district">Assigns data from <see cref="District"/></param>
+        public DistrictSummary(District district)
+        {
+            Key = district.RegionalKey;
+            Name = district.Name;
+            Type = (DistrictType)district.Type;
+        }
 
         /// <summary>
-        /// Code (Bezirkskodierung)
+        /// Regional key (Regionalschlüssel)
         /// </summary>
+        /// <example>07137</example>
         [Required]
-        [Comment("Code (Bezirkskodierung)")]
-        public string Code { get; set; }
+        [JsonPropertyOrder(1)]
+        public string Key { get; }
 
         /// <summary>
-        /// Key (Bezirkskennziffer)
+        /// Name (Kreisname)
         /// </summary>
+        /// <example>Mayen-Koblenz</example>
         [Required]
-        [Comment("Key (Bezirkskennziffer)")]
-        public string Key { get; set; }
+        [JsonPropertyOrder(2)]
+        public string Name { get; }
 
         /// <summary>
-        /// Name (Bezirksname)
+        /// Type (Kennzeichen)
         /// </summary>
+        /// <example>Landkreis</example>
         [Required]
-        [Comment("Name (Bezirksname)")]
-        public string Name { get; set; }
-
-        #region Foreign keys
-        [Comment("Reference to federal province (Bundesland)")]
-        public Guid FederalProvinceId { get; set; }
-        #endregion Foreign keys
+        [JsonPropertyOrder(3)]
+        public DistrictType Type { get; }
     }
 }

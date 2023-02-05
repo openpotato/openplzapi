@@ -109,9 +109,7 @@ namespace OpenPlzApi.CLI.DE
                             Id = federalState.GetUniqueId(),
                             Name = federalState.Name,
                             RegionalKey = federalState.RegionalCode,
-                            SeatOfGovernment =federalState.SeatOfGovernment,
-                            Source = "GV100AD",
-                            TimeStamp = federalState.TimeStamp
+                            SeatOfGovernment =federalState.SeatOfGovernment
                         });
 
                         federalStateCount++;
@@ -128,9 +126,7 @@ namespace OpenPlzApi.CLI.DE
                             Name = governmentRegion.Name,
                             RegionalKey = governmentRegion.RegionalCode,
                             AdministrativeHeadquarters = governmentRegion.AdministrativeHeadquarters,
-                            FederalStateId = governmentRegion.GetFederalStatenUniqueId(),
-                            Source = "GV100AD",
-                            TimeStamp = governmentRegion.TimeStamp
+                            FederalStateId = governmentRegion.GetFederalStatenUniqueId()
                         });
 
                         governmentRegionCount++;
@@ -149,9 +145,7 @@ namespace OpenPlzApi.CLI.DE
                             Type = (DistrictType)district.Type,
                             AdministrativeHeadquarters = district.AdministrativeHeadquarters,
                             FederalStateId = district.GetFederalStatenUniqueId(),
-                            GovernmentRegionId = district.GetGovernmentRegionUniqueId(),
-                            Source = "GV100AD",
-                            TimeStamp = district.TimeStamp
+                            GovernmentRegionId = district.GetGovernmentRegionUniqueId()
                         });
 
                         districtCount++;
@@ -170,9 +164,7 @@ namespace OpenPlzApi.CLI.DE
                             Code = association.Association,
                             Type = (MunicipalAssociationType)association.Type,
                             AdministrativeHeadquarters = association.AdministrativeHeadquarters,
-                            DistrictId = association.GetDistrictUniqueId(),
-                            Source = "GV100AD",
-                            TimeStamp = association.TimeStamp
+                            DistrictId = association.GetDistrictUniqueId()
                         });
 
                         municipalAssociationCount++;
@@ -191,12 +183,11 @@ namespace OpenPlzApi.CLI.DE
                             ShortName = municipality.GetShortName(),
                             RegionalKey = municipality.RegionalCode,
                             Type = (MunicipalityType)municipality.Type,
-                            DistrictId = municipality.GetDistrictUniqueId(),
                             AssociationId = municipality.GetMunicipalAssociationUniqueId(),
+                            DistrictId = municipality.GetDistrictUniqueId(),
+                            FederalStateId = municipality.GetFederalStatenUniqueId(),
                             PostalCode = municipality.PostalCode,
-                            MultiplePostalCodes = municipality.MultiplePostalCodes,
-                            Source = "GV100AD",
-                            TimeStamp = municipality.TimeStamp
+                            MultiplePostalCodes = municipality.MultiplePostalCodes
                         });
 
                         municipalityCount++;

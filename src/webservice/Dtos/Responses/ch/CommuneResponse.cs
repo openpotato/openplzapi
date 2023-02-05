@@ -39,40 +39,49 @@ namespace OpenPlzApi.CH
         public CommuneResponse(Commune commune)
             : base(commune)
         {
+            Canton = commune.District?.Canton != null ? new CantonSummary(commune.District.Canton) : null;
+            District = commune.District != null ? new DistrictSummary(commune.District) : null;
             Key = commune.Key;
             Name = commune.Name;
-            DistrictKey = commune.District?.Key;
+            ShortName = commune.ShortName;
         }
 
         /// <summary>
-        /// Reference to district
+        /// Reference to canton (Kanton)
         /// </summary>
         [Required]
-        [JsonPropertyOrder(7)]
-        public string DistrictKey { get; }
+        [JsonPropertyOrder(5)]
+        public CantonSummary Canton { get; }
+
+        /// <summary>
+        /// Reference to district (Bezirk)
+        /// </summary>
+        [Required]
+        [JsonPropertyOrder(4)]
+        public DistrictSummary District { get; }
 
         /// <summary>
         /// Key (Gemeindenummer)
         /// </summary>
-        /// <example>2113</example>
+        /// <example>2786</example>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
         /// Name (Amtlicher Gemeindename)
         /// </summary>
-        /// <example>Vuisternens-devant-Romont</example>
+        /// <example>Grellingen</example>
         [Required]
-        [JsonPropertyOrder(6)]
+        [JsonPropertyOrder(2)]
         public string Name { get; }
 
         /// <summary>
         /// Short name (Gemeindename, kurz)
         /// </summary>
-        /// <example>Vuisternens-dev-Romont</example>
+        /// <example>Grellingen</example>
         [Required]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(3)]
         public string ShortName { get; }
     }
 }

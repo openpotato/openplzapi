@@ -26,8 +26,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     Code = table.Column<string>(type: "text", nullable: false, comment: "Code (Kantonskürzel)"),
                     Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Kantonsnummer)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Kantonsname)")
@@ -44,8 +42,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Bundeslandkennziffer)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Bundeslandname)")
                 },
@@ -61,8 +57,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Bundeslandname)"),
                     RegionalKey = table.Column<string>(type: "text", nullable: false, comment: "Regional key (Regionalschlüssel)"),
                     SeatOfGovernment = table.Column<string>(type: "text", nullable: true, comment: "Seat of government (Sitz der Landesregierung)")
@@ -79,8 +73,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Bezirksnummer)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Bezirksname)"),
                     CantonId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to canton (Kanton)")
@@ -104,12 +96,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     Code = table.Column<string>(type: "text", nullable: false, comment: "Code (Bezirkskodierung)"),
                     Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Bezirkskennziffer)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Bezirksname)"),
-                    FederalProvinceId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to federal province")
+                    FederalProvinceId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to federal province (Bundesland)")
                 },
                 constraints: table =>
                 {
@@ -130,8 +120,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     AdministrativeHeadquarters = table.Column<string>(type: "text", nullable: true, comment: "Administrative headquarters (Verwaltungssitz des Regierungsbezirks)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Bezirksname)"),
                     RegionalKey = table.Column<string>(type: "text", nullable: false, comment: "Regional key (Regionalschlüssel)"),
@@ -156,8 +144,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Gemeindenummer)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Amtlicher Gemeindename)"),
                     ShortName = table.Column<string>(type: "text", nullable: false, comment: "Short name (Gemeindename, kurz)"),
@@ -182,15 +168,13 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     Code = table.Column<string>(type: "text", nullable: false, comment: "Code (Gemeindecode)"),
                     Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Gemeindekennziffer)"),
                     MultiplePostalCodes = table.Column<bool>(type: "boolean", nullable: false, comment: "This municipality has multiple postal codes?"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Ortschaftsname)"),
                     PostalCode = table.Column<string>(type: "text", nullable: true, comment: "Postal code (Postleitzahl des Gemeindeamtes)"),
                     Status = table.Column<int>(type: "integer", nullable: false, comment: "Status (Gemeindestatus)"),
-                    DistrictId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to district")
+                    DistrictId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to district (Bezirk)")
                 },
                 constraints: table =>
                 {
@@ -211,8 +195,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     AdministrativeHeadquarters = table.Column<string>(type: "text", nullable: true, comment: "Administrative headquarters (Sitz der Kreisverwaltung)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Kreisname)"),
                     RegionalKey = table.Column<string>(type: "text", nullable: false, comment: "Regional key (Regionalschlüssel)"),
@@ -245,8 +227,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Ortsname)"),
                     PostalCode = table.Column<string>(type: "text", nullable: false, comment: "Postal code (Postleitzahl)"),
                     CommuneId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to commune (Gemeinde)")
@@ -270,8 +250,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Ortschaftskennziffer)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Ortschaftsname)"),
                     PostalCode = table.Column<string>(type: "text", nullable: false, comment: "Postal code (Postleitzahl)"),
@@ -296,8 +274,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     AdministrativeHeadquarters = table.Column<string>(type: "text", nullable: true, comment: "Administrative headquarters (Verwaltungssitz des Gemeindeverbandes)"),
                     Code = table.Column<string>(type: "text", nullable: false, comment: "Code (Code des Gemeindeverbandes)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Name des Gemeindeverbandes)"),
@@ -323,12 +299,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Straßenschlüssel)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Straßenname)"),
                     Status = table.Column<int>(type: "integer", nullable: false, comment: "Status (Straßenstatus)"),
-                    LocalityId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to locality (Ort oder Stadt)")
+                    LocalityId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to locality")
                 },
                 constraints: table =>
                 {
@@ -349,8 +323,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Straßenkennziffer)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Straßenname)"),
                     LocalityId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to locality")
@@ -374,8 +346,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     MultiplePostalCodes = table.Column<bool>(type: "boolean", nullable: false, comment: "Multiple postcodes available?"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Gemeindename)"),
                     PostalCode = table.Column<string>(type: "text", nullable: false, comment: "Postal code of the administrative headquarters (Verwaltungssitz), if there are multiple postal codes available"),
@@ -383,7 +353,8 @@ namespace OpenPlzAPI.DataLayer.Migrations
                     ShortName = table.Column<string>(type: "text", nullable: false, comment: "Short Name (Verkürzter Gemeindename)"),
                     Type = table.Column<int>(type: "integer", nullable: false, comment: "Type (Gemeindekennzeichen)"),
                     AssociationId = table.Column<Guid>(type: "uuid", nullable: true, comment: "Reference to municipal association (Gemeindeverband)"),
-                    DistrictId = table.Column<Guid>(type: "uuid", nullable: true, comment: "Reference to district (Kreis)")
+                    DistrictId = table.Column<Guid>(type: "uuid", nullable: true, comment: "Reference to district (Kreis)"),
+                    FederalStateId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to federal state (Bundesland)")
                 },
                 constraints: table =>
                 {
@@ -394,6 +365,13 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         principalSchema: "de",
                         principalTable: "Districts",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Municipalities_FederalStates_FederalStateId",
+                        column: x => x.FederalStateId,
+                        principalSchema: "de",
+                        principalTable: "FederalStates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Municipalities_MunicipalAssociations_AssociationId",
                         column: x => x.AssociationId,
@@ -409,8 +387,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Ortsname)"),
                     PostalCode = table.Column<string>(type: "text", nullable: false, comment: "Postal code (Postleitzahl)"),
                     MunicipalityId = table.Column<Guid>(type: "uuid", nullable: true, comment: "Reference to municipality (Gemeinde)")
@@ -433,10 +409,8 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    TimeStamp = table.Column<DateOnly>(type: "date", nullable: false, comment: "Time stamp"),
-                    Source = table.Column<string>(type: "text", nullable: true, comment: "Import source"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Straßenname)"),
-                    LocalityId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to locality (Ort oder Stadt)")
+                    LocalityId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to locality")
                 },
                 constraints: table =>
                 {
@@ -613,6 +587,12 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 schema: "de",
                 table: "Municipalities",
                 column: "DistrictId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Municipalities_FederalStateId",
+                schema: "de",
+                table: "Municipalities",
+                column: "FederalStateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Municipalities_RegionalKey",

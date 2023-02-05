@@ -60,7 +60,7 @@ namespace OpenPlzApi.DataLayer.CH
         public StreetStatus Status { get; set; }
 
         #region Foreign keys
-        [Comment("Reference to locality (Ort oder Stadt)")]
+        [Comment("Reference to locality")]
         public Guid LocalityId { get; set; }
         #endregion Foreign keys
     }

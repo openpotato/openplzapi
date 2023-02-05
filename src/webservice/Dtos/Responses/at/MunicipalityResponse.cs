@@ -39,34 +39,42 @@ namespace OpenPlzApi.AT
         public MunicipalityResponse(Municipality municipality)
             : base(municipality)
         {
-            Key = municipality.Key;
             Code = municipality.Code;
-            Name = municipality.Name;
+            District = new DistrictSummary(municipality.District);
+            FederalProvince = new FederalProvinceSummary(municipality.District.FederalProvince);
+            Key = municipality.Key;
             MultiplePostalCodes = municipality.MultiplePostalCodes;
+            Name = municipality.Name;
             PostalCode = municipality.PostalCode;
             Status = (MunicipalityStatus)municipality.Status;
-            DistrictKey = municipality.District?.Key;
         }
 
         /// <summary>
         /// Code (Gemeindecode)
         /// </summary>
-        /// <example>10101</example>
+        /// <example>90201</example>
         [Required]
         [JsonPropertyOrder(5)]
         public string Code { get; }
 
         /// <summary>
-        /// Reference to district
+        /// Reference to district (Bezirk)
         /// </summary>
         [Required]
         [JsonPropertyOrder(7)]
-        public string DistrictKey { get; }
+        public DistrictSummary District { get; }
+
+        /// <summary>
+        /// Reference to federal province (Bunudesland)
+        /// </summary>
+        [Required]
+        [JsonPropertyOrder(7)]
+        public FederalProvinceSummary FederalProvince { get; }
 
         /// <summary>
         /// Key (Gemeindekennziffer)
         /// </summary>
-        /// <example>10101</example>
+        /// <example>90001</example>
         [Required]
         [JsonPropertyOrder(4)]
         public string Key { get; }
@@ -82,7 +90,7 @@ namespace OpenPlzApi.AT
         /// <summary>
         /// Name (Ortschaftsname)
         /// </summary>
-        /// <example>Eisenstadt</example>
+        /// <example>Wien</example>
         [Required]
         [JsonPropertyOrder(6)]
         public string Name { get; }
@@ -90,7 +98,7 @@ namespace OpenPlzApi.AT
         /// <summary>
         /// Postal code (Postleitzahl des Gemeindeamtes)
         /// </summary>
-        /// <example>7000</example>
+        /// <example>1020</example>
         [Required]
         [JsonPropertyOrder(8)]
         public string PostalCode { get; }

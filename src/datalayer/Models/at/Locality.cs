@@ -42,7 +42,7 @@ namespace OpenPlzApi.DataLayer.AT
         public string Key { get; set; }
 
         /// <summary>
-        /// Reference to municipality
+        /// Reference to municipality (Gemeinde)
         /// </summary>
         public virtual Municipality Municipality { get; set; }
 

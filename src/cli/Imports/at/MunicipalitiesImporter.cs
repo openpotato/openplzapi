@@ -20,12 +20,10 @@
 #endregion
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using OpenPlzApi.DataLayer;
 using OpenPlzApi.DataLayer.AT;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -93,9 +91,7 @@ namespace OpenPlzApi.CLI.AT
                         Status = (MunicipalityStatus)municipality.Status,
                         PostalCode = municipality.PostalCode,
                         MultiplePostalCodes = municipality.AdditionalPostalCodes.Length > 0,
-                        DistrictId = municipality.District.GetUniqueId(),
-                        Source = "statistik.at",
-                        TimeStamp = municipality.TimeStamp
+                        DistrictId = municipality.District.GetUniqueId()
                     });
 
                     await dbContext.SaveChangesAsync(cancellationToken);

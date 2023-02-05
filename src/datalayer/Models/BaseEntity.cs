@@ -39,20 +39,6 @@ namespace OpenPlzApi.DataLayer
         public Guid Id { get; set; }
 
         /// <summary>
-        /// From where was this record imported?
-        /// </summary>
-        [Column(Order = 2)]
-        [Comment("Import source")]
-        public string Source { get; set; }
-
-        /// <summary>
-        /// When was this record imported?
-        /// </summary>
-        [Column(Order = 1)]
-        [Comment("Time stamp")]
-        public DateOnly TimeStamp { get; set; }
-
-        /// <summary>
         /// Determines whether two object instances are equal.
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>

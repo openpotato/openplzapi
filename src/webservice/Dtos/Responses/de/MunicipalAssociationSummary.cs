@@ -27,52 +27,44 @@ using System.Text.Json.Serialization;
 namespace OpenPlzApi.DE
 {
     /// <summary>
-    /// Representation of a German government region (Regierungsbezirk)
+    /// Reduced representation of a German municipal association (Gemeindeverband)
     /// </summary>
     [SwaggerSchema(ReadOnly = true)]
-    public class GovernmentRegionResponse : BaseResponse
+    public class MunicipalAssociationSummary
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GovernmentRegionResponse"/> class.
+        /// Initializes a new instance of the <see cref="MunicipalAssociationSummary"/> class.
         /// </summary>
-        /// <param name="governmentRegion">Assigns data from <see cref="GovernmentRegion"/></param>
-        public GovernmentRegionResponse(GovernmentRegion governmentRegion)
-            : base(governmentRegion)
+        /// <param name="municipalAssociation">Assigns data from <see cref="MunicipalAssociation"/></param>
+        public MunicipalAssociationSummary(MunicipalAssociation municipalAssociation)
         {
-            AdministrativeHeadquarters = governmentRegion.AdministrativeHeadquarters;
-            FederalState = governmentRegion.FederalState != null ? new FederalStateSummary(governmentRegion.FederalState) : null;
-            Key = governmentRegion.RegionalKey;
-            Name = governmentRegion.Name;
+            Key = municipalAssociation.RegionalKey;
+            Name = municipalAssociation.Name;
+            Type = (MunicipalAssociationType)municipalAssociation.Type;
         }
-
-        /// <summary>
-        /// Administrative headquarters (Verwaltungssitz des Regierungsbezirks)
-        /// </summary>
-        [Required]
-        [JsonPropertyOrder(4)]
-        public string AdministrativeHeadquarters { get; }
-
-        /// <summary>
-        /// Reference to federal state (Bundesland)
-        /// </summary>
-        [Required]
-        [JsonPropertyOrder(3)]
-        public FederalStateSummary FederalState { get; }
 
         /// <summary>
         /// Regional key (Regionalschlüssel)
         /// </summary>
-        /// <example>071</example>
+        /// <example>07137</example>
         [Required]
         [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
-        /// Name (Bezirksname)
+        /// Name (Name des Gemeindeverbandes)
         /// </summary>
-        /// <example>früher: Reg.-Bez. Koblenz</example>
+        /// <example>Bendorf, Stadt</example>
         [Required]
         [JsonPropertyOrder(2)]
         public string Name { get; }
+
+        /// <summary>
+        /// Type (Kennzeichen des Gemeindeverbandes)
+        /// </summary>
+        /// <example>Verbandsfreie_Gemeinde</example>
+        [Required]
+        [JsonPropertyOrder(3)]
+        public MunicipalAssociationType Type { get; }
     }
 }

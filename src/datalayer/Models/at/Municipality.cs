@@ -81,7 +81,7 @@ namespace OpenPlzApi.DataLayer.AT
         public MunicipalityStatus Status { get; set; }
 
         #region Foreign keys
-        [Comment("Reference to district")]
+        [Comment("Reference to district (Bezirk)")]
         public Guid DistrictId { get; set; }
         #endregion Foreign keys
     }

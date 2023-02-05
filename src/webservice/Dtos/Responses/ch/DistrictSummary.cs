@@ -1,4 +1,5 @@
-﻿#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
+﻿
+#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
@@ -19,53 +20,41 @@
  */
 #endregion
 
-using OpenPlzApi.DataLayer.DE;
-using Swashbuckle.AspNetCore.Annotations;
+using OpenPlzApi.DataLayer.CH;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace OpenPlzApi.DE
+namespace OpenPlzApi.CH
 {
     /// <summary>
-    /// Representation of a German federal state (Bundesland)
+    /// Reduced representation of a Swiss district (Bezirk)
     /// </summary>
-    [SwaggerSchema(ReadOnly = true)]
-    public class FederalStateResponse : BaseResponse
+    public class DistrictSummary
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FederalStateResponse"/> class.
+        /// Initializes a new instance of the <see cref="DistrictSummary"/> class.
         /// </summary>
-        /// <param name="federalState">Assigns data from <see cref="FederalState"/></param>
-        public FederalStateResponse(FederalState federalState)
-            : base(federalState)
+        /// <param name="district">Assigns data from <see cref="District"/></param>
+        public DistrictSummary(District district)
         {
-            Key = federalState.RegionalKey;
-            Name = federalState.Name;
-            SeatOfGovernment = federalState.SeatOfGovernment;
+            Key = district.Key;
+            Name = district.Name;
         }
 
         /// <summary>
-        /// Regional key (Regionalschlüssel)
+        /// Key (Bezirksnummer)
         /// </summary>
-        /// <example>07/example>
+        /// <example>1302</example>
         [Required]
         [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
-        /// Name (Bundeslandname)
+        /// Name (Bezirksname)
         /// </summary>
-        /// <example>Rheinland-Pfalz</example>
+        /// <example>Bezirk Laufen</example>
         [Required]
         [JsonPropertyOrder(2)]
         public string Name { get; }
-
-        /// <summary>
-        /// Seat of government (Sitz der Landesregierung)
-        /// </summary>
-        /// <example>Mainz</example>
-        [Required]
-        [JsonPropertyOrder(3)]
-        public string SeatOfGovernment { get; }
     }
 }

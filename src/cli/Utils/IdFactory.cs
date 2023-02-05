@@ -22,7 +22,7 @@
 using Enbrea.GuidFactory;
 using System;
 
-namespace OpenPlzApi.CLI.Sources
+namespace OpenPlzApi.CLI
 {
     public static class IdFactory
     {

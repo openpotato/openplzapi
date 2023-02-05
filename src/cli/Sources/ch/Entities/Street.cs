@@ -53,11 +53,6 @@ namespace OpenPlzApi.CLI.Sources.CH
         /// Street type
         /// </summary>
         public StreetType Type { get; set; }
-                                            
-        /// <summary>
-        /// Is street valid?
-        /// </summary>
-        public bool Valid { get; set; }
 
         /// <summary>
         /// Embedded locality (Ort oder Stadt)

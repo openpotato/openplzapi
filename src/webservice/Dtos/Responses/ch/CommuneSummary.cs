@@ -20,49 +20,51 @@
 #endregion
 
 using Microsoft.EntityFrameworkCore;
+using OpenPlzApi.DataLayer.CH;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-namespace OpenPlzApi.DataLayer.AT
+namespace OpenPlzApi.CH
 {
     /// <summary>
-    /// Representation of an Austrian district (Politischer Bezirk)
+    /// Reduced representation of a Swiss commune (Gemeinde)
     /// </summary>
-    [Table(DbTables.AT.Districts, Schema = DbSchemas.AT)]
-    [Index(nameof(Code), IsUnique = true)]
-    [Comment("Representation of an Austrian district (Politischer Bezirk)")]
-    public class District : BaseEntity
+    public class CommuneSummary
     {
         /// <summary>
-        /// Reference to federal province
+        /// Initializes a new instance of the <see cref="CommuneSummary"/> class.
         /// </summary>
-        public virtual FederalProvince FederalProvince { get; set; }
+        /// <param name="commune">Assigns data from <see cref="Commune"/></param>
+        public CommuneSummary(Commune commune)
+        {
+            Key = commune.Key;
+            Name = commune.Name;
+            ShortName = commune.ShortName;
+        }
 
         /// <summary>
-        /// Code (Bezirkskodierung)
+        /// Key (Gemeindenummer)
         /// </summary>
+        /// <example>2786</example>
         [Required]
-        [Comment("Code (Bezirkskodierung)")]
-        public string Code { get; set; }
+        [JsonPropertyOrder(1)]
+        public string Key { get; }
 
         /// <summary>
-        /// Key (Bezirkskennziffer)
+        /// Name (Amtlicher Gemeindename)
         /// </summary>
+        /// <example>Grellingen</example>
         [Required]
-        [Comment("Key (Bezirkskennziffer)")]
-        public string Key { get; set; }
+        [JsonPropertyOrder(2)]
+        public string Name { get; }
 
         /// <summary>
-        /// Name (Bezirksname)
+        /// Short name (Gemeindename, kurz)
         /// </summary>
+        /// <example>Grellingen</example>
         [Required]
-        [Comment("Name (Bezirksname)")]
-        public string Name { get; set; }
-
-        #region Foreign keys
-        [Comment("Reference to federal province (Bundesland)")]
-        public Guid FederalProvinceId { get; set; }
-        #endregion Foreign keys
+        [JsonPropertyOrder(3)]
+        public string ShortName { get; }
     }
 }

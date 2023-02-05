@@ -19,50 +19,50 @@
  */
 #endregion
 
-using Microsoft.EntityFrameworkCore;
-using System;
+using OpenPlzApi.DataLayer.CH;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-namespace OpenPlzApi.DataLayer.AT
+namespace OpenPlzApi.CH
 {
     /// <summary>
-    /// Representation of an Austrian district (Politischer Bezirk)
+    /// Reduced representation of a Swiss canton (Kanton)
     /// </summary>
-    [Table(DbTables.AT.Districts, Schema = DbSchemas.AT)]
-    [Index(nameof(Code), IsUnique = true)]
-    [Comment("Representation of an Austrian district (Politischer Bezirk)")]
-    public class District : BaseEntity
+    public class CantonSummary
     {
         /// <summary>
-        /// Reference to federal province
+        /// Initializes a new instance of the <see cref="CantonSummary"/> class.
         /// </summary>
-        public virtual FederalProvince FederalProvince { get; set; }
+        /// <param name="canton">Assigns data from <see cref="Canton"/></param>
+        public CantonSummary(Canton canton)
+        {
+            Code = canton.Code;
+            Key = canton.Key;
+            Name = canton.Name;
+        }
 
         /// <summary>
-        /// Code (Bezirkskodierung)
+        /// Code (Kantonskürzel)
         /// </summary>
+        /// <example>BL</example>
         [Required]
-        [Comment("Code (Bezirkskodierung)")]
-        public string Code { get; set; }
+        [JsonPropertyOrder(2)]
+        public string Code { get; }
 
         /// <summary>
-        /// Key (Bezirkskennziffer)
+        /// Key (Kantonsnummer)
         /// </summary>
+        /// <example>13</example>
         [Required]
-        [Comment("Key (Bezirkskennziffer)")]
-        public string Key { get; set; }
+        [JsonPropertyOrder(1)]
+        public string Key { get; }
 
         /// <summary>
-        /// Name (Bezirksname)
+        /// Name (Kantonsname)
         /// </summary>
+        /// <example>Basel-Landschaft</example>
         [Required]
-        [Comment("Name (Bezirksname)")]
-        public string Name { get; set; }
-
-        #region Foreign keys
-        [Comment("Reference to federal province (Bundesland)")]
-        public Guid FederalProvinceId { get; set; }
-        #endregion Foreign keys
+        [JsonPropertyOrder(3)]
+        public string Name { get; }
     }
 }

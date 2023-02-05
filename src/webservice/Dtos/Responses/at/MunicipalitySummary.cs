@@ -19,53 +19,61 @@
  */
 #endregion
 
-using OpenPlzApi.DataLayer.DE;
+using OpenPlzApi.DataLayer.AT;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace OpenPlzApi.DE
+namespace OpenPlzApi.AT
 {
     /// <summary>
-    /// Representation of a German federal state (Bundesland)
+    /// Reduced representation of an Austrian municipality (Gemeinde)
     /// </summary>
     [SwaggerSchema(ReadOnly = true)]
-    public class FederalStateResponse : BaseResponse
+    public class MunicipalitySummary
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FederalStateResponse"/> class.
+        /// Initializes a new instance of the <see cref="MunicipalitySummary"/> class.
         /// </summary>
-        /// <param name="federalState">Assigns data from <see cref="FederalState"/></param>
-        public FederalStateResponse(FederalState federalState)
-            : base(federalState)
+        /// <param name="municipality">Assigns data from <see cref="Municipality"/></param>
+        public MunicipalitySummary(Municipality municipality)
         {
-            Key = federalState.RegionalKey;
-            Name = federalState.Name;
-            SeatOfGovernment = federalState.SeatOfGovernment;
+            Code = municipality.Code;
+            Key = municipality.Key;
+            Name = municipality.Name;
+            Status = (MunicipalityStatus)municipality.Status;
         }
 
         /// <summary>
-        /// Regional key (Regionalschlüssel)
+        /// Code (Gemeindecode)
         /// </summary>
-        /// <example>07/example>
+        /// <example>90201</example>
+        [Required]
+        [JsonPropertyOrder(2)]
+        public string Code { get; }
+
+        /// <summary>
+        /// Key (Gemeindekennziffer)
+        /// </summary>
+        /// <example>90001</example>
         [Required]
         [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
-        /// Name (Bundeslandname)
+        /// Name (Gemeindename)
         /// </summary>
-        /// <example>Rheinland-Pfalz</example>
+        /// <example>Wien</example>
         [Required]
-        [JsonPropertyOrder(2)]
+        [JsonPropertyOrder(3)]
         public string Name { get; }
 
         /// <summary>
-        /// Seat of government (Sitz der Landesregierung)
+        /// Status (Gemeindestatus)
         /// </summary>
-        /// <example>Mainz</example>
+        /// <example>TownWithCharter</example>
         [Required]
-        [JsonPropertyOrder(3)]
-        public string SeatOfGovernment { get; }
+        [JsonPropertyOrder(4)]
+        public MunicipalityStatus Status { get; }
     }
 }

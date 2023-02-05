@@ -27,50 +27,33 @@ using System.Text.Json.Serialization;
 namespace OpenPlzApi.DE
 {
     /// <summary>
-    /// Representation of a German government region (Regierungsbezirk)
+    /// Reduced representation of a German federal state (Bundesland)
     /// </summary>
     [SwaggerSchema(ReadOnly = true)]
-    public class GovernmentRegionResponse : BaseResponse
+    public class FederalStateSummary 
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GovernmentRegionResponse"/> class.
+        /// Initializes a new instance of the <see cref="FederalStateSummary"/> class.
         /// </summary>
-        /// <param name="governmentRegion">Assigns data from <see cref="GovernmentRegion"/></param>
-        public GovernmentRegionResponse(GovernmentRegion governmentRegion)
-            : base(governmentRegion)
+        /// <param name="federalState">Assigns data from <see cref="FederalState"/></param>
+        public FederalStateSummary(FederalState federalState)
         {
-            AdministrativeHeadquarters = governmentRegion.AdministrativeHeadquarters;
-            FederalState = governmentRegion.FederalState != null ? new FederalStateSummary(governmentRegion.FederalState) : null;
-            Key = governmentRegion.RegionalKey;
-            Name = governmentRegion.Name;
+            Key = federalState.RegionalKey;
+            Name = federalState.Name;
         }
-
-        /// <summary>
-        /// Administrative headquarters (Verwaltungssitz des Regierungsbezirks)
-        /// </summary>
-        [Required]
-        [JsonPropertyOrder(4)]
-        public string AdministrativeHeadquarters { get; }
-
-        /// <summary>
-        /// Reference to federal state (Bundesland)
-        /// </summary>
-        [Required]
-        [JsonPropertyOrder(3)]
-        public FederalStateSummary FederalState { get; }
 
         /// <summary>
         /// Regional key (Regionalschlüssel)
         /// </summary>
-        /// <example>071</example>
+        /// <example>07</example>
         [Required]
         [JsonPropertyOrder(1)]
         public string Key { get; }
 
         /// <summary>
-        /// Name (Bezirksname)
+        /// Name (Bundeslandname)
         /// </summary>
-        /// <example>früher: Reg.-Bez. Koblenz</example>
+        /// <example>Rheinland-Pfalz</example>
         [Required]
         [JsonPropertyOrder(2)]
         public string Name { get; }

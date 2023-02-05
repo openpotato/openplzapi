@@ -19,21 +19,20 @@
  */
 #endregion
 
-using OpenPlzApi.DataLayer;
-
-namespace OpenPlzApi
+namespace OpenPlzApi.CLI.AT
 {
-    /// <summary>
-    /// Abstract response
-    /// </summary>
-    public abstract class BaseResponse
+    public static class StringExtensions
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseResponse"/> class.
-        /// </summary>
-        /// <param name="entity">Assigns data from <see cref="BaseEntity"/> based instance</param>
-        public BaseResponse(BaseEntity entity)
+        public static string GetFriendlyName(this string name)
         {
+            if (string.IsNullOrEmpty(name))
+            {
+                return name;
+            }
+            else
+            {
+                return name.Replace("(", " ( ").Replace(",", ", ");
+            }
         }
     }
 }

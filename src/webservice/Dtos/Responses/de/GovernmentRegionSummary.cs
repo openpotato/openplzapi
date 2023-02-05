@@ -19,50 +19,43 @@
  */
 #endregion
 
-using Microsoft.EntityFrameworkCore;
-using System;
+using OpenPlzApi.DataLayer.DE;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-namespace OpenPlzApi.DataLayer.AT
+namespace OpenPlzApi.DE
 {
     /// <summary>
-    /// Representation of an Austrian district (Politischer Bezirk)
+    /// Reduced representation of a German government region (Regierungsbezirk)
     /// </summary>
-    [Table(DbTables.AT.Districts, Schema = DbSchemas.AT)]
-    [Index(nameof(Code), IsUnique = true)]
-    [Comment("Representation of an Austrian district (Politischer Bezirk)")]
-    public class District : BaseEntity
+    [SwaggerSchema(ReadOnly = true)]
+    public class GovernmentRegionSummary
     {
         /// <summary>
-        /// Reference to federal province
+        /// Initializes a new instance of the <see cref="GovernmentRegionSummary"/> class.
         /// </summary>
-        public virtual FederalProvince FederalProvince { get; set; }
+        /// <param name="governmentRegion">Assigns data from <see cref="GovernmentRegion"/></param>
+        public GovernmentRegionSummary(GovernmentRegion governmentRegion)
+        {
+            Key = governmentRegion.RegionalKey;
+            Name = governmentRegion.Name;
+        }
 
         /// <summary>
-        /// Code (Bezirkskodierung)
+        /// Regional key (Regionalschlüssel)
         /// </summary>
+        /// <example>071</example>
         [Required]
-        [Comment("Code (Bezirkskodierung)")]
-        public string Code { get; set; }
-
-        /// <summary>
-        /// Key (Bezirkskennziffer)
-        /// </summary>
-        [Required]
-        [Comment("Key (Bezirkskennziffer)")]
-        public string Key { get; set; }
+        [JsonPropertyOrder(1)]
+        public string Key { get; }
 
         /// <summary>
         /// Name (Bezirksname)
         /// </summary>
+        /// <example>früher: Reg.-Bez. Koblenz</example>
         [Required]
-        [Comment("Name (Bezirksname)")]
-        public string Name { get; set; }
-
-        #region Foreign keys
-        [Comment("Reference to federal province (Bundesland)")]
-        public Guid FederalProvinceId { get; set; }
-        #endregion Foreign keys
+        [JsonPropertyOrder(2)]
+        public string Name { get; }
     }
 }

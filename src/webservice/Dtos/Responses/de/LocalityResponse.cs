@@ -39,30 +39,48 @@ namespace OpenPlzApi.DE
         public LocalityResponse(Locality locality)
             : base(locality)
         {
-            Municipality = locality.Municipality != null ? new MunicipalityResponse(locality.Municipality) : null;
+            District = locality.Municipality?.District != null ? new DistrictSummary(locality.Municipality.District) : null;
+            FederalState = locality.Municipality?.FederalState != null ? new FederalStateSummary(locality.Municipality.FederalState) : null;
+            Municipality = new MunicipalitySummary(locality.Municipality);
             Name = locality.Name;
             PostalCode = locality.PostalCode;
         }
 
         /// <summary>
+        /// Reference to district (Kreis)
+        /// </summary>
+        [Required]
+        [JsonPropertyOrder(4)]
+        public DistrictSummary District { get; }
+
+        /// <summary>
+        /// Reference to federal state (Bundesland)
+        /// </summary>
+        [Required]
+        [JsonPropertyOrder(5)]
+        public FederalStateSummary FederalState { get; }
+
+        /// <summary>
         /// Reference to municipality
         /// </summary>
         [Required]
-        [JsonPropertyOrder(6)]
-        public MunicipalityResponse Municipality { get; }
+        [JsonPropertyOrder(3)]
+        public MunicipalitySummary Municipality { get; }
 
         /// <summary>
         /// Name (Ortsname)
         /// </summary>
+        /// <example>Bendorf</example>
         [Required]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(2)]
         public string Name { get; }
 
         /// <summary>
         /// Postal code (Postleitzahl)
         /// </summary>
+        /// <example>56170</example>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(1)]
         public string PostalCode { get; }
     }
 }

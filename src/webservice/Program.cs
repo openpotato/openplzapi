@@ -20,7 +20,6 @@
 #endregion
 
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using OpenPlzApi;
 using OpenPlzApi.DataLayer;
@@ -36,14 +35,13 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin()
-              .WithMethods("GET")
-              .WithHeaders(HeaderNames.Accept);
+        policy.AllowAnyOrigin().AllowAnyHeader().WithMethods("GET");
     });
 });
 
 // Add controller support
-builder.Services.AddControllers()
+builder.Services
+    .AddControllers()
     .AddJsonOptions(setup =>
     {
         setup.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());

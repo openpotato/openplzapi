@@ -19,50 +19,52 @@
  */
 #endregion
 
-using Microsoft.EntityFrameworkCore;
-using System;
+using OpenPlzApi.DataLayer.DE;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-namespace OpenPlzApi.DataLayer.AT
+namespace OpenPlzApi.DE
 {
     /// <summary>
-    /// Representation of an Austrian district (Politischer Bezirk)
+    /// Reduced representation of a German municipality (Gemeinde)
     /// </summary>
-    [Table(DbTables.AT.Districts, Schema = DbSchemas.AT)]
-    [Index(nameof(Code), IsUnique = true)]
-    [Comment("Representation of an Austrian district (Politischer Bezirk)")]
-    public class District : BaseEntity
+    [SwaggerSchema(ReadOnly = true)]
+    public class MunicipalitySummary
     {
         /// <summary>
-        /// Reference to federal province
+        /// Initializes a new instance of the <see cref="MunicipalitySummary"/> class.
         /// </summary>
-        public virtual FederalProvince FederalProvince { get; set; }
+        /// <param name="municipality">Assigns data from <see cref="Municipality"/></param>
+        public MunicipalitySummary(Municipality municipality)
+        {
+            Key = municipality.RegionalKey;
+            Name = municipality.Name;
+            Type = (MunicipalityType)municipality.Type;
+        }
 
         /// <summary>
-        /// Code (Bezirkskodierung)
+        /// Regional key (Regionalschlüssel)
         /// </summary>
+        /// <example>07137203</example>
         [Required]
-        [Comment("Code (Bezirkskodierung)")]
-        public string Code { get; set; }
+        [JsonPropertyOrder(1)]
+        public string Key { get; }
 
         /// <summary>
-        /// Key (Bezirkskennziffer)
+        /// Name (Gemeindename)
         /// </summary>
+        /// <example>Bendorf, Stadt</example>
         [Required]
-        [Comment("Key (Bezirkskennziffer)")]
-        public string Key { get; set; }
+        [JsonPropertyOrder(2)]
+        public string Name { get; }
 
         /// <summary>
-        /// Name (Bezirksname)
+        /// Type (Kennzeichen)
         /// </summary>
+        /// <example>Stadt</example>
         [Required]
-        [Comment("Name (Bezirksname)")]
-        public string Name { get; set; }
-
-        #region Foreign keys
-        [Comment("Reference to federal province (Bundesland)")]
-        public Guid FederalProvinceId { get; set; }
-        #endregion Foreign keys
+        [JsonPropertyOrder(3)]
+        public MunicipalityType Type { get; }
     }
 }
