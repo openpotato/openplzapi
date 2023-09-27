@@ -41,7 +41,10 @@ builder.Services.AddCors(options =>
 
 // Add controller support
 builder.Services
-    .AddControllers()
+    .AddControllers(setup =>
+    {
+        setup.OutputFormatters.Add(new CsvOutputFormatter());
+    })
     .AddJsonOptions(setup =>
     {
         setup.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());

@@ -32,19 +32,6 @@ namespace OpenPlzApi.CLI
         {
             return Assembly.GetExecutingAssembly().GetName().Name;
         }
-        public static string GetCopyright()
-        {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            object[] attributes = assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), true);
-            if (attributes.Length > 0)
-            {
-                return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
-            }
-            else
-            {
-                return null;
-            }
-        }
 
         public static string GetTitle()
         {

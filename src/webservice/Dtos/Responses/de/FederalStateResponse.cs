@@ -47,7 +47,7 @@ namespace OpenPlzApi.DE
         /// <summary>
         /// Regional key (Regionalschlüssel)
         /// </summary>
-        /// <example>07/example>
+        /// <example>0</example>
         [Required]
         [JsonPropertyOrder(1)]
         public string Key { get; }
