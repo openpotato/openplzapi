@@ -51,7 +51,7 @@ namespace OpenPlzApi.DE
         /// <param name="key" example="09">Regional key of the federal state</param>
         /// <returns>List of districts</returns>
         [HttpGet("FederalStates/{key}/Districts")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<DistrictResponse>> GetDistrictsByFederalStateAsync(string key)
         {
             return await _dbContext.Set<District>()
@@ -70,7 +70,7 @@ namespace OpenPlzApi.DE
         /// <param name="key" example="091">Regional key of the government region</param>
         /// <returns>List of districts</returns>
         [HttpGet("GovernmentRegions/{key}/Districts")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<DistrictResponse>> GetDistrictsByGovernmentRegionAsync(string key)
         {
             return await _dbContext.Set<District>()
@@ -88,7 +88,7 @@ namespace OpenPlzApi.DE
         /// </summary>
         /// <returns>List of federal states</returns>
         [HttpGet("FederalStates")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<FederalStateResponse>> GetFederalStatesAsync()
         {
             return await _dbContext.Set<FederalState>()
@@ -104,7 +104,7 @@ namespace OpenPlzApi.DE
         /// <param name="key" example="09">Regional key of the federal state</param>
         /// <returns>List of government regions</returns>
         [HttpGet("FederalStates/{key}/GovernmentRegions")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<GovernmentRegionResponse>> GetGovernmentRegionsByFederalStateAsync(string key)
         {
             return await _dbContext.Set<GovernmentRegion>()
@@ -125,7 +125,7 @@ namespace OpenPlzApi.DE
         /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>Paged list of localities</returns>
         [HttpGet("Localities")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<LocalityResponse>> GetLocalitiesAsync(
             [FromQuery] string postalCode, 
             [FromQuery] string name,
@@ -157,7 +157,7 @@ namespace OpenPlzApi.DE
         /// <param name="key" example="09180">Regional key of the district</param>
         /// <returns>List of municipal associations</returns>
         [HttpGet("Districts/{key}/MunicipalAssociations")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<MunicipalAssociationResponse>> GetMunicipalAssociationsByDistrictAsync(string key)
         {
             return await _dbContext.Set<MunicipalAssociation>()
@@ -176,7 +176,7 @@ namespace OpenPlzApi.DE
         /// <param name="key" example="09">Regional key of the federal state</param>
         /// <returns>List of municipal associations</returns>
         [HttpGet("FederalStates/{key}/MunicipalAssociations")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<MunicipalAssociationResponse>> GetMunicipalAssociationsByFederalStateAsync(string key)
         {
             return await _dbContext.Set<MunicipalAssociation>()
@@ -195,7 +195,7 @@ namespace OpenPlzApi.DE
         /// <param name="key" example="091">Regional key of the government region</param>
         /// <returns>List of municipal associations</returns>
         [HttpGet("GovernmentRegions/{key}/MunicipalAssociations")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<MunicipalAssociationResponse>> GetMunicipalAssociationsByGovernmentRegionAsync(string key)
         {
             return await _dbContext.Set<MunicipalAssociation>()
@@ -215,7 +215,7 @@ namespace OpenPlzApi.DE
         /// <param name="key" example="09180">Regional key of the district</param>
         /// <returns>List of municipalities</returns>
         [HttpGet("Districts/{key}/Municipalities")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<MunicipalityResponse>> GetMunicipalitiesByDistrictAsync(string key)
         {
             return await _dbContext.Set<Municipality>()
@@ -235,7 +235,7 @@ namespace OpenPlzApi.DE
         /// <param name="key" example="Pariser Platz">Regional key of the federal state</param>
         /// <returns>List of municipalities</returns>
         [HttpGet("FederalStates/{key}/Municipalities")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<MunicipalityResponse>> GetMunicipalitiesByFederalStateAsync(string key)
         {
             return await _dbContext.Set<Municipality>()
@@ -255,7 +255,7 @@ namespace OpenPlzApi.DE
         /// <param name="key" example="091">Regional key of the government region</param>
         /// <returns>List of municipalities</returns>
         [HttpGet("GovernmentRegions/{key}/Municipalities")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<MunicipalityResponse>> GetMunicipalitiesByGovernmentRegionAsync(string key)
         {
             return await _dbContext.Set<Municipality>()
@@ -278,7 +278,7 @@ namespace OpenPlzApi.DE
         /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>Paged list of streets</returns>
         [HttpGet("Streets")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<StreetResponse>> GetStreetsAsync(
             [FromQuery] string name, 
             [FromQuery] string postalCode, 

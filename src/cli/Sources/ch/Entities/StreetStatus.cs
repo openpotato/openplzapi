@@ -28,7 +28,7 @@ namespace OpenPlzApi.CLI.Sources.CH
     {
         None = 0,
         Planned = 1,
-        Real = 2, 
+        Existing = 2, 
         Outdated = 3
     }
 }

@@ -33,11 +33,6 @@ namespace OpenPlzApi.CLI
             // Console window title
             Console.Title = AssemblyInfo.GetTitle();
 
-            // Display infos about this app
-            Console.WriteLine(AssemblyInfo.GetTitle());
-            Console.WriteLine(AssemblyInfo.GetCopyright());
-            Console.WriteLine();
-
             // Read configuration
             var configuration = new ConfigurationBuilder()
                .AddJsonFile("appsettings.json", optional: false)

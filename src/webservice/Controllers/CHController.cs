@@ -50,7 +50,7 @@ namespace OpenPlzApi.CH
         /// </summary>
         /// <returns>List of cantons</returns>
         [HttpGet("Cantons")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<CantonResponse>> GetCantonsAsync()
         {
             return await _dbContext.Set<Canton>()
@@ -66,7 +66,7 @@ namespace OpenPlzApi.CH
         /// <param name="key" example="10">Key of the canton</param>
         /// <returns>List of communes</returns>
         [HttpGet("Cantons/{key}/Communes")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<CommuneResponse>> GetCommunesByCantonAsync(string key)
         {
             return await _dbContext.Set<Commune>()
@@ -84,7 +84,7 @@ namespace OpenPlzApi.CH
         /// <param name="key" example="1002">Key of the district</param>
         /// <returns>List of communes</returns>
         [HttpGet("Districts/{key}/Communes")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<CommuneResponse>> GetCommunesByDistrictAsync(string key)
         {
             return await _dbContext.Set<Commune>()
@@ -102,7 +102,7 @@ namespace OpenPlzApi.CH
         /// <param name="key" example="10">Key of the canton</param>
         /// <returns>List of districts</returns>
         [HttpGet("Cantons/{key}/Districts")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<DistrictResponse>> GetDistrictsByCantonAsync(string key)
         {
             return await _dbContext.Set<District>()
@@ -123,7 +123,7 @@ namespace OpenPlzApi.CH
         /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>Paged list of localities</returns>
         [HttpGet("Localities")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<LocalityResponse>> GetLocalitiesAsync(
             [FromQuery] string postalCode, 
             [FromQuery] string name,
@@ -158,7 +158,7 @@ namespace OpenPlzApi.CH
         /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>Paged list of streets</returns>
         [HttpGet("Streets")]
-        [Produces("text/plain", "text/json", "application/json")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<StreetResponse>> GetStreetsAsync(
             [FromQuery] string name, 
             [FromQuery] string postalCode, 
