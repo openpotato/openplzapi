@@ -96,9 +96,25 @@ namespace OpenPlzApi
             {
                 WriteResponse(csvWriter, context.Object as IEnumerable<CH.StreetResponse>);
             }
-            else if (context.Object is IEnumerable <DE.FederalStateResponse>)
+            else if (context.Object is IEnumerable<DE.FederalStateResponse>)
             {
                 WriteResponse(csvWriter, context.Object as IEnumerable<DE.FederalStateResponse>);
+            }
+            else if (context.Object is IEnumerable<DE.GovernmentRegionResponse>)
+            {
+                WriteResponse(csvWriter, context.Object as IEnumerable<DE.GovernmentRegionResponse>);
+            }
+            else if (context.Object is IEnumerable<DE.DistrictResponse>)
+            {
+                WriteResponse(csvWriter, context.Object as IEnumerable<DE.DistrictResponse>);
+            }
+            else if (context.Object is IEnumerable<DE.MunicipalityResponse>)
+            {
+                WriteResponse(csvWriter, context.Object as IEnumerable<DE.MunicipalityResponse>);
+            }
+            else if (context.Object is IEnumerable<DE.MunicipalAssociationResponse>)
+            {
+                WriteResponse(csvWriter, context.Object as IEnumerable<DE.MunicipalAssociationResponse>);
             }
             else if (context.Object is IEnumerable<DE.LocalityResponse>)
             {
@@ -170,12 +186,6 @@ namespace OpenPlzApi
                 "Key",
                 "PostalCode",
                 "Name",
-                "Municipality.Key",
-                "Municipality.Code",
-                "Municipality.Name",
-                "District.Key",
-                "District.Code",
-                "District.Name",
                 "FederalProvince.Key",
                 "FederalProvince.Name");
 
@@ -470,6 +480,138 @@ namespace OpenPlzApi
                 csvWriter.SetValue("Key", federalState.Key);
                 csvWriter.SetValue("Name", federalState.Name);
                 csvWriter.SetValue("SeatOfGovernment", federalState.SeatOfGovernment);
+
+                csvWriter.Write();
+            }
+        }
+
+        /// <summary>
+        /// Writes a list of German government regions to the CSV writer.
+        /// </summary>
+        /// <param name="csvWriter">The CSV writer</param>
+        /// <param name="governmentRegionResponse">The list of government regions</param>
+        private void WriteResponse(CsvTableWriter csvWriter, IEnumerable<DE.GovernmentRegionResponse> governmentRegionResponse)
+        {
+            csvWriter.WriteHeaders(
+                "Key",
+                "Name",
+                "FederalState.Key",
+                "FederalState.Name",
+                "AdministrativeHeadquarters");
+
+            foreach (var governmentRegion in governmentRegionResponse)
+            {
+                csvWriter.SetValue("Key", governmentRegion.Key);
+                csvWriter.SetValue("Name", governmentRegion.Name);
+                csvWriter.SetValue("FederalState.Key", governmentRegion.FederalState.Key);
+                csvWriter.SetValue("FederalState.Name", governmentRegion.FederalState.Name);
+                csvWriter.SetValue("AdministrativeHeadquarters", governmentRegion.AdministrativeHeadquarters);
+
+                csvWriter.Write();
+            }
+        }
+
+        /// <summary>
+        /// Writes a list of German districts to the CSV writer.
+        /// </summary>
+        /// <param name="csvWriter">The CSV writer</param>
+        /// <param name="districtResponse">The list of districts</param>
+        private void WriteResponse(CsvTableWriter csvWriter, IEnumerable<DE.DistrictResponse> districtResponse)
+        {
+            csvWriter.WriteHeaders(
+                "Key",
+                "Name",
+                "Type",
+                "GovernmentRegion.Key",
+                "GovernmentRegion.Name",
+                "FederalState.Key",
+                "FederalState.Name",
+                "AdministrativeHeadquarters");
+
+            foreach (var district in districtResponse)
+            {
+                csvWriter.SetValue("Key", district.Key);
+                csvWriter.SetValue("Name", district.Name);
+                csvWriter.SetValue("Type", district.Type);
+                csvWriter.SetValue("GovernmentRegion.Key", district.GovernmentRegion.Key);
+                csvWriter.SetValue("GovernmentRegion.Name", district.GovernmentRegion.Name);
+                csvWriter.SetValue("FederalState.Key", district.FederalState.Key);
+                csvWriter.SetValue("FederalState.Name", district.FederalState.Name);
+                csvWriter.SetValue("AdministrativeHeadquarters", district.AdministrativeHeadquarters);
+
+                csvWriter.Write();
+            }
+        }
+
+        /// <summary>
+        /// Writes a list of German municipalities to the CSV writer.
+        /// </summary>
+        /// <param name="csvWriter">The CSV writer</param>
+        /// <param name="municipalityResponse">The list of municipalities</param>
+        private void WriteResponse(CsvTableWriter csvWriter, IEnumerable<DE.MunicipalityResponse> municipalityResponse)
+        {
+            csvWriter.WriteHeaders(
+                "Key",
+                "Name",
+                "Type",
+                "PostalCode",
+                "MultiplePostalCodes",
+                "District.Key",
+                "District.Name",
+                "District.Type",
+                "GovernmentRegion.Key",
+                "GovernmentRegion.Name",
+                "FederalState.Key",
+                "FederalState.Name");
+
+            foreach (var municipality in municipalityResponse)
+            {
+                csvWriter.SetValue("Key", municipality.Key);
+                csvWriter.SetValue("Name", municipality.Name);
+                csvWriter.SetValue("Type", municipality.Type);
+                csvWriter.SetValue("PostalCode", municipality.PostalCode);
+                csvWriter.SetValue("MultiplePostalCodes", municipality.MultiplePostalCodes);
+                csvWriter.SetValue("District.Key", municipality.District.Key);
+                csvWriter.SetValue("District.Name", municipality.District.Name);
+                csvWriter.SetValue("District.Type", municipality.District.Type);
+                csvWriter.SetValue("GovernmentRegion.Key", municipality.GovernmentRegion.Key);
+                csvWriter.SetValue("GovernmentRegion.Name", municipality.GovernmentRegion.Name);
+                csvWriter.SetValue("FederalState.Key", municipality.FederalState.Key);
+                csvWriter.SetValue("FederalState.Name", municipality.FederalState.Name);
+
+                csvWriter.Write();
+            }
+        }
+
+        /// <summary>
+        /// Writes a list of German municipal associations to the CSV writer.
+        /// </summary>
+        /// <param name="csvWriter">The CSV writer</param>
+        /// <param name="municipalAssociationResponse">The list of municipal associations</param>
+        private void WriteResponse(CsvTableWriter csvWriter, IEnumerable<DE.MunicipalAssociationResponse> municipalAssociationResponse)
+        {
+            csvWriter.WriteHeaders(
+                "Key",
+                "Name",
+                "Type",
+                "District.Key",
+                "District.Name",
+                "District.Type",
+                "FederalState.Key",
+                "FederalState.Name",
+                "AdministrativeHeadquarters");
+
+            foreach (var municipalAssociation in municipalAssociationResponse)
+            {
+                csvWriter.SetValue("Key", municipalAssociation.Key);
+                csvWriter.SetValue("Name", municipalAssociation.Name);
+                csvWriter.SetValue("Type", municipalAssociation.Type);
+                csvWriter.SetValue("District.Key", municipalAssociation.District.Key);
+                csvWriter.SetValue("District.Name", municipalAssociation.District.Name);
+                csvWriter.SetValue("District.Type", municipalAssociation.District.Type);
+                csvWriter.SetValue("FederalState.Key", municipalAssociation.FederalState.Key);
+                csvWriter.SetValue("FederalState.Name", municipalAssociation.FederalState.Name);
+                csvWriter.SetValue("AdministrativeHeadquarters", municipalAssociation.AdministrativeHeadquarters);
 
                 csvWriter.Write();
             }
