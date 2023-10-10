@@ -232,7 +232,7 @@ namespace OpenPlzApi.DE
         /// <summary>
         /// Returns all municipalities (Gemeinden) within a federal state (Bundesland).
         /// </summary>
-        /// <param name="key" example="Pariser Platz">Regional key of the federal state</param>
+        /// <param name="key" example="09">Regional key of the federal state</param>
         /// <returns>List of municipalities</returns>
         [HttpGet("FederalStates/{key}/Municipalities")]
         [Produces("text/plain", "text/json", "application/json", "text/csv")]
