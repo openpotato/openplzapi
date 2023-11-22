@@ -51,13 +51,13 @@ namespace OpenPlzApi.CLI.AT
         {
             if (!_cachedSourceFile.Exists)
             {
-                _progressReport.Start($"Download {_cachedSourceFile.Name}");
+                _consoleWriter.StartProgress($"Download {_cachedSourceFile.Name}");
 
                 Directory.CreateDirectory(_cachedSourceFile.DirectoryName);
 
                 await _httpClient.DownloadAsync(_remoteSourceFile, _cachedSourceFile, cancellationToken);
 
-                _progressReport.Finish();
+                _consoleWriter.FinishProgress();
             }
         }
 
@@ -68,15 +68,15 @@ namespace OpenPlzApi.CLI.AT
 
             try
             {
-                _progressReport.Start($"Open {_cachedSourceFile.Name} file");
+                _consoleWriter.StartProgress($"Open {_cachedSourceFile.Name} file");
 
                 using var gvFileStream = _cachedSourceFile.OpenText();
 
                 var rdReader = new Sources.AT.MunicipalityDataReader(gvFileStream);
 
-                _progressReport.Finish();
+                _consoleWriter.FinishProgress();
 
-                _progressReport.Start("Read and process municipalities...");
+                _consoleWriter.StartProgress("Read and process municipalities...");
 
                 await foreach (var municipality in rdReader.ReadAsync(cancellationToken))
                 {
@@ -98,17 +98,20 @@ namespace OpenPlzApi.CLI.AT
 
                     municipalitiesCount++;
                     
-                    _progressReport.Continue(recordCount++);
+                    _consoleWriter.ContinueProgress(++recordCount);
                 }
 
-                _progressReport.Finish(recordCount);
-                _progressReport.Success($"{municipalitiesCount} municipalities imported.");
-                _progressReport.NewLine();
+                _consoleWriter
+                    .FinishProgress(recordCount)
+                    .Success($"{municipalitiesCount} municipalities imported.")
+                    .NewLine();
             }
             catch (Exception ex)
             {
-                _progressReport.Cancel();
-                _progressReport.Error($"Import failed. {ex.Message}");
+                _consoleWriter
+                    .CancelProgress()
+                    .Error($"Import failed. {ex.Message}");
+
                 throw;
             }
         }

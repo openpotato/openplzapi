@@ -55,25 +55,25 @@ namespace OpenPlzApi.CLI.DE
         {
             if (!_cachedZipArchive.Exists)
             {
-                _progressReport.Start($"Download {_cachedZipArchive.Name}");
+                _consoleWriter.StartProgress($"Download {_cachedZipArchive.Name}");
 
                 Directory.CreateDirectory(_cachedZipArchive.DirectoryName);
 
                 await _httpClient.DownloadAsync(_remoteZipArchive, _cachedZipArchive, cancellationToken);
 
-                _progressReport.Finish();
+                _consoleWriter.FinishProgress();
             }
 
             if (!_cachedSourceFile.Exists)
             {
-                _progressReport.Start($"Extract {_cachedSourceFile.Name}");
+                _consoleWriter.StartProgress($"Extract {_cachedSourceFile.Name}");
 
                 Directory.CreateDirectory(_cachedSourceFile.DirectoryName);
 
                 var fastZip = new FastZip();
                 fastZip.ExtractZip(_cachedZipArchive.FullName, _cachedSourceFile.DirectoryName, null);
 
-                _progressReport.Finish();
+                _consoleWriter.FinishProgress();
             }
         }
 
@@ -88,15 +88,15 @@ namespace OpenPlzApi.CLI.DE
 
             try
             {
-                _progressReport.Start("Open GV100AD file");
+                _consoleWriter.StartProgress("Open GV100AD file");
 
                 using var gvFileStream = _cachedSourceFile.OpenText();
 
                 var gvReader = new GV100AD.GV100ADReader(gvFileStream);
 
-                _progressReport.Finish();
+                _consoleWriter.FinishProgress();
 
-                _progressReport.Start("Read and process records...");
+                _consoleWriter.StartProgress("Read and process records...");
 
                 await foreach (var gvRecord in gvReader.ReadAsync())
                 {
@@ -195,19 +195,22 @@ namespace OpenPlzApi.CLI.DE
                         await dbContext.SaveChangesAsync(cancellationToken);
                     }
 
-                    _progressReport.Continue(recordCount++);
+                    _consoleWriter.ContinueProgress(++recordCount);
                 }
 
-                _progressReport.Finish(recordCount);
-                _progressReport.Success(
-                    $"{federalStateCount} federal states, {governmentRegionCount} government regions, {districtCount} districts, " +
-                    $"{municipalAssociationCount} municipal and {municipalityCount} municipalities imported.");
-                _progressReport.NewLine();
+                _consoleWriter
+                    .FinishProgress(recordCount)
+                    .Success(
+                        $"{federalStateCount} federal states, {governmentRegionCount} government regions, {districtCount} districts, " +
+                        $"{municipalAssociationCount} municipal and {municipalityCount} municipalities imported.")
+                    .NewLine();
             }
             catch (Exception ex)
             {
-                _progressReport.Cancel();
-                _progressReport.Error($"Import failed. {ex.Message}");
+                _consoleWriter
+                    .CancelProgress()
+                    .Error($"Import failed. {ex.Message}");
+
                 throw;
             }
         }

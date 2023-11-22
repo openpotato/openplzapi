@@ -52,13 +52,13 @@ namespace OpenPlzApi.CLI.AT
         {
             if (!_cachedSourceFile.Exists)
             {
-                _progressReport.Start($"Download {_cachedSourceFile.Name}");
+                _consoleWriter.StartProgress($"Download {_cachedSourceFile.Name}");
 
                 Directory.CreateDirectory(_cachedSourceFile.DirectoryName);
 
                 await _httpClient.DownloadAsync(_remoteSourceFile, _cachedSourceFile, cancellationToken);
 
-                _progressReport.Finish();
+                _consoleWriter.FinishProgress();
             }
         }
 
@@ -72,15 +72,15 @@ namespace OpenPlzApi.CLI.AT
 
             try
             {
-                _progressReport.Start($"Open {_cachedSourceFile.Name} file");
+                _consoleWriter.StartProgress($"Open {_cachedSourceFile.Name} file");
 
                 using var rdFileStream = _cachedSourceFile.OpenText();
 
                 var rdReader = new Sources.AT.StreetDataReader(rdFileStream);
 
-                _progressReport.Finish();
+                _consoleWriter.FinishProgress();
 
-                _progressReport.Start("Read and process streets...");
+                _consoleWriter.StartProgress("Read and process streets...");
 
                 await foreach (var street in rdReader.ReadAsync(cancellationToken))
                 {
@@ -113,17 +113,19 @@ namespace OpenPlzApi.CLI.AT
 
                     streetCount++;
 
-                    _progressReport.Continue(recordCount++);
+                    _consoleWriter.ContinueProgress(++recordCount);
                 }
 
-                _progressReport.Finish(recordCount);
-                _progressReport.Success($"{localityCount} localities and {streetCount} streets imported.");
-                _progressReport.NewLine();
+                _consoleWriter
+                    .FinishProgress(recordCount)
+                    .Success($"{localityCount} localities and {streetCount} streets imported.")
+                    .NewLine();
             }
             catch (Exception ex)
             {
-                _progressReport.Cancel();
-                _progressReport.Error($"Import failed. {ex.Message}");
+                _consoleWriter
+                    .CancelProgress()
+                    .Error($"Import failed. {ex.Message}");
                 throw;
             }
         }

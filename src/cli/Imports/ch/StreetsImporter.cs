@@ -56,26 +56,26 @@ namespace OpenPlzApi.CLI.CH
         {
             if (!_cachedZipArchive.Exists)
             {
-                _progressReport.Start($"Download {_cachedZipArchive.Name}");
+                _consoleWriter.StartProgress($"Download {_cachedZipArchive.Name}");
 
                 Directory.CreateDirectory(_cachedZipArchive.DirectoryName);
 
                 await _httpClient.DownloadAsync(_remoteZipArchive, _cachedZipArchive, cancellationToken);
 
-                _progressReport.Finish();
+                _consoleWriter.FinishProgress();
             }
 
             if (!_cachedSourceFile.Exists)
             {
 
-                _progressReport.Start($"Extract {_cachedSourceFile.Name}");
+                _consoleWriter.StartProgress($"Extract {_cachedSourceFile.Name}");
 
                 Directory.CreateDirectory(_cachedSourceFile.DirectoryName);
 
                 var fastZip = new FastZip();
                 fastZip.ExtractZip(_cachedZipArchive.FullName, _cachedSourceFile.DirectoryName, null);
 
-                _progressReport.Finish();
+                _consoleWriter.FinishProgress();
             }
         }
 
@@ -89,15 +89,15 @@ namespace OpenPlzApi.CLI.CH
 
             try
             {
-                _progressReport.Start($"Open {_cachedSourceFile.Name} file");
+                _consoleWriter.StartProgress($"Open {_cachedSourceFile.Name} file");
 
                 using var rdFileReader = _cachedSourceFile.OpenText();
 
                 var rdReader = new Sources.CH.StreetDirectoryReader(rdFileReader);
 
-                _progressReport.Finish();
+                _consoleWriter.FinishProgress();
 
-                _progressReport.Start("Read and process streets...");
+                _consoleWriter.StartProgress("Read and process streets...");
 
                 await foreach (var street in rdReader.ReadAsync(cancellationToken))
                 {
@@ -133,17 +133,19 @@ namespace OpenPlzApi.CLI.CH
         
                     streetCount++;
                     
-                    _progressReport.Continue(recordCount++);
+                    _consoleWriter.ContinueProgress(++recordCount);
                 }
 
-                _progressReport.Finish(recordCount);
-                _progressReport.Success($"{localityCount} localities and {streetCount} streets imported.");
-                _progressReport.NewLine();
+                _consoleWriter
+                    .FinishProgress(recordCount)
+                    .Success($"{localityCount} localities and {streetCount} streets imported.")
+                    .NewLine();
             }
             catch (Exception ex)
             {
-                _progressReport.Cancel();
-                _progressReport.Error($"Import failed. {ex.Message}");
+                _consoleWriter
+                    .CancelProgress()
+                    .Error($"Import failed. {ex.Message}");
                 throw;
             }
         }

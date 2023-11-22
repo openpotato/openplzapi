@@ -51,13 +51,13 @@ namespace OpenPlzApi.CLI.CH
         {
             if (!_cachedSourceFile.Exists)
             {
-                _progressReport.Start($"Download {_cachedSourceFile.Name}");
+                _consoleWriter.StartProgress($"Download {_cachedSourceFile.Name}");
 
                 Directory.CreateDirectory(_cachedSourceFile.DirectoryName);
 
                 await _httpClient.DownloadAsync(_remoteSourceFile, _cachedSourceFile, cancellationToken);
 
-                _progressReport.Finish();
+                _consoleWriter.FinishProgress();
             }
         }
 
@@ -70,7 +70,7 @@ namespace OpenPlzApi.CLI.CH
 
             try
             {
-                _progressReport.Start($"Open {_cachedSourceFile.Name} file");
+                _consoleWriter.StartProgress($"Open {_cachedSourceFile.Name} file");
 
                 using var gvFileStream = _cachedSourceFile.OpenRead();
 
@@ -78,9 +78,9 @@ namespace OpenPlzApi.CLI.CH
 
                 communeRegister.Load(gvFileStream);
 
-                _progressReport.Finish();
-
-                _progressReport.Start("Read and process cantons...");
+                _consoleWriter.FinishProgress();
+                
+                _consoleWriter.StartProgress("Read and process cantons...");
 
                 foreach (var canton in communeRegister.Cantons)
                 {
@@ -100,14 +100,14 @@ namespace OpenPlzApi.CLI.CH
 
                     cantonsCount++;
 
-                    _progressReport.Continue(recordCount++);
+                    _consoleWriter.ContinueProgress(++recordCount);
                 }
 
-                _progressReport.Finish(recordCount);
+                _consoleWriter.FinishProgress(recordCount);
 
                 recordCount = 0;
 
-                _progressReport.Start("Read and process districts...");
+                _consoleWriter.StartProgress("Read and process districts...");
 
                 foreach (var district in communeRegister.Districts)
                 {
@@ -127,14 +127,14 @@ namespace OpenPlzApi.CLI.CH
 
                     districtsCount++;
 
-                    _progressReport.Continue(recordCount++);
+                    _consoleWriter.ContinueProgress(++recordCount);
                 }
 
-                _progressReport.Finish(recordCount);
+                _consoleWriter.FinishProgress(recordCount);
 
                 recordCount = 0;
 
-                _progressReport.Start("Read and process communes...");
+                _consoleWriter.StartProgress("Read and process communes...");
 
                 foreach (var commune in communeRegister.Communes)
                 {
@@ -156,17 +156,20 @@ namespace OpenPlzApi.CLI.CH
 
                     communesCount++;
 
-                    _progressReport.Continue(recordCount++);
+                    _consoleWriter.ContinueProgress(++recordCount);
                 }
 
-                _progressReport.Finish(recordCount);
-                _progressReport.Success($"{cantonsCount} cantons, {districtsCount} districts and {communesCount} communes imported.");
-                _progressReport.NewLine();
+                _consoleWriter
+                    .FinishProgress(recordCount)
+                    .Success($"{cantonsCount} cantons, {districtsCount} districts and {communesCount} communes imported.")
+                    .NewLine();
             }
             catch (Exception ex)
             {
-                _progressReport.Cancel();
-                _progressReport.Error($"Import failed. {ex.Message}");
+                _consoleWriter
+                    .CancelProgress()
+                    .Error($"Import failed. {ex.Message}");
+                
                 throw;
             }
         }

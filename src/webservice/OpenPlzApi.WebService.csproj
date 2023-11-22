@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Product>OpenPLZ API</Product>
     <Description>Open Data API for street directories of Germany, Austria and Switzerland</Description>
     <Authors>STÜBER SYSTEMS GmbH</Authors>
@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="DateOnlyTimeOnly.AspNet.Swashbuckle" Version="2.1.1" />
-    <PackageReference Include="Enbrea.Csv" Version="0.9.7" />
+    <PackageReference Include="Enbrea.Csv" Version="0.9.9" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
   </ItemGroup>

@@ -19,7 +19,7 @@
  */
 #endregion
 
-using Enbrea.Progress;
+using Enbrea.Konsoli;
 using Microsoft.EntityFrameworkCore;
 using OpenPlzApi.DataLayer;
 using System.Threading;
@@ -31,14 +31,14 @@ namespace OpenPlzApi.CLI
     {
         protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
         protected readonly IDownloadHttpClient _httpClient;
-        protected readonly ProgressReport _progressReport;
+        protected readonly ConsoleWriter _consoleWriter;
 
         public BaseImporter(IDbContextFactory<AppDbContext> dbContextFactory, string caption)
         {
             _dbContextFactory = dbContextFactory;
             _httpClient = DownloadHttpClientFactory.CreateClient();
-            _progressReport = ProgressReportFactory.CreateProgressReport(ProgressUnit.Count);
-            _progressReport.Caption(caption);
+            _consoleWriter = ConsoleWriterFactory.CreateConsoleWriter(ProgressUnit.Count);
+            _consoleWriter.Caption(caption);
         }
 
         public abstract Task ExecuteAsync(CancellationToken cancellationToken);
