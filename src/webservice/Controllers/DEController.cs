@@ -49,10 +49,14 @@ namespace OpenPlzApi.DE
         /// Returns all districts (Kreise) within a federal state (Bundesland).
         /// </summary>
         /// <param name="key" example="09">Regional key of the federal state</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>List of districts</returns>
         [HttpGet("FederalStates/{key}/Districts")]
         [Produces("text/plain", "text/json", "application/json", "text/csv")]
-        public async Task<IEnumerable<DistrictResponse>> GetDistrictsByFederalStateAsync(string key)
+        public async Task<IEnumerable<DistrictResponse>> GetDistrictsByFederalStateAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
         {
             return await _dbContext.Set<District>()
                 .Include(x => x.FederalState)
@@ -60,6 +64,7 @@ namespace OpenPlzApi.DE
                 .Where(x => x.FederalState.RegionalKey == key)
                 .OrderBy(x => x.RegionalKey)
                 .Select(x => new DistrictResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -68,10 +73,14 @@ namespace OpenPlzApi.DE
         /// Returns all districts (Kreise) within a government region (Regierungsbezirk).
         /// </summary>
         /// <param name="key" example="091">Regional key of the government region</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>List of districts</returns>
         [HttpGet("GovernmentRegions/{key}/Districts")]
         [Produces("text/plain", "text/json", "application/json", "text/csv")]
-        public async Task<IEnumerable<DistrictResponse>> GetDistrictsByGovernmentRegionAsync(string key)
+        public async Task<IEnumerable<DistrictResponse>> GetDistrictsByGovernmentRegionAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
         {
             return await _dbContext.Set<District>()
                 .Include(x => x.FederalState)
@@ -79,6 +88,7 @@ namespace OpenPlzApi.DE
                 .Where(x => x.GovernmentRegion.RegionalKey == key)
                 .OrderBy(x => x.RegionalKey)
                 .Select(x => new DistrictResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -102,16 +112,21 @@ namespace OpenPlzApi.DE
         /// Returns all government regions (Regierungsbezirke) within a federal state (Bundesaland).
         /// </summary>
         /// <param name="key" example="09">Regional key of the federal state</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>List of government regions</returns>
         [HttpGet("FederalStates/{key}/GovernmentRegions")]
         [Produces("text/plain", "text/json", "application/json", "text/csv")]
-        public async Task<IEnumerable<GovernmentRegionResponse>> GetGovernmentRegionsByFederalStateAsync(string key)
+        public async Task<IEnumerable<GovernmentRegionResponse>> GetGovernmentRegionsByFederalStateAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
         {
             return await _dbContext.Set<GovernmentRegion>()
                 .Include(x => x.FederalState)
                 .Where(x => x.FederalState.RegionalKey == key)
                 .OrderBy(x => x.RegionalKey)
                 .Select(x => new GovernmentRegionResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -152,13 +167,89 @@ namespace OpenPlzApi.DE
         }
 
         /// <summary>
+        /// Returns all localities wihtin a district (Kreis).
+        /// </summary>
+        /// <param name="key" example="09180">Regional key of the district</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <returns>Paged list of localities</returns>
+        [HttpGet("Districts/{key}/Localities")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
+        public async Task<IEnumerable<LocalityResponse>> GetLocalitiesByDistrictAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
+        {
+            return await _dbContext.Set<Locality>()
+                .Include(x => x.Municipality).ThenInclude(x => x.FederalState)
+                .Include(x => x.Municipality).ThenInclude(x => x.District)
+                .Where(x => x.Municipality.District.RegionalKey == key)
+                .OrderBy(x => x.PostalCode).ThenBy(x => x.Name)
+                .Select(x => new LocalityResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Returns all localities wihtin a federal state (Bundesland).
+        /// </summary>
+        /// <param name="key" example="11">Regional key of the federal state</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <returns>Paged list of localities</returns>
+        [HttpGet("FederalStates/{key}/Localities")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
+        public async Task<IEnumerable<LocalityResponse>> GetLocalitiesByFederalStateAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
+        {
+            return await _dbContext.Set<Locality>()
+                .Include(x => x.Municipality).ThenInclude(x => x.FederalState)
+                .Include(x => x.Municipality).ThenInclude(x => x.District)
+                .Where(x => x.Municipality.FederalState.RegionalKey == key)
+                .OrderBy(x => x.PostalCode).ThenBy(x => x.Name)
+                .Select(x => new LocalityResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Returns all localities wihtin a government region (Regierungsbezirk).
+        /// </summary>
+        /// <param name="key" example="091">Regional key of the government region</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <returns>Paged list of localities</returns>
+        [HttpGet("GovernmentRegions/{key}/Localities")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
+        public async Task<IEnumerable<LocalityResponse>> GetLocalitiesByGovernmentRegionAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
+        {
+            return await _dbContext.Set<Locality>()
+                .Include(x => x.Municipality).ThenInclude(x => x.FederalState)
+                .Include(x => x.Municipality).ThenInclude(x => x.District)
+                .Where(x => x.Municipality.District.GovernmentRegion.RegionalKey == key)
+                .OrderBy(x => x.PostalCode).ThenBy(x => x.Name)
+                .Select(x => new LocalityResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
         /// Returns all municipal associations (Gemeindeverbände) within a district (Kreis).
         /// </summary>
         /// <param name="key" example="09180">Regional key of the district</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>List of municipal associations</returns>
         [HttpGet("Districts/{key}/MunicipalAssociations")]
         [Produces("text/plain", "text/json", "application/json", "text/csv")]
-        public async Task<IEnumerable<MunicipalAssociationResponse>> GetMunicipalAssociationsByDistrictAsync(string key)
+        public async Task<IEnumerable<MunicipalAssociationResponse>> GetMunicipalAssociationsByDistrictAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
         {
             return await _dbContext.Set<MunicipalAssociation>()
                 .Include(x => x.District).ThenInclude(x => x.FederalState)
@@ -166,6 +257,7 @@ namespace OpenPlzApi.DE
                 .Where(x => x.District.RegionalKey == key)
                 .OrderBy(x => x.RegionalKey)
                 .Select(x => new MunicipalAssociationResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -174,10 +266,14 @@ namespace OpenPlzApi.DE
         /// Returns all municipal associations (Gemeindeverbände) within a federal state (Bundesland).
         /// </summary>
         /// <param name="key" example="09">Regional key of the federal state</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>List of municipal associations</returns>
         [HttpGet("FederalStates/{key}/MunicipalAssociations")]
         [Produces("text/plain", "text/json", "application/json", "text/csv")]
-        public async Task<IEnumerable<MunicipalAssociationResponse>> GetMunicipalAssociationsByFederalStateAsync(string key)
+        public async Task<IEnumerable<MunicipalAssociationResponse>> GetMunicipalAssociationsByFederalStateAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
         {
             return await _dbContext.Set<MunicipalAssociation>()
                 .Include(x => x.District).ThenInclude(x => x.FederalState)
@@ -185,6 +281,7 @@ namespace OpenPlzApi.DE
                 .Where(x => x.District.FederalState.RegionalKey == key)
                 .OrderBy(x => x.RegionalKey)
                 .Select(x => new MunicipalAssociationResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -193,10 +290,14 @@ namespace OpenPlzApi.DE
         /// Returns all municipal associations (Gemeindeverbünde) within a government region (Regierungsbezirk).
         /// </summary>
         /// <param name="key" example="091">Regional key of the government region</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>List of municipal associations</returns>
         [HttpGet("GovernmentRegions/{key}/MunicipalAssociations")]
         [Produces("text/plain", "text/json", "application/json", "text/csv")]
-        public async Task<IEnumerable<MunicipalAssociationResponse>> GetMunicipalAssociationsByGovernmentRegionAsync(string key)
+        public async Task<IEnumerable<MunicipalAssociationResponse>> GetMunicipalAssociationsByGovernmentRegionAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
         {
             return await _dbContext.Set<MunicipalAssociation>()
                 .Include(x => x.District).ThenInclude(x => x.FederalState)
@@ -205,6 +306,7 @@ namespace OpenPlzApi.DE
                 .Where(x => x.District.GovernmentRegion.RegionalKey == key)
                 .OrderBy(x => x.RegionalKey)
                 .Select(x => new MunicipalAssociationResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -213,10 +315,14 @@ namespace OpenPlzApi.DE
         /// Returns all municipalities (Gemeinden) within a district (Kreis).
         /// </summary>
         /// <param name="key" example="09180">Regional key of the district</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>List of municipalities</returns>
         [HttpGet("Districts/{key}/Municipalities")]
         [Produces("text/plain", "text/json", "application/json", "text/csv")]
-        public async Task<IEnumerable<MunicipalityResponse>> GetMunicipalitiesByDistrictAsync(string key)
+        public async Task<IEnumerable<MunicipalityResponse>> GetMunicipalitiesByDistrictAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
         {
             return await _dbContext.Set<Municipality>()
                 .Include(x => x.FederalState)
@@ -225,6 +331,7 @@ namespace OpenPlzApi.DE
                 .Where(x => x.District.RegionalKey == key)
                 .OrderBy(x => x.RegionalKey)
                 .Select(x => new MunicipalityResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -233,10 +340,14 @@ namespace OpenPlzApi.DE
         /// Returns all municipalities (Gemeinden) within a federal state (Bundesland).
         /// </summary>
         /// <param name="key" example="09">Regional key of the federal state</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>List of municipalities</returns>
         [HttpGet("FederalStates/{key}/Municipalities")]
         [Produces("text/plain", "text/json", "application/json", "text/csv")]
-        public async Task<IEnumerable<MunicipalityResponse>> GetMunicipalitiesByFederalStateAsync(string key)
+        public async Task<IEnumerable<MunicipalityResponse>> GetMunicipalitiesByFederalStateAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
         {
             return await _dbContext.Set<Municipality>()
                 .Include(x => x.FederalState)
@@ -245,6 +356,7 @@ namespace OpenPlzApi.DE
                 .Where(x => x.District.FederalState.RegionalKey == key)
                 .OrderBy(x => x.RegionalKey)
                 .Select(x => new MunicipalityResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -253,10 +365,14 @@ namespace OpenPlzApi.DE
         /// Returns all municipalities (Gemeinden) within a government region (Regierungsbezirk).
         /// </summary>
         /// <param name="key" example="091">Regional key of the government region</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>List of municipalities</returns>
         [HttpGet("GovernmentRegions/{key}/Municipalities")]
         [Produces("text/plain", "text/json", "application/json", "text/csv")]
-        public async Task<IEnumerable<MunicipalityResponse>> GetMunicipalitiesByGovernmentRegionAsync(string key)
+        public async Task<IEnumerable<MunicipalityResponse>> GetMunicipalitiesByGovernmentRegionAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
         {
             return await _dbContext.Set<Municipality>()
                 .Include(x => x.FederalState)
@@ -265,9 +381,11 @@ namespace OpenPlzApi.DE
                 .Where(x => x.District.GovernmentRegion.RegionalKey == key)
                 .OrderBy(x => x.RegionalKey)
                 .Select(x => new MunicipalityResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
                 .AsNoTracking()
                 .ToListAsync();
         }
+
         /// <summary>
         /// Returns all streets whose name, postal code and/or name matches the given patterns.
         /// </summary>

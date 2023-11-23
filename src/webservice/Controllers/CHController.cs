@@ -64,16 +64,21 @@ namespace OpenPlzApi.CH
         /// Returns all communes (Gemeinden) within a canton (Kanton).
         /// </summary>
         /// <param name="key" example="10">Key of the canton</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>List of communes</returns>
         [HttpGet("Cantons/{key}/Communes")]
         [Produces("text/plain", "text/json", "application/json", "text/csv")]
-        public async Task<IEnumerable<CommuneResponse>> GetCommunesByCantonAsync(string key)
+        public async Task<IEnumerable<CommuneResponse>> GetCommunesByCantonAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
         {
             return await _dbContext.Set<Commune>()
                 .Include(x => x.District).ThenInclude(x => x.Canton)
                 .Where(x => x.District.Canton.Key == key)
                 .OrderBy(x => x.Key)
                 .Select(x => new CommuneResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -82,34 +87,45 @@ namespace OpenPlzApi.CH
         /// Returns all communes (Gemeinden) within a district (Bezirk).
         /// </summary>
         /// <param name="key" example="1002">Key of the district</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>List of communes</returns>
         [HttpGet("Districts/{key}/Communes")]
         [Produces("text/plain", "text/json", "application/json", "text/csv")]
-        public async Task<IEnumerable<CommuneResponse>> GetCommunesByDistrictAsync(string key)
+        public async Task<IEnumerable<CommuneResponse>> GetCommunesByDistrictAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
         {
             return await _dbContext.Set<Commune>()
                 .Include(x => x.District).ThenInclude(x => x.Canton)
                 .Where(x => x.District.Key == key)
                 .OrderBy(x => x.Key)
                 .Select(x => new CommuneResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
                 .AsNoTracking()
                 .ToListAsync();
         }
+
 
         /// <summary>
         /// Returns all districts (Bezirke) within a canton (Kanton).
         /// </summary>
         /// <param name="key" example="10">Key of the canton</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>List of districts</returns>
         [HttpGet("Cantons/{key}/Districts")]
         [Produces("text/plain", "text/json", "application/json", "text/csv")]
-        public async Task<IEnumerable<DistrictResponse>> GetDistrictsByCantonAsync(string key)
+        public async Task<IEnumerable<DistrictResponse>> GetDistrictsByCantonAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
         {
             return await _dbContext.Set<District>()
                 .Include(x => x.Canton)
                 .Where(x => x.Canton.Key == key)
                 .OrderBy(x => x.Key)
                 .Select(x => new DistrictResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -125,7 +141,7 @@ namespace OpenPlzApi.CH
         [HttpGet("Localities")]
         [Produces("text/plain", "text/json", "application/json", "text/csv")]
         public async Task<IEnumerable<LocalityResponse>> GetLocalitiesAsync(
-            [FromQuery] string postalCode, 
+            [FromQuery] string postalCode,
             [FromQuery] string name,
             [FromQuery, Range(1, int.MaxValue)] int? page = 1,
             [FromQuery, Range(1, 50)] int? pageSize = 10)
@@ -146,6 +162,52 @@ namespace OpenPlzApi.CH
             {
                 throw new ArgumentNullException(nameof(name));
             }
+        }
+
+        /// <summary>
+        /// Returns all localities wihtin a canton (Kanton)
+        /// </summary>
+        /// <param name="key" example="7">Regional key of the canton</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <returns>Paged list of localities</returns>
+        [HttpGet("Cantons/{key}/Localities")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
+        public async Task<IEnumerable<LocalityResponse>> GetLocalitiesByCantonAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
+        {
+            return await _dbContext.Set<Locality>()
+                .Include(x => x.Commune).ThenInclude(x => x.District).ThenInclude(x => x.Canton)
+                .Where(x => x.Commune.District.Canton.Key == key)
+                .OrderBy(x => x.PostalCode).ThenBy(x => x.Name)
+                .Select(x => new LocalityResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Returns all localities wihtin a district (Kreis).
+        /// </summary>
+        /// <param name="key" example="701">Regional key of the district</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <returns>Paged list of localities</returns>
+        [HttpGet("Districts/{key}/Localities")]
+        [Produces("text/plain", "text/json", "application/json", "text/csv")]
+        public async Task<IEnumerable<LocalityResponse>> GetLocalitiesByDistrictAsync(string key,
+            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
+            [FromQuery, Range(1, 50)] int? pageSize = 10)
+        {
+            return await _dbContext.Set<Locality>()
+                .Include(x => x.Commune).ThenInclude(x => x.District).ThenInclude(x => x.Canton)
+                .Where(x => x.Commune.District.Key == key)
+                .OrderBy(x => x.PostalCode).ThenBy(x => x.Name)
+                .Select(x => new LocalityResponse(x))
+                .Paging(page ?? 1, pageSize ?? 10)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         /// <summary>
