@@ -1,8 +1,8 @@
-#region OpenPLZ API - Copyright (C) 2023 STÜBER SYSTEMS GmbH
+#region OpenPLZ API - Copyright (c) STÜBER SYSTEMS GmbH
 /*    
  *    OpenPLZ API 
  *    
- *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
+ *    Copyright (c) STÜBER SYSTEMS GmbH
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License, version 3,
