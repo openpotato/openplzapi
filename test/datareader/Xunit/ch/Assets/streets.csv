@@ -1,6 +1,6 @@
 ﻿STR_ESID;STN_LABEL;ZIP_LABEL;COM_FOSNR;COM_NAME;COM_CANTON;STR_TYPE;STR_STATUS;STR_OFFICIAL;STR_VALID;STR_MODIFIED;STR_EASTING;STR_NORTHING
-10061643;Aeschen;8752 Näfels;1630;Glarus Nord;GL;Street;existing;true;true;07.04.2021;2721001;1216761
-10238439;Panoramastrasse;8868 Oberurnen;1630;Glarus Nord;GL;Street;existing;true;true;07.04.2021;2723125;1218940
-10090616;Les Etramaz;1041 Bottens;5514;Bottens;VD;Area;existing;true;true;03.03.2022;2539571;1163114
-10112650;Gerbe;3533 Bowil;605;Bowil;BE;Area;existing;true;true;07.04.2021;2620017;1193497
-10163894;Route du Glèbe;1695 Rueyres-St-Laurent, 1695 Villarsel-le-Gibloux;2236;Gibloux;FR;Street;existing;true;true;25.08.2022;2568391;1173689
+10061643;Aeschen;8752 Näfels;1630;Glarus Nord;GL;Street;real;true;true;07.04.2021;2721001;1216761
+10238439;Panoramastrasse;8868 Oberurnen;1630;Glarus Nord;GL;Street;real;true;true;07.04.2021;2723125;1218940
+10090616;Les Etramaz;1041 Bottens;5514;Bottens;VD;Area;real;true;true;03.03.2022;2539571;1163114
+10112650;Gerbe;3533 Bowil;605;Bowil;BE;Area;real;true;true;07.04.2021;2620017;1193497
+10163894;Route du Glèbe;1695 Rueyres-St-Laurent, 1695 Villarsel-le-Gibloux;2236;Gibloux;FR;Street;real;true;true;25.08.2022;2568391;1173689
