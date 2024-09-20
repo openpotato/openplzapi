@@ -19,48 +19,50 @@
  */
 #endregion
 
-using Microsoft.EntityFrameworkCore;
-using System;
+using OpenPlzApi.DataLayer.LI;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-namespace OpenPlzApi.DataLayer.DE
+namespace OpenPlzApi.LI
 {
     /// <summary>
-    /// Representation of a German street (Straße)
+    /// Reduced representation of a Liechtenstein commune (Gemeinde)
     /// </summary>
-    [Table(DbTables.DE.Street, Schema = DbSchemas.DE)]
-    [Index(nameof(Name), nameof(LocalityId), IsUnique = false)]
-    [Comment("Representation of a German street (Straße)")]
-    public class Street : BaseEntity
+    public class CommuneSummary
     {
         /// <summary>
-        /// Borough (Stadtbezirk)
+        /// Initializes a new instance of the <see cref="CommuneSummary"/> class.
         /// </summary>
-        [Comment("Borough (Stadtbezirk)")]
-        public string Borough { get; set; }
+        /// <param name="commune">Assigns data from <see cref="Commune"/></param>
+        public CommuneSummary(Commune commune)
+        {
+            Key = commune.Key;
+            Name = commune.Name;
+            ElectoralDistrict = commune.ElectoralDistrict;
+        }
 
         /// <summary>
-        /// Reference to locality
+        /// Key (Gemeindenummer)
         /// </summary>
-        public virtual Locality Locality { get; set; }
-
-        /// <summary>
-        /// Name (Straßenname)
-        /// </summary>
+        /// <example>7005</example>
         [Required]
-        [Comment("Name (Straßenname)")]
-        public string Name { get; set; }
+        [JsonPropertyOrder(1)]
+        public string Key { get; }
 
         /// <summary>
-        /// Suburb (Orts- oder Stadtteil)
+        /// Name (Amtlicher Gemeindename)
         /// </summary>
-        [Comment("Suburb (Orts- oder Stadtteil)")]
-        public string Suburb { get; set; }
+        /// <example>Schaan</example>
+        [Required]
+        [JsonPropertyOrder(2)]
+        public string Name { get; }
 
-        #region Foreign keys
-        [Comment("Reference to locality")]
-        public Guid LocalityId { get; set; }
-        #endregion Foreign keys
+        /// <summary>
+        /// Electoral district (Wahlkreis)
+        /// </summary>
+        /// <example>Oberland</example>
+        [Required]
+        [JsonPropertyOrder(3)]
+        public string ElectoralDistrict { get; }
     }
 }

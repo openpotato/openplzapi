@@ -54,5 +54,12 @@ namespace OpenPlzApi.DataLayer
             public const string Municipality = "Municipalities";
             public const string Street = "Streets";
         }
+
+        public static class LI
+        {
+            public const string Commune = "Communes";
+            public const string Locality = "Localities";
+            public const string Street = "Streets";
+        }
     }
 }

@@ -19,16 +19,34 @@
  */
 #endregion
 
-namespace OpenPlzApi.DataLayer
+using Swashbuckle.AspNetCore.Annotations;
+
+namespace OpenPlzApi.LI
 {
     /// <summary>
-    /// SQL schema names for database
+    /// Street status (Straßenstatus)
     /// </summary>
-    public static class DbSchemas
+    [SwaggerSchema(ReadOnly = true)]
+    public enum StreetStatus
     {
-        public const string AT = "at";
-        public const string CH = "ch";
-        public const string DE = "de";
-        public const string LI = "li";
+        /// <summary>
+        /// No status available
+        /// </summary>
+        None,
+        
+        /// <summary>
+        /// Planned street
+        /// </summary>
+        Planned = 1,
+
+        /// <summary>
+        /// Real street
+        /// </summary>
+        Real = 2,
+
+        /// <summary>
+        /// Outdated street
+        /// </summary>
+        Outdated = 3
     }
 }

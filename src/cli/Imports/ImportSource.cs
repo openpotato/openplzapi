@@ -24,6 +24,7 @@ namespace OpenPlzApi.CLI
     public enum ImportSource {
         AT,
         CH,
-        DE
+        DE,
+        LI
     };
 }

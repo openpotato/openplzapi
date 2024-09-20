@@ -38,9 +38,9 @@ namespace OpenPlzApi.CLI.Sources.CH
         /// </summary>
         public CommuneRegister()
         {
-            Cantons = new List<Canton>();
-            Communes = new List<Commune>();
-            Districts = new List<District>();
+            Cantons = [];
+            Communes = [];
+            Districts = [];
         }
 
         /// <summary>
@@ -105,7 +105,6 @@ namespace OpenPlzApi.CLI.Sources.CH
             {
                 Cantons.Add(new Canton()
                 {
-                    
                     Key = xlsReader.GetStringValue("A"),
                     Code = xlsReader.GetStringValue("B"),
                     Name = xlsReader.GetStringValue("C")

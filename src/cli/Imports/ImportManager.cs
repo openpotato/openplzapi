@@ -71,6 +71,11 @@ namespace OpenPlzApi.CLI
                     await ImportDEStreets(cancellationToken);
                     break;
 
+                case ImportSource.LI:
+                    await ImportLICommunes(cancellationToken);
+                    await ImportLIStreets(cancellationToken);
+                    break;
+
                 default:
                     break;
             };
@@ -148,6 +153,27 @@ namespace OpenPlzApi.CLI
                 _appConfiguration.Sources.DE.Streets.Caption,
                 _appConfiguration.Sources.DE.Streets.RemoteSourceFile,
                 new FileInfo(Path.Combine(_appConfiguration.Sources.RootFolderName, _appConfiguration.Sources.DE.Streets.LocalSourceFileName)));
+
+            await importer.ExecuteAsync(cancellationToken);
+        }
+
+        private async Task ImportLICommunes(CancellationToken cancellationToken)
+        {
+            var importer = new LI.CommunesImporter(_dbContextFactory,
+                _appConfiguration.Sources.LI.Communes.Caption,
+                _appConfiguration.Sources.LI.Communes.RemoteSourceFile,
+                new FileInfo(Path.Combine(_appConfiguration.Sources.RootFolderName, _appConfiguration.Sources.LI.Communes.LocalSourceFileName)));
+
+            await importer.ExecuteAsync(cancellationToken);
+        }
+
+        private async Task ImportLIStreets(CancellationToken cancellationToken)
+        {
+            var importer = new LI.StreetsImporter(_dbContextFactory,
+                _appConfiguration.Sources.LI.Streets.Caption,
+                _appConfiguration.Sources.LI.Streets.RemoteZipArchive,
+                new FileInfo(Path.Combine(_appConfiguration.Sources.RootFolderName, _appConfiguration.Sources.LI.Streets.LocalZipArchiveName)),
+                new FileInfo(Path.Combine(_appConfiguration.Sources.RootFolderName, _appConfiguration.Sources.LI.Streets.LocalSourceFileName)));
 
             await importer.ExecuteAsync(cancellationToken);
         }

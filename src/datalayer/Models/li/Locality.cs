@@ -24,43 +24,38 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OpenPlzApi.DataLayer.DE
+namespace OpenPlzApi.DataLayer.LI
 {
     /// <summary>
-    /// Representation of a German street (Straße)
+    /// Representation of a Liechtenstein locality (Ort oder Stadt)
     /// </summary>
-    [Table(DbTables.DE.Street, Schema = DbSchemas.DE)]
-    [Index(nameof(Name), nameof(LocalityId), IsUnique = false)]
-    [Comment("Representation of a German street (Straße)")]
-    public class Street : BaseEntity
+    [Table(DbTables.LI.Locality, Schema = DbSchemas.LI)]
+    [Index(nameof(PostalCode), nameof(Name), IsUnique = true)]
+    [Comment("Representation of a Liechtenstein locality (Ort oder Stadt)")]
+    public class Locality : BaseEntity
     {
         /// <summary>
-        /// Borough (Stadtbezirk)
+        /// Reference to commune
         /// </summary>
-        [Comment("Borough (Stadtbezirk)")]
-        public string Borough { get; set; }
+        public virtual Commune Commune { get; set; }
 
         /// <summary>
-        /// Reference to locality
-        /// </summary>
-        public virtual Locality Locality { get; set; }
-
-        /// <summary>
-        /// Name (Straßenname)
+        /// Name (Ortsname)
         /// </summary>
         [Required]
-        [Comment("Name (Straßenname)")]
+        [Comment("Name (Ortsname)")]
         public string Name { get; set; }
 
         /// <summary>
-        /// Suburb (Orts- oder Stadtteil)
+        /// Postal code (Postleitzahl)
         /// </summary>
-        [Comment("Suburb (Orts- oder Stadtteil)")]
-        public string Suburb { get; set; }
+        [Required]
+        [Comment("Postal code (Postleitzahl)")]
+        public string PostalCode { get; set; }
 
         #region Foreign keys
-        [Comment("Reference to locality")]
-        public Guid LocalityId { get; set; }
+        [Comment("Reference to commune (Gemeinde)")]
+        public Guid CommuneId { get; set; }
         #endregion Foreign keys
     }
 }

@@ -19,16 +19,28 @@
  */
 #endregion
 
-namespace OpenPlzApi.DataLayer
+using Enbrea.Csv;
+using System;
+
+namespace OpenPlzApi.CLI.Sources.LI
 {
-    /// <summary>
-    /// SQL schema names for database
-    /// </summary>
-    public static class DbSchemas
+    public class StreetTypeConverter : ICsvConverter
     {
-        public const string AT = "at";
-        public const string CH = "ch";
-        public const string DE = "de";
-        public const string LI = "li";
+        public virtual object FromString(string value)
+        {
+            return value switch
+            {
+                "" or null => StreetType.None,
+                "Area" => StreetType.Area,
+                "Street" => StreetType.Street,
+                "Place" => StreetType.Place,
+                _ => throw new NotSupportedException($"Street type {value} not supported"),
+            };
+        }
+
+        public string ToString(object value)
+        {
+            return null;
+        }
     }
 }

@@ -69,7 +69,6 @@ namespace OpenPlzApi.CLI.DE
             uint localityCount = 0;
 
             var localityIdCache = new HashSet<Guid>();
-            var timeStamp = DateOnly.FromDateTime(DateTime.Today);
 
             try
             {
@@ -85,43 +84,34 @@ namespace OpenPlzApi.CLI.DE
 
                 await foreach(var street in rdReader.ReadAsync(cancellationToken))
                 {
-                    try
+                    using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+
+                    if (!localityIdCache.Contains(street.Locality.GetUniqueId()))
                     {
-                        using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
-
-                        if (!localityIdCache.Contains(street.Locality.GetUniqueId()))
+                        dbContext.Set<Locality>().Add(new Locality()
                         {
-                            dbContext.Set<Locality>().Add(new Locality()
-                            {
-                                Id = street.Locality.GetUniqueId(),
-                                PostalCode = street.Locality.PostalCode,
-                                Name = street.Locality.Name,
-                                MunicipalityId = street.Locality.GetUniqueMunicipalityId()
-                            });
-
-                            localityIdCache.Add(street.Locality.GetUniqueId());
-                            localityCount++;
-                        }
-
-                        dbContext.Set<Street>().Add(new Street()
-                        {
-                            Id = Guid.NewGuid(),
-                            Name = street.Name,
-                            LocalityId = street.Locality.GetUniqueId()
+                            Id = street.Locality.GetUniqueId(),
+                            PostalCode = street.Locality.PostalCode,
+                            Name = street.Locality.Name,
+                            MunicipalityId = street.Locality.GetUniqueMunicipalityId()
                         });
 
-                        await dbContext.SaveChangesAsync(cancellationToken);
-
-                        streetCount++;
-                        recordCount++;
-
-                        if (recordCount % 100 == 0) _consoleWriter.ContinueProgress(recordCount);
+                        localityIdCache.Add(street.Locality.GetUniqueId());
+                        localityCount++;
                     }
-                    catch (Exception e)
+
+                    dbContext.Set<Street>().Add(new Street()
                     {
-                        Console.WriteLine(e.InnerException.ToString()); throw;
-                    }
+                        Id = Guid.NewGuid(),
+                        Name = street.Name,
+                        LocalityId = street.Locality.GetUniqueId()
+                    });
 
+                    await dbContext.SaveChangesAsync(cancellationToken);
+
+                    streetCount++;
+
+                    _consoleWriter.ContinueProgress(++recordCount);
                 }
 
                 _consoleWriter

@@ -19,21 +19,40 @@
  */
 #endregion
 
-namespace OpenPlzApi.CLI.Sources.CH
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace OpenPlzApi.DataLayer.LI
 {
     /// <summary>
-    /// Base class for <see cref="Canton"/>, <see cref="District"/>, <see cref="Commune"/> and <see cref="Street"/>
+    /// Representation of a Liechtenstein commune (Gemeinde)
     /// </summary>
-    public abstract class BaseRecord
+    [Table(DbTables.LI.Commune, Schema = DbSchemas.LI)]
+    [Index(nameof(Key), IsUnique = true)]
+    [Comment("Representation of a Liechtenstein commune (Gemeinde)")]
+    public class Commune : BaseEntity
     {
         /// <summary>
-        /// Key
+        /// Electoral district (Wahlkreis)
         /// </summary>
+        [Required]
+        [Comment("Electoral district (Wahlkreis)")]
+        public string ElectoralDistrict { get; set; }
+
+        /// <summary>
+        /// Key (Gemeindenummer)
+        /// </summary>
+        [Required]
+        [Comment("Key (Gemeindenummer)")]
         public string Key { get; set; }
 
         /// <summary>
-        /// Name
+        /// Name (Amtlicher Gemeindename)
         /// </summary>
+        [Required]
+        [Comment("Name (Amtlicher Gemeindename)")]
         public string Name { get; set; }
     }
 }

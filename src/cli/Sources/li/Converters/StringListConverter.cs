@@ -19,16 +19,31 @@
  */
 #endregion
 
-namespace OpenPlzApi.DataLayer
+using Enbrea.Csv;
+using System.Collections.Generic;
+
+namespace OpenPlzApi.CLI.Sources.LI
 {
-    /// <summary>
-    /// SQL schema names for database
-    /// </summary>
-    public static class DbSchemas
+    public class StringListConverter : ICsvConverter
     {
-        public const string AT = "at";
-        public const string CH = "ch";
-        public const string DE = "de";
-        public const string LI = "li";
+        public virtual object FromString(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return new List<string>();
+            }
+            else
+            {
+                var list = new List<string>();
+                var csvLineParser = new CsvLineParser(new CsvConfiguration { Separator = ',' });
+                csvLineParser.Parse(value, (i, s) => { if (!string.IsNullOrEmpty(s)) list.Add(s.Trim()); });
+                return list;
+            }
+        }
+
+        public string ToString(object value)
+        {
+            return null;
+        }
     }
 }

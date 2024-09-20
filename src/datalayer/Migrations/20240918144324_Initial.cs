@@ -15,6 +15,9 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 name: "ch");
 
             migrationBuilder.EnsureSchema(
+                name: "li");
+
+            migrationBuilder.EnsureSchema(
                 name: "at");
 
             migrationBuilder.EnsureSchema(
@@ -35,6 +38,22 @@ namespace OpenPlzAPI.DataLayer.Migrations
                     table.PrimaryKey("PK_Cantons", x => x.Id);
                 },
                 comment: "Representation of a Swiss canton (Kanton)");
+
+            migrationBuilder.CreateTable(
+                name: "Communes",
+                schema: "li",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
+                    ElectoralDistrict = table.Column<string>(type: "text", nullable: false, comment: "Electoral district (Wahlkreis)"),
+                    Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Gemeindenummer)"),
+                    Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Amtlicher Gemeindename)")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Communes", x => x.Id);
+                },
+                comment: "Representation of a Liechtenstein commune (Gemeinde)");
 
             migrationBuilder.CreateTable(
                 name: "FederalProvinces",
@@ -89,6 +108,29 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         onDelete: ReferentialAction.Cascade);
                 },
                 comment: "Representation of a Swiss district (Bezirk)");
+
+            migrationBuilder.CreateTable(
+                name: "Localities",
+                schema: "li",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
+                    Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Ortsname)"),
+                    PostalCode = table.Column<string>(type: "text", nullable: false, comment: "Postal code (Postleitzahl)"),
+                    CommuneId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to commune (Gemeinde)")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Localities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Localities_Communes_CommuneId",
+                        column: x => x.CommuneId,
+                        principalSchema: "li",
+                        principalTable: "Communes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                },
+                comment: "Representation of a Liechtenstein locality (Ort oder Stadt)");
 
             migrationBuilder.CreateTable(
                 name: "Districts",
@@ -161,6 +203,30 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         onDelete: ReferentialAction.Cascade);
                 },
                 comment: "Representation of a Swiss commune (Gemeinde)");
+
+            migrationBuilder.CreateTable(
+                name: "Streets",
+                schema: "li",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
+                    Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Straßenschlüssel)"),
+                    Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Straßenname)"),
+                    Status = table.Column<int>(type: "integer", nullable: false, comment: "Status (Straßenstatus)"),
+                    LocalityId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to locality")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Streets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Streets_Localities_LocalityId",
+                        column: x => x.LocalityId,
+                        principalSchema: "li",
+                        principalTable: "Localities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                },
+                comment: "Representation of a Liechtenstein street (Straße)");
 
             migrationBuilder.CreateTable(
                 name: "Municipalities",
@@ -409,7 +475,9 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
+                    Borough = table.Column<string>(type: "text", nullable: true, comment: "Borough (Stadtbezirk)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Straßenname)"),
+                    Suburb = table.Column<string>(type: "text", nullable: true, comment: "Suburb (Orts- oder Stadtteil)"),
                     LocalityId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to locality")
                 },
                 constraints: table =>
@@ -441,6 +509,13 @@ namespace OpenPlzAPI.DataLayer.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Communes_Key",
                 schema: "ch",
+                table: "Communes",
+                column: "Key",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Communes_Key1",
+                schema: "li",
                 table: "Communes",
                 column: "Key",
                 unique: true);
@@ -551,6 +626,19 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Localities_CommuneId1",
+                schema: "li",
+                table: "Localities",
+                column: "CommuneId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Localities_PostalCode_Name1",
+                schema: "li",
+                table: "Localities",
+                columns: new[] { "PostalCode", "Name" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MunicipalAssociations_DistrictId",
                 schema: "de",
                 table: "MunicipalAssociations",
@@ -637,8 +725,20 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 name: "IX_Streets_Name_LocalityId",
                 schema: "de",
                 table: "Streets",
-                columns: new[] { "Name", "LocalityId" },
+                columns: new[] { "Name", "LocalityId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Streets_Key_LocalityId2",
+                schema: "li",
+                table: "Streets",
+                columns: new[] { "Key", "LocalityId" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Streets_LocalityId3",
+                schema: "li",
+                table: "Streets",
+                column: "LocalityId");
         }
 
         /// <inheritdoc />
@@ -657,6 +757,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 schema: "de");
 
             migrationBuilder.DropTable(
+                name: "Streets",
+                schema: "li");
+
+            migrationBuilder.DropTable(
                 name: "Localities",
                 schema: "at");
 
@@ -667,6 +771,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
             migrationBuilder.DropTable(
                 name: "Localities",
                 schema: "de");
+
+            migrationBuilder.DropTable(
+                name: "Localities",
+                schema: "li");
 
             migrationBuilder.DropTable(
                 name: "Municipalities",
@@ -679,6 +787,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
             migrationBuilder.DropTable(
                 name: "Municipalities",
                 schema: "de");
+
+            migrationBuilder.DropTable(
+                name: "Communes",
+                schema: "li");
 
             migrationBuilder.DropTable(
                 name: "Districts",

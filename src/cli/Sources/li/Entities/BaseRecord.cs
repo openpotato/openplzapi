@@ -19,16 +19,21 @@
  */
 #endregion
 
-namespace OpenPlzApi.DataLayer
+namespace OpenPlzApi.CLI.Sources.LI
 {
     /// <summary>
-    /// SQL schema names for database
+    /// Base class for <see cref="Commune"/> and <see cref="Street"/>
     /// </summary>
-    public static class DbSchemas
+    public abstract class BaseRecord
     {
-        public const string AT = "at";
-        public const string CH = "ch";
-        public const string DE = "de";
-        public const string LI = "li";
+        /// <summary>
+        /// Key
+        /// </summary>
+        public string Key { get; set; }
+
+        /// <summary>
+        /// Name
+        /// </summary>
+        public string Name { get; set; }
     }
 }

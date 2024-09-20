@@ -28,7 +28,7 @@ namespace OpenPlzApi.DataLayer.CH
     {
         None = 0,
         Planned = 1, 
-        Existing = 2, 
+        Real = 2, 
         Outdated = 3
     }
 }

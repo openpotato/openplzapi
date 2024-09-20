@@ -22,10 +22,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenPlzApi.CLI.Sources.CH
+namespace OpenPlzApi.CLI.Sources.LI
 {
     /// <summary>
-    /// Swiss street (Straße))
+    /// Liechtenstein street (Straße))
     /// </summary>
     public class Street : BaseRecord
     {
@@ -88,11 +88,6 @@ namespace OpenPlzApi.CLI.Sources.CH
             /// </summary>
             public class _Commune
             {
-                /// <summary>
-                /// Code of canton
-                /// </summary>
-                public string Canton { get; set; }
-
                 /// <summary>
                 /// Key
                 /// </summary>

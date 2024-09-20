@@ -53,6 +53,7 @@ builder.Services
 
 // Add Swagger/OpenAPI support
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDateOnlyTimeOnlyStringConverters();
 builder.Services.AddSwaggerGen(setup =>
 {
     setup.SwaggerDoc("v1",
@@ -60,7 +61,7 @@ builder.Services.AddSwaggerGen(setup =>
         {
             Title = "OpenPLZ API v1",
             Version = "v1",
-            Description = "Open Data API for street and postal code directories of Germany, Austria and Switzerland",
+            Description = "Open Data API for street and postal code directories of Germany, Austria, Switzerland and Liechtenstein",
             Contact = new OpenApiContact
             {
                 Name = "The OpenPLZ API Project",
@@ -76,7 +77,6 @@ builder.Services.AddSwaggerGen(setup =>
     setup.CustomSchemaIds(x => x.FullName);
     setup.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "OpenPlzApi.WebService.xml"));
     setup.OrderActionsBy((apiDesc) => apiDesc.RelativePath);
-    setup.UseDateOnlyTimeOnlyStringConverters();
 });
 
 // Add EF Core support
@@ -108,6 +108,9 @@ app.UseSwaggerUI(options =>
 {
     options.DocumentTitle = "OpenPLZ API";
     options.SwaggerEndpoint("v1/swagger.json", "OpenPLZ API v1");
+    
+    // Sorting of controllers
+    options.ConfigObject.AdditionalItems["tagsSorter"] = "alpha";
 });
 
 app.UseCors();

@@ -32,7 +32,7 @@ namespace OpenPlzApi.CLI.Sources.CH
             {
                 "" or null => StreetStatus.None,
                 "planned" => StreetStatus.Planned,
-                "existing" => StreetStatus.Existing,
+                "real" => StreetStatus.Real,
                 "outdated" => StreetStatus.Outdated,
                 _ => throw new NotSupportedException($"Street status {value} not supported"),
             };

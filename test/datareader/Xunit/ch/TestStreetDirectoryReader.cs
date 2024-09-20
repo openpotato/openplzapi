@@ -51,7 +51,7 @@ namespace OpenPlzApi.CLI.Sources.CH.Tests
             Assert.Equal("10061643", enumerator.Current.Key);
             Assert.Equal("Aeschen", enumerator.Current.Name);
             Assert.Equal(StreetType.Street, enumerator.Current.Type);
-            Assert.Equal(StreetStatus.Existing, enumerator.Current.Status);
+            Assert.Equal(StreetStatus.Real, enumerator.Current.Status);
             Assert.Equal(new DateOnly(2021, 4, 7), enumerator.Current.LastModified);
 
             Assert.True(await enumerator.MoveNextAsync());
@@ -63,7 +63,7 @@ namespace OpenPlzApi.CLI.Sources.CH.Tests
             Assert.Equal("10238439", enumerator.Current.Key);
             Assert.Equal("Panoramastrasse", enumerator.Current.Name);
             Assert.Equal(StreetType.Street, enumerator.Current.Type);
-            Assert.Equal(StreetStatus.Existing, enumerator.Current.Status);
+            Assert.Equal(StreetStatus.Real, enumerator.Current.Status);
             Assert.Equal(new DateOnly(2021, 4, 7), enumerator.Current.LastModified);
 
             Assert.True(await enumerator.MoveNextAsync());
@@ -75,7 +75,7 @@ namespace OpenPlzApi.CLI.Sources.CH.Tests
             Assert.Equal("10090616", enumerator.Current.Key);
             Assert.Equal("Les Etramaz", enumerator.Current.Name);
             Assert.Equal(StreetType.Area, enumerator.Current.Type);
-            Assert.Equal(StreetStatus.Existing, enumerator.Current.Status);
+            Assert.Equal(StreetStatus.Real, enumerator.Current.Status);
             Assert.Equal(new DateOnly(2022, 3, 3), enumerator.Current.LastModified);
 
             Assert.True(await enumerator.MoveNextAsync());
@@ -87,7 +87,7 @@ namespace OpenPlzApi.CLI.Sources.CH.Tests
             Assert.Equal("10112650", enumerator.Current.Key);
             Assert.Equal("Gerbe", enumerator.Current.Name);
             Assert.Equal(StreetType.Area, enumerator.Current.Type);
-            Assert.Equal(StreetStatus.Existing, enumerator.Current.Status);
+            Assert.Equal(StreetStatus.Real, enumerator.Current.Status);
             Assert.Equal(new DateOnly(2021, 4, 7), enumerator.Current.LastModified);
 
             Assert.True(await enumerator.MoveNextAsync());
@@ -104,7 +104,7 @@ namespace OpenPlzApi.CLI.Sources.CH.Tests
             Assert.Equal("10163894", enumerator.Current.Key);
             Assert.Equal("Route du Glèbe", enumerator.Current.Name);
             Assert.Equal(StreetType.Street, enumerator.Current.Type);
-            Assert.Equal(StreetStatus.Existing, enumerator.Current.Status);
+            Assert.Equal(StreetStatus.Real, enumerator.Current.Status);
             Assert.Equal(new DateOnly(2022, 8, 25), enumerator.Current.LastModified);
 
             Assert.False(await enumerator.MoveNextAsync());

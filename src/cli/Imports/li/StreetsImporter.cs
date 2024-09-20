@@ -22,14 +22,14 @@
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.EntityFrameworkCore;
 using OpenPlzApi.DataLayer;
-using OpenPlzApi.DataLayer.CH;
+using OpenPlzApi.DataLayer.LI;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenPlzApi.CLI.CH
+namespace OpenPlzApi.CLI.LI
 {
     public class StreetsImporter : BaseImporter
     {
@@ -92,7 +92,7 @@ namespace OpenPlzApi.CLI.CH
 
                 using var rdFileReader = _cachedSourceFile.OpenText();
 
-                var rdReader = new Sources.CH.StreetDirectoryReader(rdFileReader);
+                var rdReader = new Sources.LI.StreetDirectoryReader(rdFileReader);
 
                 _consoleWriter.FinishProgress();
 

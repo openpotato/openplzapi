@@ -19,16 +19,32 @@
  */
 #endregion
 
-namespace OpenPlzApi.DataLayer
+using System;
+
+namespace OpenPlzApi.CLI.Sources.LI
 {
     /// <summary>
-    /// SQL schema names for database
+    /// Liechtenstein commune (Gemeinde)
     /// </summary>
-    public static class DbSchemas
+    public class Commune : BaseRecord
     {
-        public const string AT = "at";
-        public const string CH = "ch";
-        public const string DE = "de";
-        public const string LI = "li";
+        /// <summary>
+        /// Electoral district 
+        /// </summary>
+        public string ElectoralDistrict { get; set; }
+
+        /// <summary>
+        /// Date of last modification
+        /// </summary>
+        public DateOnly? LastModified { get; set; }
+
+        /// <summary>
+        /// Get a predictable unique id for this commune
+        /// </summary>
+        /// <returns>A guid value</returns>
+        public Guid GetUniqueId()
+        {
+            return IdFactory.CreateIdFromValue(Key);
+        }
     }
 }

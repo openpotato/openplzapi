@@ -17,7 +17,7 @@ namespace OpenPlzAPI.DataLayer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -662,6 +662,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnOrder(0)
                         .HasComment("Unique Id");
 
+                    b.Property<string>("Borough")
+                        .HasColumnType("text")
+                        .HasComment("Borough (Stadtbezirk)");
+
                     b.Property<Guid>("LocalityId")
                         .HasColumnType("uuid")
                         .HasComment("Reference to locality");
@@ -671,17 +675,130 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("text")
                         .HasComment("Name (Straßenname)");
 
+                    b.Property<string>("Suburb")
+                        .HasColumnType("text")
+                        .HasComment("Suburb (Orts- oder Stadtteil)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("LocalityId")
                         .HasDatabaseName("IX_Streets_LocalityId2");
 
-                    b.HasIndex("Name", "LocalityId")
-                        .IsUnique();
+                    b.HasIndex("Name", "LocalityId");
 
                     b.ToTable("Streets", "de", t =>
                         {
                             t.HasComment("Representation of a German street (Straße)");
+                        });
+                });
+
+            modelBuilder.Entity("OpenPlzApi.DataLayer.LI.Commune", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnOrder(0)
+                        .HasComment("Unique Id");
+
+                    b.Property<string>("ElectoralDistrict")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Electoral district (Wahlbezirk)");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Key (Gemeindenummer)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Name (Amtlicher Gemeindename)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Key")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Communes_Key1");
+
+                    b.ToTable("Communes", "li", t =>
+                        {
+                            t.HasComment("Representation of a Liechtenstein commune (Gemeinde)");
+                        });
+                });
+
+            modelBuilder.Entity("OpenPlzApi.DataLayer.LI.Locality", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnOrder(0)
+                        .HasComment("Unique Id");
+
+                    b.Property<Guid>("CommuneId")
+                        .HasColumnType("uuid")
+                        .HasComment("Reference to commune (Gemeinde)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Name (Ortsname)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Postal code (Postleitzahl)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommuneId")
+                        .HasDatabaseName("IX_Localities_CommuneId1");
+
+                    b.HasIndex("PostalCode", "Name")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Localities_PostalCode_Name1");
+
+                    b.ToTable("Localities", "li", t =>
+                        {
+                            t.HasComment("Representation of a Liechtenstein locality (Ort oder Stadt)");
+                        });
+                });
+
+            modelBuilder.Entity("OpenPlzApi.DataLayer.LI.Street", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnOrder(0)
+                        .HasComment("Unique Id");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Key (Straßenschlüssel)");
+
+                    b.Property<Guid>("LocalityId")
+                        .HasColumnType("uuid")
+                        .HasComment("Reference to locality");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Name (Straßenname)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasComment("Status (Straßenstatus)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocalityId")
+                        .HasDatabaseName("IX_Streets_LocalityId3");
+
+                    b.HasIndex("Key", "LocalityId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Streets_Key_LocalityId2");
+
+                    b.ToTable("Streets", "li", t =>
+                        {
+                            t.HasComment("Representation of a Liechtenstein street (Straße)");
                         });
                 });
 
@@ -845,6 +962,28 @@ namespace OpenPlzAPI.DataLayer.Migrations
             modelBuilder.Entity("OpenPlzApi.DataLayer.DE.Street", b =>
                 {
                     b.HasOne("OpenPlzApi.DataLayer.DE.Locality", "Locality")
+                        .WithMany()
+                        .HasForeignKey("LocalityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Locality");
+                });
+
+            modelBuilder.Entity("OpenPlzApi.DataLayer.LI.Locality", b =>
+                {
+                    b.HasOne("OpenPlzApi.DataLayer.LI.Commune", "Commune")
+                        .WithMany()
+                        .HasForeignKey("CommuneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Commune");
+                });
+
+            modelBuilder.Entity("OpenPlzApi.DataLayer.LI.Street", b =>
+                {
+                    b.HasOne("OpenPlzApi.DataLayer.LI.Locality", "Locality")
                         .WithMany()
                         .HasForeignKey("LocalityId")
                         .OnDelete(DeleteBehavior.Cascade)

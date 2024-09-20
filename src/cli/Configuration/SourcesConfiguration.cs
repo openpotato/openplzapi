@@ -44,6 +44,11 @@ namespace OpenPlzApi.CLI
         public DEConfiguration DE { get; set; }
 
         /// <summary>
+        /// Raw data sources for Liechtenstein
+        /// </summary>
+        public LIConfiguration LI { get; set; }
+
+        /// <summary>
         /// Root folder name for relative paths
         /// </summary>
         public string RootFolderName { get; set; }
@@ -74,6 +79,15 @@ namespace OpenPlzApi.CLI
         {
             public ZipFileConfiguration Municipalities { get; set; }
             public SingleFileConfiguration Streets { get; set; }
+        }
+
+        /// <summary>
+        /// Raw data sources for Liechtenstein
+        /// </summary>
+        public class LIConfiguration
+        {
+            public SingleFileConfiguration Communes { get; set; }
+            public ZipFileConfiguration Streets { get; set; }
         }
     }
 }

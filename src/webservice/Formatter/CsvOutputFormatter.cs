@@ -124,6 +124,18 @@ namespace OpenPlzApi
             {
                 WriteResponse(csvWriter, context.Object as IEnumerable<DE.StreetResponse>);
             }
+            else if (context.Object is IEnumerable<LI.CommuneResponse>)
+            {
+                WriteResponse(csvWriter, context.Object as IEnumerable<LI.CommuneResponse>);
+            }
+            else if (context.Object is IEnumerable<LI.LocalityResponse>)
+            {
+                WriteResponse(csvWriter, context.Object as IEnumerable<LI.LocalityResponse>);
+            }
+            else if (context.Object is IEnumerable<LI.StreetResponse>)
+            {
+                WriteResponse(csvWriter, context.Object as IEnumerable<LI.StreetResponse>);
+            }
 
             await context.HttpContext.Response.WriteAsync(buffer.ToString(), selectedEncoding);
         }
@@ -152,7 +164,10 @@ namespace OpenPlzApi
                 typeof(IEnumerable<DE.MunicipalAssociationResponse>).IsAssignableFrom(type) ||
                 typeof(IEnumerable<DE.MunicipalityResponse>).IsAssignableFrom(type) ||
                 typeof(IEnumerable<DE.LocalityResponse>).IsAssignableFrom(type) ||
-                typeof(IEnumerable<DE.StreetResponse>).IsAssignableFrom(type);
+                typeof(IEnumerable<DE.StreetResponse>).IsAssignableFrom(type) ||
+                typeof(IEnumerable<LI.CommuneResponse>).IsAssignableFrom(type) ||
+                typeof(IEnumerable<LI.LocalityResponse>).IsAssignableFrom(type) ||
+                typeof(IEnumerable<LI.StreetResponse>).IsAssignableFrom(type);
         }
 
         /// <summary>
@@ -686,6 +701,85 @@ namespace OpenPlzApi
                 csvWriter.SetValue("District.Type", street.District.Type);
                 csvWriter.SetValue("FederalState.Key", street.FederalState.Key);
                 csvWriter.SetValue("FederalState.Name", street.FederalState.Name);
+
+                csvWriter.Write();
+            }
+        }
+        /// <summary>
+        /// Writes a list of Liechtenstein communes to the CSV writer.
+        /// </summary>
+        /// <param name="csvWriter">The CSV writer</param>
+        /// <param name="communes">The list of communes</param>
+        private void WriteResponse(CsvTableWriter csvWriter, IEnumerable<LI.CommuneResponse> communes)
+        {
+            csvWriter.WriteHeaders(
+                "Key",
+                "Name",
+                "ElectoralDistrict");
+
+            foreach (var commune in communes)
+            {
+                csvWriter.SetValue("Key", commune.Key);
+                csvWriter.SetValue("Name", commune.Name);
+                csvWriter.SetValue("ElectoralDistrict", commune.ElectoralDistrict);
+
+                csvWriter.Write();
+            }
+        }
+
+        /// <summary>
+        /// Writes a list of Liechtenstein localities to the CSV writer.
+        /// </summary>
+        /// <param name="csvWriter">The CSV writer</param>
+        /// <param name="localities">The list of localities</param>
+        private void WriteResponse(CsvTableWriter csvWriter, IEnumerable<LI.LocalityResponse> localities)
+        {
+            csvWriter.WriteHeaders(
+                "PostalCode",
+                "Name",
+                "Commune.Code",
+                "Commune.Name",
+                "Commune.ElectoralDistrict");
+
+            foreach (var localitiy in localities)
+            {
+                csvWriter.SetValue("PostalCode", localitiy.PostalCode);
+                csvWriter.SetValue("Name", localitiy.Name);
+                csvWriter.SetValue("Commune.Key", localitiy.Commune.Key);
+                csvWriter.SetValue("Commune.Name", localitiy.Commune.Name);
+                csvWriter.SetValue("Commune.ElectoralDistrict", localitiy.Commune.ElectoralDistrict);
+
+                csvWriter.Write();
+            }
+        }
+
+        /// <summary>
+        /// Writes a list of Liechtenstein streets to the CSV writer.
+        /// </summary>
+        /// <param name="csvWriter">The CSV writer</param>
+        /// <param name="streets">The list of streets</param>
+        private void WriteResponse(CsvTableWriter csvWriter, IEnumerable<LI.StreetResponse> streets)
+        {
+            csvWriter.WriteHeaders(
+                "Key",
+                "Name",
+                "PostalCode",
+                "Locality",
+                "Status",
+                "Commune.Key",
+                "Commune.Name",
+                "Commune.ElectoralDistrict");
+
+            foreach (var street in streets)
+            {
+                csvWriter.SetValue("Key", street.Key);
+                csvWriter.SetValue("Name", street.Name);
+                csvWriter.SetValue("PostalCode", street.PostalCode);
+                csvWriter.SetValue("Locality", street.Locality);
+                csvWriter.SetValue("Status", street.Status);
+                csvWriter.SetValue("Commune.Key", street.Commune.Key);
+                csvWriter.SetValue("Commune.Name", street.Commune.Name);
+                csvWriter.SetValue("Commune.ElectoralDistrict", street.Commune.ElectoralDistrict);
 
                 csvWriter.Write();
             }

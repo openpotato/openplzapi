@@ -19,16 +19,21 @@
  */
 #endregion
 
-namespace OpenPlzApi.DataLayer
+using System;
+
+namespace OpenPlzApi.CLI.Sources.LI
 {
     /// <summary>
-    /// SQL schema names for database
+    /// Exception class for <see cref="XlsReader"/>.
     /// </summary>
-    public static class DbSchemas
+    public class XlsReaderException : Exception
     {
-        public const string AT = "at";
-        public const string CH = "ch";
-        public const string DE = "de";
-        public const string LI = "li";
+        /// <summary>
+        /// Initializes a new instance of <see cref="XlsReaderException"/>.
+        /// </summary>
+        /// <param name="message">The message that describes the error.</param>
+        public XlsReaderException(string message) : base(message)
+        {
+        }
     }
 }

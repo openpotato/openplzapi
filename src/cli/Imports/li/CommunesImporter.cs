@@ -21,21 +21,20 @@
 
 using Microsoft.EntityFrameworkCore;
 using OpenPlzApi.DataLayer;
-using OpenPlzApi.DataLayer.AT;
+using OpenPlzApi.DataLayer.LI;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenPlzApi.CLI.AT
+namespace OpenPlzApi.CLI.LI
 {
-    public class DistrictsImporter : BaseImporter
+    public class CommunesImporter : BaseImporter
     {
         private readonly FileInfo _cachedSourceFile;
         private readonly Uri _remoteSourceFile;
 
-        public DistrictsImporter(IDbContextFactory<AppDbContext> dbContextFactory, string caption, Uri remoteSourceFile, FileInfo cachedSourceFile)
+        public CommunesImporter(IDbContextFactory<AppDbContext> dbContextFactory, string caption, Uri remoteSourceFile, FileInfo cachedSourceFile)
             : base(dbContextFactory, caption)
         {
             _remoteSourceFile = remoteSourceFile;
@@ -65,59 +64,42 @@ namespace OpenPlzApi.CLI.AT
         private async Task ImportToDatabaseAsync(CancellationToken cancellationToken)
         {
             uint recordCount = 0;
-            uint federalProvinceCount = 0;
-            uint districtCount = 0;
-
-            var federalProvinceIdCache = new HashSet<Guid>();
+            uint communesCount = 0;
 
             try
             {
                 _consoleWriter.StartProgress($"Open {_cachedSourceFile.Name} file");
 
-                using var rdFileStream = _cachedSourceFile.OpenText();
+                using var gvFileStream = _cachedSourceFile.OpenText();
 
-                var rdReader = new Sources.AT.DistrictDataReader(rdFileStream);
+                var rdReader = new Sources.LI.CommuneDataReader(gvFileStream);
 
                 _consoleWriter.FinishProgress();
 
-                _consoleWriter.StartProgress("Read and process districts...");
+                _consoleWriter.StartProgress("Read and process communes...");
 
-                await foreach (var district in rdReader.ReadAsync(cancellationToken))
+                await foreach (var commune in rdReader.ReadAsync(cancellationToken))
                 {
                     using var dbContext = _dbContextFactory.CreateDbContext();
 
-                    if (!federalProvinceIdCache.Contains(district.FederalProvince.GetUniqueId()))
+                    dbContext.Set<Commune>().Add(new Commune()
                     {
-                        dbContext.Set<FederalProvince>().Add(new FederalProvince()
-                        {
-                            Id = district.FederalProvince.GetUniqueId(),
-                            Key = district.FederalProvince.Key,
-                            Name = district.FederalProvince.Name
-                        });
-
-                        federalProvinceIdCache.Add(district.FederalProvince.GetUniqueId());
-                        federalProvinceCount++;
-                    }
-
-                    dbContext.Set<District>().Add(new District()
-                    {
-                        Id = district.GetUniqueId(),
-                        Key = district.Key,
-                        Name = district.Name.GetFriendlyName(),
-                        Code = district.Code,
-                        FederalProvinceId = district.FederalProvince.GetUniqueId()
+                        Id = commune.GetUniqueId(),
+                        Key = commune.Key,
+                        Name = commune.Name,
+                        ElectoralDistrict = commune.ElectoralDistrict,
                     });
 
                     await dbContext.SaveChangesAsync(cancellationToken);
 
-                    districtCount++;
+                    communesCount++;
 
                     _consoleWriter.ContinueProgress(++recordCount);
                 }
 
                 _consoleWriter
                     .FinishProgress(recordCount)
-                    .Success($"{federalProvinceCount} federal provinces and {districtCount} districts imported.")
+                    .Success($"{communesCount} communes imported.")
                     .NewLine();
             }
             catch (Exception ex)
@@ -131,4 +113,3 @@ namespace OpenPlzApi.CLI.AT
         }
     }
 }
-

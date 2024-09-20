@@ -57,6 +57,10 @@ namespace OpenPlzApi.DataLayer
             modelBuilder.Entity<DE.Municipality>();
             modelBuilder.Entity<DE.Locality>();
             modelBuilder.Entity<DE.Street>();
+
+            modelBuilder.Entity<LI.Commune>();
+            modelBuilder.Entity<LI.Locality>();
+            modelBuilder.Entity<LI.Street>();
         }
     }
 }

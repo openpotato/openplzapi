@@ -36,6 +36,11 @@ namespace OpenPlzApi.CLI.Sources.DE
         }
 
         /// <summary>
+        /// Borough
+        /// </summary>
+        public string Borough { get; set; }
+
+        /// <summary>
         /// Reference to locality
         /// </summary>
         public _Locality Locality { get; set; }
@@ -44,6 +49,11 @@ namespace OpenPlzApi.CLI.Sources.DE
         /// Name
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Suburb
+        /// </summary>
+        public string Suburb { get; set; }
 
         /// <summary>
         /// Embedded locality (Ort oder Stadt)

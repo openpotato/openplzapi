@@ -202,7 +202,7 @@ namespace OpenPlzApi.CLI.DE
                     .FinishProgress(recordCount)
                     .Success(
                         $"{federalStateCount} federal states, {governmentRegionCount} government regions, {districtCount} districts, " +
-                        $"{municipalAssociationCount} municipal and {municipalityCount} municipalities imported.")
+                        $"{municipalAssociationCount} municipal associations and {municipalityCount} municipalities imported.")
                     .NewLine();
             }
             catch (Exception ex)

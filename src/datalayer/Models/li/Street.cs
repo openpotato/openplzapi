@@ -24,21 +24,22 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OpenPlzApi.DataLayer.DE
+namespace OpenPlzApi.DataLayer.LI
 {
     /// <summary>
-    /// Representation of a German street (Straße)
+    /// Representation of a Liechtenstein street (Straße)
     /// </summary>
-    [Table(DbTables.DE.Street, Schema = DbSchemas.DE)]
-    [Index(nameof(Name), nameof(LocalityId), IsUnique = false)]
-    [Comment("Representation of a German street (Straße)")]
+    [Table(DbTables.LI.Street, Schema = DbSchemas.LI)]
+    [Index(nameof(Key), nameof(LocalityId), IsUnique = true)]
+    [Comment("Representation of a Liechtenstein street (Straße)")]
     public class Street : BaseEntity
     {
         /// <summary>
-        /// Borough (Stadtbezirk)
+        /// Key (Straßenschlüssel)
         /// </summary>
-        [Comment("Borough (Stadtbezirk)")]
-        public string Borough { get; set; }
+        [Required]
+        [Comment("Key (Straßenschlüssel)")]
+        public string Key { get; set; }
 
         /// <summary>
         /// Reference to locality
@@ -53,10 +54,10 @@ namespace OpenPlzApi.DataLayer.DE
         public string Name { get; set; }
 
         /// <summary>
-        /// Suburb (Orts- oder Stadtteil)
+        /// Status (Straßenstatus)
         /// </summary>
-        [Comment("Suburb (Orts- oder Stadtteil)")]
-        public string Suburb { get; set; }
+        [Comment("Status (Straßenstatus)")]
+        public StreetStatus Status { get; set; }
 
         #region Foreign keys
         [Comment("Reference to locality")]

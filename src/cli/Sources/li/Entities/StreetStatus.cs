@@ -19,16 +19,16 @@
  */
 #endregion
 
-namespace OpenPlzApi.DataLayer
+namespace OpenPlzApi.CLI.Sources.LI
 {
     /// <summary>
-    /// SQL schema names for database
+    /// Street status (Straßenstatus)
     /// </summary>
-    public static class DbSchemas
+    public enum StreetStatus
     {
-        public const string AT = "at";
-        public const string CH = "ch";
-        public const string DE = "de";
-        public const string LI = "li";
+        None = 0,
+        Planned = 1,
+        Real = 2, 
+        Outdated = 3
     }
 }

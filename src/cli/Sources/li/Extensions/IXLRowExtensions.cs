@@ -19,16 +19,25 @@
  */
 #endregion
 
-namespace OpenPlzApi.DataLayer
+using ClosedXML.Excel;
+
+namespace OpenPlzApi.CLI.Sources.LI
 {
     /// <summary>
-    /// SQL schema names for database
+    /// Extensions for <see cref="IXLRow"/>
     /// </summary>
-    public static class DbSchemas
+    public static class IXLRowExtensions
     {
-        public const string AT = "at";
-        public const string CH = "ch";
-        public const string DE = "de";
-        public const string LI = "li";
+        public static T GetCellValue<T>(this IXLRow xlsRow, string xlsColumnName)
+        {
+            if (xlsColumnName != null)
+            {
+                return xlsRow.Cell(xlsColumnName).GetValue<T>();
+            }
+            else
+            {
+                return default;
+            }
+        }
     }
 }

@@ -25,65 +25,49 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace OpenPlzApi.CLI.Sources.DE
+namespace OpenPlzApi.CLI.Sources.LI
 {
     /// <summary>
-    /// A reader for German street names from the OpenStreetMap project.
+    /// A reader for the Liechtenstein commune list
     /// </summary>
-    public class StreetDataReader
+    public class CommuneDataReader
     {
         private readonly CsvTableReader _csvReader;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StreetDataReader"/> class for the specified stream.
+        /// Initializes a new instance of the <see cref="CommuneDataReader"/> class for the specified stream.
         /// </summary>
         /// <param name="textReader">A text reader</param>
-        public StreetDataReader(TextReader textReader)
+        public CommuneDataReader(TextReader textReader)
         {
             _csvReader = new CsvTableReader(textReader);
             _csvReader.Configuration.Separator = ',';
         }
 
         /// <summary>
-        /// Iterates over the internal CSV stream and gives back street records
+        /// Iterates over the internal CSV stream and gives back commune records
         /// </summary>
         /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
-        /// <returns>An async enumerator of <see cref="Street"/> instances</returns>
-        public async IAsyncEnumerable<Street> ReadAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
+        /// <returns>An async enumerator of <see cref="Commune"/> instances</returns>
+        public async IAsyncEnumerable<Commune> ReadAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             await _csvReader.ReadHeadersAsync();
-
-            var localityCache = new Dictionary<string, Street._Locality>();
 
             while (await _csvReader.ReadAsync() > 1)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                yield return GetStreet(localityCache);
+                yield return GetCommune();
             }
         }
 
-        private Street GetStreet(Dictionary<string, Street._Locality> localityCache)
+
+        private Commune GetCommune()
         {
-            var localityId = $"{_csvReader.GetValue<string>("Name")}+{_csvReader.GetValue<string>("PostalCode")}+{_csvReader.GetValue<string>("RegionalKey")}";
-
-            if (!localityCache.TryGetValue(localityId, out var locality))
+            return new Commune()
             {
-                locality = new Street._Locality()
-                {
-                    PostalCode = _csvReader.GetValue<string>("PostalCode"),
-                    Name = _csvReader.GetValue<string>("Locality"),
-                    MunicipalityKey = _csvReader.GetValue<string>("RegionalKey")
-                };
-
-                localityCache.Add(localityId, locality);
-            }
-
-            return new Street()
-            {
+                Key = _csvReader.GetValue<string>("Key"),
                 Name = _csvReader.GetValue<string>("Name"),
-                Locality = locality,
-                Borough = _csvReader.GetValue<string>("Borough"),
-                Suburb = _csvReader.GetValue<string>("Suburb"),
+                ElectoralDistrict = _csvReader.GetValue<string>("ElectoralDistrict"),
             };
         }
     }
