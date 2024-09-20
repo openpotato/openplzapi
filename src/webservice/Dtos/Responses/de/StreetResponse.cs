@@ -45,20 +45,29 @@ namespace OpenPlzApi.DE
             Municipality = street.Locality?.Municipality != null ? new MunicipalitySummary(street.Locality?.Municipality) : null;
             Name = street.Name;
             PostalCode = street.Locality?.PostalCode;
+            Suburb = street.Suburb;
+            Borough = street.Borough;
         }
+
+        /// <summary>
+        /// Borough (Stadtbezirk)
+        /// </summary>
+        [Required]
+        [JsonPropertyOrder(4)]
+        public string Borough { get; }
 
         /// <summary>
         /// Reference to district (Kreis)
         /// </summary>
         [Required]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(7)]
         public DistrictSummary District { get; }
 
         /// <summary>
         /// Reference to federal state (Bundesland)
         /// </summary>
         [Required]
-        [JsonPropertyOrder(6)]
+        [JsonPropertyOrder(8)]
         public FederalStateSummary FederalState { get; }
 
         /// <summary>
@@ -73,7 +82,7 @@ namespace OpenPlzApi.DE
         /// Reference to municipality
         /// </summary>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(6)]
         public MunicipalitySummary Municipality { get; }
 
         /// <summary>
@@ -91,5 +100,12 @@ namespace OpenPlzApi.DE
         [Required]
         [JsonPropertyOrder(2)]
         public string PostalCode { get; }
+
+        /// <summary>
+        /// Suburb (Stadtteil)
+        /// </summary>
+        [Required]
+        [JsonPropertyOrder(5)]
+        public string Suburb { get; }
     }
 }

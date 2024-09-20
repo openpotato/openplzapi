@@ -104,7 +104,9 @@ namespace OpenPlzApi.CLI.DE
                     {
                         Id = Guid.NewGuid(),
                         Name = street.Name,
-                        LocalityId = street.Locality.GetUniqueId()
+                        LocalityId = street.Locality.GetUniqueId(),
+                        Borough = street.Borough,
+                        Suburb = street.Suburb
                     });
 
                     await dbContext.SaveChangesAsync(cancellationToken);
