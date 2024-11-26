@@ -19,7 +19,6 @@
  */
 #endregion
 
-using DocumentFormat.OpenXml.Bibliography;
 using System;
 using System.Collections.Generic;
 using System.IO;

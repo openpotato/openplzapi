@@ -14,7 +14,7 @@ steps:
     filePath: 'azure-gitversion.ps1'
     failOnStderr: true
     pwsh: true
-- task: Assembly-Info-NetCore@2
+- task: Assembly-Info-NetCore@3
   displayName: 'Apply Assembly Infos'
   inputs:
     Path: '$(Build.SourcesDirectory)'

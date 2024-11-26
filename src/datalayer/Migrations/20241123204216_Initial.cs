@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using NpgsqlTypes;
 
 #nullable disable
 
@@ -76,8 +77,8 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
+                    Key = table.Column<string>(type: "text", nullable: false, comment: "Regional key (Regionalschlüssel)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Bundeslandname)"),
-                    RegionalKey = table.Column<string>(type: "text", nullable: false, comment: "Regional key (Regionalschlüssel)"),
                     SeatOfGovernment = table.Column<string>(type: "text", nullable: true, comment: "Seat of government (Sitz der Landesregierung)")
                 },
                 constraints: table =>
@@ -108,6 +109,35 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         onDelete: ReferentialAction.Cascade);
                 },
                 comment: "Representation of a Swiss district (Bezirk)");
+
+            migrationBuilder.CreateTable(
+                name: "FullTextStreets",
+                schema: "li",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
+                    Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Straßenschlüssel)"),
+                    Locality = table.Column<string>(type: "text", nullable: false, comment: "Locality"),
+                    Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Straßenname)"),
+                    PostalCode = table.Column<string>(type: "text", nullable: false, comment: "Postal code (Postleitzahl)"),
+                    SearchVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: true, comment: "tsvector column for full text search")
+                        .Annotation("Npgsql:TsVectorConfig", "config_openplzapi")
+                        .Annotation("Npgsql:TsVectorProperties", new[] { "Name", "PostalCode", "Locality" }),
+                    Status = table.Column<int>(type: "integer", nullable: false, comment: "Status (Straßenstatus)"),
+                    CommuneId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to commune (Gemeinde)")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FullTextStreets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FullTextStreets_Communes_CommuneId",
+                        column: x => x.CommuneId,
+                        principalSchema: "li",
+                        principalTable: "Communes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                },
+                comment: "Representation of a Liechtenstein street (Straße) for full text search");
 
             migrationBuilder.CreateTable(
                 name: "Localities",
@@ -163,8 +193,8 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
                     AdministrativeHeadquarters = table.Column<string>(type: "text", nullable: true, comment: "Administrative headquarters (Verwaltungssitz des Regierungsbezirks)"),
+                    Key = table.Column<string>(type: "text", nullable: false, comment: "Regional key (Regionalschlüssel)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Bezirksname)"),
-                    RegionalKey = table.Column<string>(type: "text", nullable: false, comment: "Regional key (Regionalschlüssel)"),
                     FederalStateId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to federal state (Bundesland)")
                 },
                 constraints: table =>
@@ -262,8 +292,8 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
                     AdministrativeHeadquarters = table.Column<string>(type: "text", nullable: true, comment: "Administrative headquarters (Sitz der Kreisverwaltung)"),
+                    Key = table.Column<string>(type: "text", nullable: false, comment: "Regional key (Regionalschlüssel)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Kreisname)"),
-                    RegionalKey = table.Column<string>(type: "text", nullable: false, comment: "Regional key (Regionalschlüssel)"),
                     Type = table.Column<int>(type: "integer", nullable: false, comment: "Type (Kreiskennzeichen)"),
                     FederalStateId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to federal state (Bundesland)"),
                     GovernmentRegionId = table.Column<Guid>(type: "uuid", nullable: true, comment: "Reference to government region (Regierungsbezirk)")
@@ -288,6 +318,35 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 comment: "Representation of a German district (Kreis)");
 
             migrationBuilder.CreateTable(
+                name: "FullTextStreets",
+                schema: "ch",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
+                    Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Straßenschlüssel)"),
+                    Locality = table.Column<string>(type: "text", nullable: false, comment: "Locality (Ort)"),
+                    Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Straßenname)"),
+                    PostalCode = table.Column<string>(type: "text", nullable: false, comment: "Postal code (Postleitzahl)"),
+                    SearchVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: true, comment: "tsvector column for full text search")
+                        .Annotation("Npgsql:TsVectorConfig", "config_openplzapi")
+                        .Annotation("Npgsql:TsVectorProperties", new[] { "Name", "PostalCode", "Locality" }),
+                    Status = table.Column<int>(type: "integer", nullable: false, comment: "Status (Straßenstatus)"),
+                    CommuneId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to commune (Gemeinde)")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FullTextStreets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FullTextStreets_Communes_CommuneId",
+                        column: x => x.CommuneId,
+                        principalSchema: "ch",
+                        principalTable: "Communes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                },
+                comment: "Representation of a Swiss street (Straße) for full text search");
+
+            migrationBuilder.CreateTable(
                 name: "Localities",
                 schema: "ch",
                 columns: table => new
@@ -309,6 +368,34 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         onDelete: ReferentialAction.Cascade);
                 },
                 comment: "Representation of a Swiss locality (Ort oder Stadt)");
+
+            migrationBuilder.CreateTable(
+                name: "FullTextStreets",
+                schema: "at",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
+                    Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Straßenkennziffer)"),
+                    Locality = table.Column<string>(type: "text", nullable: false, comment: "Locality (Ortschaft)"),
+                    Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Straßenname)"),
+                    PostalCode = table.Column<string>(type: "text", nullable: false, comment: "Postal code (Postleitzahl)"),
+                    SearchVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: true, comment: "tsvector column for full text search")
+                        .Annotation("Npgsql:TsVectorConfig", "config_openplzapi")
+                        .Annotation("Npgsql:TsVectorProperties", new[] { "Name", "PostalCode", "Locality" }),
+                    MunicipalityId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to municipality")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FullTextStreets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FullTextStreets_Municipalities_MunicipalityId",
+                        column: x => x.MunicipalityId,
+                        principalSchema: "at",
+                        principalTable: "Municipalities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                },
+                comment: "Representation of an Austrian street (Straße) for full text search");
 
             migrationBuilder.CreateTable(
                 name: "Localities",
@@ -341,9 +428,8 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
                     AdministrativeHeadquarters = table.Column<string>(type: "text", nullable: true, comment: "Administrative headquarters (Verwaltungssitz des Gemeindeverbandes)"),
-                    Code = table.Column<string>(type: "text", nullable: false, comment: "Code (Code des Gemeindeverbandes)"),
+                    Key = table.Column<string>(type: "text", nullable: false, comment: "Regional key (Regionalschlüssel)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Name des Gemeindeverbandes)"),
-                    RegionalKey = table.Column<string>(type: "text", nullable: false, comment: "Regional key (Regionalschlüssel)"),
                     Type = table.Column<int>(type: "integer", nullable: false, comment: "Type (Kennzeichen)"),
                     DistrictId = table.Column<Guid>(type: "uuid", nullable: true, comment: "Reference to district (Kreis)")
                 },
@@ -412,10 +498,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
+                    Key = table.Column<string>(type: "text", nullable: false, comment: "Regional key (Regionalschlüssel)"),
                     MultiplePostalCodes = table.Column<bool>(type: "boolean", nullable: false, comment: "Multiple postcodes available?"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Gemeindename)"),
                     PostalCode = table.Column<string>(type: "text", nullable: false, comment: "Postal code of the administrative headquarters (Verwaltungssitz), if there are multiple postal codes available"),
-                    RegionalKey = table.Column<string>(type: "text", nullable: false, comment: "Regional key (Regionalschlüssel)"),
                     ShortName = table.Column<string>(type: "text", nullable: false, comment: "Short Name (Verkürzter Gemeindename)"),
                     Type = table.Column<int>(type: "integer", nullable: false, comment: "Type (Gemeindekennzeichen)"),
                     AssociationId = table.Column<Guid>(type: "uuid", nullable: true, comment: "Reference to municipal association (Gemeindeverband)"),
@@ -446,6 +532,34 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         principalColumn: "Id");
                 },
                 comment: "Representation of a German municipality (Gemeinde)");
+
+            migrationBuilder.CreateTable(
+                name: "FullTextStreets",
+                schema: "de",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
+                    Borough = table.Column<string>(type: "text", nullable: true, comment: "Borough (Stadtbezirk)"),
+                    Locality = table.Column<string>(type: "text", nullable: false, comment: "Locality (Ort)"),
+                    Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Straßenname)"),
+                    PostalCode = table.Column<string>(type: "text", nullable: false, comment: "Postal code (Postleitzahl)"),
+                    SearchVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: true, comment: "tsvector column for full text search")
+                        .Annotation("Npgsql:TsVectorConfig", "config_openplzapi")
+                        .Annotation("Npgsql:TsVectorProperties", new[] { "Name", "PostalCode", "Locality" }),
+                    Suburb = table.Column<string>(type: "text", nullable: true, comment: "Suburb (Orts- oder Stadtteil)"),
+                    MunicipalityId = table.Column<Guid>(type: "uuid", nullable: true, comment: "Reference to municipality (Gemeinde)")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FullTextStreets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FullTextStreets_Municipalities_MunicipalityId",
+                        column: x => x.MunicipalityId,
+                        principalSchema: "de",
+                        principalTable: "Municipalities",
+                        principalColumn: "Id");
+                },
+                comment: "Representation of a German street (Straße) for full text search");
 
             migrationBuilder.CreateTable(
                 name: "Localities",
@@ -559,10 +673,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 column: "GovernmentRegionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Districts_RegionalKey",
+                name: "IX_Districts_Key1",
                 schema: "de",
                 table: "Districts",
-                column: "RegionalKey",
+                column: "Key",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -573,11 +687,63 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_FederalStates_RegionalKey",
+                name: "IX_FederalStates_Key",
                 schema: "de",
                 table: "FederalStates",
-                column: "RegionalKey",
+                column: "Key",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FullTextStreets_MunicipalityId",
+                schema: "at",
+                table: "FullTextStreets",
+                column: "MunicipalityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FullTextStreets_SearchVector",
+                schema: "at",
+                table: "FullTextStreets",
+                column: "SearchVector")
+                .Annotation("Npgsql:IndexMethod", "GIN");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FullTextStreets_CommuneId",
+                schema: "ch",
+                table: "FullTextStreets",
+                column: "CommuneId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FullTextStreets_SearchVector1",
+                schema: "ch",
+                table: "FullTextStreets",
+                column: "SearchVector")
+                .Annotation("Npgsql:IndexMethod", "GIN");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FullTextStreets_MunicipalityId1",
+                schema: "de",
+                table: "FullTextStreets",
+                column: "MunicipalityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FullTextStreets_SearchVector2",
+                schema: "de",
+                table: "FullTextStreets",
+                column: "SearchVector")
+                .Annotation("Npgsql:IndexMethod", "GIN");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FullTextStreets_CommuneId1",
+                schema: "li",
+                table: "FullTextStreets",
+                column: "CommuneId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FullTextStreets_SearchVector3",
+                schema: "li",
+                table: "FullTextStreets",
+                column: "SearchVector")
+                .Annotation("Npgsql:IndexMethod", "GIN");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GovernmentRegions_FederalStateId",
@@ -586,10 +752,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 column: "FederalStateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GovernmentRegions_RegionalKey",
+                name: "IX_GovernmentRegions_Key",
                 schema: "de",
                 table: "GovernmentRegions",
-                column: "RegionalKey",
+                column: "Key",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -645,10 +811,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 column: "DistrictId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MunicipalAssociations_RegionalKey_Code",
+                name: "IX_MunicipalAssociations_Key",
                 schema: "de",
                 table: "MunicipalAssociations",
-                columns: new[] { "RegionalKey", "Code" },
+                column: "Key",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -683,10 +849,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 column: "FederalStateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Municipalities_RegionalKey",
+                name: "IX_Municipalities_Key",
                 schema: "de",
                 table: "Municipalities",
-                column: "RegionalKey",
+                column: "Key",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -744,6 +910,22 @@ namespace OpenPlzAPI.DataLayer.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "FullTextStreets",
+                schema: "at");
+
+            migrationBuilder.DropTable(
+                name: "FullTextStreets",
+                schema: "ch");
+
+            migrationBuilder.DropTable(
+                name: "FullTextStreets",
+                schema: "de");
+
+            migrationBuilder.DropTable(
+                name: "FullTextStreets",
+                schema: "li");
+
             migrationBuilder.DropTable(
                 name: "Streets",
                 schema: "at");

@@ -19,6 +19,8 @@
  */
 #endregion
 
+using System.ComponentModel.DataAnnotations;
+
 namespace OpenPlzApi.DataLayer.DE
 {
     /// <summary>
@@ -26,14 +28,28 @@ namespace OpenPlzApi.DataLayer.DE
     /// </summary>
     public enum MunicipalityType
     {
-        None = 0,
+        [Display(Name = "Markt")]
         Markt = 60,
-        KreisfreieStadt = 61, 
+
+        [Display(Name = "Kreisfreie Stadt")]
+        KreisfreieStadt = 61,
+
+        [Display(Name = "Stadtkreis")]
         Stadtkreis = 62,
-        Stadt = 63, 
+
+        [Display(Name = "Stadt")]
+        Stadt = 63,
+
+        [Display(Name = "Kreisangehörige Gemeinde")]
         KreisangehörigeGemeinde = 64,
+
+        [Display(Name = "Gemeindefreies Gebiet (bewohnt)")]
         GemeindefreiesGebietBewohnt = 65,
+
+        [Display(Name = "Gemeindefreies Gebiet (unbewohnt)")]
         GemeindefreiesGebietUnbewohnt = 66,
+
+        [Display(Name = "Große Kreisstadt")]
         GroßeKreisstadt = 67 
     }
 }

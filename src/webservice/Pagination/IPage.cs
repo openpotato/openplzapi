@@ -19,34 +19,38 @@
  */
 #endregion
 
-using Swashbuckle.AspNetCore.Annotations;
+using System.Collections;
 
-namespace OpenPlzApi.AT
+namespace OpenPlzApi
 {
     /// <summary>
-    /// Municipality status (Gemeindestatus)
+    /// A page is the result of pagination, in which a potentially large object list is divided 
+    /// into smaller units. An implementaion of <see cref="IPage"/> represents one page.
     /// </summary>
-    [SwaggerSchema(ReadOnly = true)]
-    public enum MunicipalityStatus
+    public interface IPage: IEnumerable
     {
         /// <summary>
-        /// No status available
+        /// The index of the page
         /// </summary>
-        None,
+        /// <returns>A number</returns>
+        int GetPageIndex();
 
         /// <summary>
-        /// Statutarstadt
+        /// The size of the page
         /// </summary>
-        TownWithCharter,
+        /// <returns>A number</returns>
+        int GetPageSize();
 
         /// <summary>
-        /// Stadtgemeinde
+        /// The total count of elements of the original List
         /// </summary>
-        UrbanMunicipality,
+        /// <returns>A number</returns>
+        int GetTotalCount();
 
         /// <summary>
-        /// Marktgemeinde
+        /// The total count of pages for the original List
         /// </summary>
-        MarketTown
+        /// <returns>A number</returns>
+        int GetTotalPages();
     }
 }

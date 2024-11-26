@@ -65,11 +65,11 @@ namespace OpenPlzApi.CLI.Sources.LI
             while (await _csvReader.ReadAsync() > 0)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                yield return GetStreet(communeCache, localityCache);
+                yield return GenerateStreet(communeCache, localityCache);
             }
         }
 
-        private Street GetStreet(Dictionary<string, Street._Locality._Commune> communeCache, Dictionary<string, Street._Locality> localityCache)
+        private Street GenerateStreet(Dictionary<string, Street._Locality._Commune> communeCache, Dictionary<string, Street._Locality> localityCache)
         {
             var communeId = _csvReader.GetValue<string>("COM_FOSNR");
 

@@ -23,6 +23,7 @@ using OpenPlzApi.DataLayer.DE;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Microsoft.OpenApi;
 
 namespace OpenPlzApi.DE
 {
@@ -43,11 +44,11 @@ namespace OpenPlzApi.DE
             District = municipality.District != null ? new DistrictSummary(municipality.District) : null;
             FederalState = municipality.FederalState != null ? new FederalStateSummary(municipality.FederalState) : null;
             GovernmentRegion = municipality.District?.GovernmentRegion != null ? new GovernmentRegionSummary(municipality.District.GovernmentRegion) : null;
-            Key = municipality.RegionalKey;
+            Key = municipality.Key;
             MultiplePostalCodes = municipality.MultiplePostalCodes;
             Name = municipality.Name;
             PostalCode = municipality.PostalCode;
-            Type = (MunicipalityType)municipality.Type;
+            Type = municipality.Type.GetDisplayName();
         }
 
         /// <summary>
@@ -113,6 +114,6 @@ namespace OpenPlzApi.DE
         /// <example>Stadt</example>
         [Required]
         [JsonPropertyOrder(3)]
-        public MunicipalityType Type { get; }
+        public string Type { get; }
     }
 }

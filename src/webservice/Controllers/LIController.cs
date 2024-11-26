@@ -32,35 +32,50 @@ namespace OpenPlzApi.LI
     /// <summary>
     /// API controller for Liechtenstein data
     /// </summary>
+    /// <param name="dbContext">Injected database context</param>
     [Route("li")]
     [SwaggerTag("Liechtenstein communes, localities and streets")]
-    public class LIController : BaseController
+    public class LIController(AppDbContext dbContext) : BaseController(dbContext)
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LIController"/> class.
+        /// Performs a full-text search using the street name, postal code and city.
         /// </summary>
-        /// <param name="dbContext">Injected database context</param>
-        public LIController(AppDbContext dbContext)
-            : base(dbContext)
+        /// <param name="searchTerm" example="Alte Landstrasse 9490 Vaduz">Search term for full text search</param>
+        /// <param name="page">Page number (starting with 1)</param>
+        /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <returns>Paged list of streets</returns>
+        [HttpGet("FullTextSearch")]
+        [ProducesResponseType(typeof(IEnumerable<StreetResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
+        [ProducesResponseType(typeof(ProblemDetails), statusCode: 400, MediaTypeNames.Application.ProblemDetails)]
+        [ProducesResponseType(typeof(ProblemDetails), statusCode: 500, MediaTypeNames.Application.ProblemDetails)]
+        [PaginationFilter]
+        public async Task<IEnumerable<StreetResponse>> FullTextSearchAsync(
+            [FromQuery, Required] string searchTerm,
+            [FromQuery, Range(1, int.MaxValue)] int page = 1,
+            [FromQuery, Range(1, 50)] int pageSize = 10)
         {
+            return await _dbContext.Set<FullTextStreet>()
+                .Include(x => x.Commune)
+                .Where(x => x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery("config_openplzapi", searchTerm)))
+                .OrderBy(x => x.Name).ThenBy(x => x.PostalCode).ThenBy(x => x.Locality)
+                .Select(x => new StreetResponse(x))
+                .AsNoTracking()
+                .ToPageAsync(page, pageSize);
         }
 
         /// <summary>
         /// Returns all communes (Gemeinden).
         /// </summary>
-        /// <param name="page">Page number (starting with 1)</param>
-        /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>List of communes</returns>
-        [HttpGet("Cantons/Communes")]
-        [Produces("text/plain", "text/json", "application/json", "text/csv")]
-        public async Task<IEnumerable<CommuneResponse>> GetCommunesAsync(
-            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
-            [FromQuery, Range(1, 50)] int? pageSize = 10)
+        [HttpGet("Communes")]
+        [ProducesResponseType(typeof(IEnumerable<CommuneResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
+        [ProducesResponseType(typeof(ProblemDetails), statusCode: 400, MediaTypeNames.Application.ProblemDetails)]
+        [ProducesResponseType(typeof(ProblemDetails), statusCode: 500, MediaTypeNames.Application.ProblemDetails)]
+        public async Task<IEnumerable<CommuneResponse>> GetCommunesAsync()
         {
             return await _dbContext.Set<Commune>()
                 .OrderBy(x => x.Key)
                 .Select(x => new CommuneResponse(x))
-                .Paging(page ?? 1, pageSize ?? 10)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -69,17 +84,20 @@ namespace OpenPlzApi.LI
         /// Returns all localities whose postal code and/or name matches the given patterns.
         /// </summary>
         /// <param name="postalCode">Postal code or regular expression</param>
-        /// <param name="name" example="Zürich">Name or regular expression</param>
+        /// <param name="name" example="Vaduz">Name or regular expression</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>Paged list of localities</returns>
         [HttpGet("Localities")]
-        [Produces("text/plain", "text/json", "application/json", "text/csv")]
+        [ProducesResponseType(typeof(IEnumerable<LocalityResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
+        [ProducesResponseType(typeof(ProblemDetails), statusCode: 400, MediaTypeNames.Application.ProblemDetails)]
+        [ProducesResponseType(typeof(ProblemDetails), statusCode: 500, MediaTypeNames.Application.ProblemDetails)]
+        [PaginationFilter]
         public async Task<IEnumerable<LocalityResponse>> GetLocalitiesAsync(
-            [FromQuery] string postalCode,
-            [FromQuery] string name,
-            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
-            [FromQuery, Range(1, 50)] int? pageSize = 10)
+            [FromQuery] string postalCode = null,
+            [FromQuery] string name = null,
+            [FromQuery, Range(1, int.MaxValue)] int page = 1,
+            [FromQuery, Range(1, 50)] int pageSize = 10)
         {
             if (!string.IsNullOrEmpty(name) || !string.IsNullOrEmpty(postalCode))
             {
@@ -89,50 +107,51 @@ namespace OpenPlzApi.LI
                     .Where(x => string.IsNullOrEmpty(name) || Regex.IsMatch(x.Name, name, RegexOptions.IgnoreCase))
                     .OrderBy(x => x.PostalCode).ThenBy(x => x.Name)
                     .Select(x => new LocalityResponse(x))
-                    .Paging(page ?? 1, pageSize ?? 10)
                     .AsNoTracking()
-                    .ToListAsync();
+                    .ToPageAsync(page, pageSize);
             }
             else
             {
-                throw new ArgumentNullException(nameof(name));
+                throw new BadHttpRequestException("No postal code or name given.");
             }
         }
 
         /// <summary>
         /// Returns all streets whose name, postal code and/or name matches the given patterns.
         /// </summary>
-        /// <param name="name" example="Bederstrasse">Name or regular expression</param>
-        /// <param name="postalCode" example="8002">Postal code or regular expression</param>
-        /// <param name="locality">Locality or regular expression</param>
+        /// <param name="name" example="Alte Landstrasse">Name or regular expression</param>
+        /// <param name="postalCode" example="9490">Postal code or regular expression</param>
+        /// <param name="locality" example="Vaduz">Locality or regular expression</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
         /// <returns>Paged list of streets</returns>
         [HttpGet("Streets")]
-        [Produces("text/plain", "text/json", "application/json", "text/csv")]
+        [ProducesResponseType(typeof(IEnumerable<StreetResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
+        [ProducesResponseType(typeof(ProblemDetails), statusCode: 400, MediaTypeNames.Application.ProblemDetails)]
+        [ProducesResponseType(typeof(ProblemDetails), statusCode: 500, MediaTypeNames.Application.ProblemDetails)]
+        [PaginationFilter]
         public async Task<IEnumerable<StreetResponse>> GetStreetsAsync(
-            [FromQuery] string name, 
-            [FromQuery] string postalCode, 
-            [FromQuery] string locality,
-            [FromQuery, Range(1, int.MaxValue)] int? page = 1,
-            [FromQuery, Range(1, 50)] int? pageSize = 10)
+            [FromQuery] string name = null,
+            [FromQuery] string postalCode = null,
+            [FromQuery] string locality = null,
+            [FromQuery, Range(1, int.MaxValue)] int page = 1,
+            [FromQuery, Range(1, 50)] int pageSize = 10)
         {
             if (!string.IsNullOrEmpty(name) || !string.IsNullOrEmpty(postalCode) || !string.IsNullOrEmpty(locality))
             {
                 return await _dbContext.Set<Street>()
-                    .Include(x => x.Locality).ThenInclude(x => x.Commune)
                     .Where(x => string.IsNullOrEmpty(name) || Regex.IsMatch(x.Name, name, RegexOptions.IgnoreCase))
                     .Where(x => string.IsNullOrEmpty(postalCode) || Regex.IsMatch(x.Locality.PostalCode, postalCode))
                     .Where(x => string.IsNullOrEmpty(locality) || Regex.IsMatch(x.Locality.Name, locality, RegexOptions.IgnoreCase))
+                    .Include(x => x.Locality).ThenInclude(x => x.Commune)
                     .OrderBy(x => x.Name).ThenBy(x => x.Locality.PostalCode).ThenBy(x => x.Locality.Name)
-                    .Paging(page ?? 1, pageSize ?? 10)
                     .Select(x => new StreetResponse(x))
                     .AsNoTracking()
-                    .ToListAsync();
+                    .ToPageAsync(page, pageSize);
             }
             else
             {
-                throw new ArgumentNullException(nameof(name));
+                throw new BadHttpRequestException("No name, postal code or locality given.");
             }
         }
     }

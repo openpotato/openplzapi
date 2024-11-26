@@ -20,10 +20,14 @@
 #endregion
 
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using OpenPlzApi;
 using OpenPlzApi.DataLayer;
+using System.Collections;
+using System.Net;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +39,9 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin().AllowAnyHeader().WithMethods("GET");
+        policy.AllowAnyOrigin()
+              .WithMethods(WebRequestMethods.Http.Get)
+              .WithHeaders(HeaderNames.Accept);
     });
 });
 
@@ -49,7 +55,24 @@ builder.Services
     {
         setup.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         setup.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        setup.JsonSerializerOptions.TypeInfoResolver = new DefaultJsonTypeInfoResolver
+        {
+            Modifiers = { (JsonTypeInfo type_info) =>
+                {
+                    foreach (var property in type_info.Properties)
+                    {
+                        if (typeof(ICollection).IsAssignableFrom(property.PropertyType))
+                        {
+                            property.ShouldSerialize = (_, val) => val is ICollection collection && collection.Count > 0;
+                        }
+                    }
+                }
+            }
+        };
     });
+
+// Exception handling
+builder.Services.AddProblemDetails();
 
 // Add Swagger/OpenAPI support
 builder.Services.AddEndpointsApiExplorer();
@@ -74,7 +97,7 @@ builder.Services.AddSwaggerGen(setup =>
             }
         });
     setup.EnableAnnotations();
-    setup.CustomSchemaIds(x => x.FullName);
+    setup.CustomSchemaIds(x => x.Namespace.StartsWith("OpenPlzApi") ? x.FullName : x.Name);
     setup.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "OpenPlzApi.WebService.xml"));
     setup.OrderActionsBy((apiDesc) => apiDesc.RelativePath);
 });
@@ -98,7 +121,8 @@ else
     {
         ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
     });
-    app.UseExceptionHandler("/error");
+    app.UseStatusCodePages();
+    app.UseExceptionHandler();
     app.UseHttpsRedirection();
     app.UseHsts();
 }

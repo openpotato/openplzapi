@@ -30,6 +30,7 @@ namespace OpenPlzApi.DataLayer
         {
             public const string Districts = "Districts";
             public const string FederalProvince = "FederalProvinces";
+            public const string FullTextStreet = "FullTextStreets";
             public const string Locality = "Localities";
             public const string Municipality = "Municipalities";
             public const string Street = "Streets";
@@ -40,6 +41,7 @@ namespace OpenPlzApi.DataLayer
             public const string Canton = "Cantons";
             public const string Commune = "Communes";
             public const string District = "Districts";
+            public const string FullTextStreet = "FullTextStreets";
             public const string Locality = "Localities";
             public const string Street = "Streets";
         }
@@ -48,6 +50,7 @@ namespace OpenPlzApi.DataLayer
         {
             public const string District = "Districts";
             public const string FederalState = "FederalStates";
+            public const string FullTextStreet = "FullTextStreets";
             public const string GovernmentRegion = "GovernmentRegions";
             public const string Locality = "Localities";
             public const string MunicipalAssociation = "MunicipalAssociations";
@@ -58,6 +61,7 @@ namespace OpenPlzApi.DataLayer
         public static class LI
         {
             public const string Commune = "Communes";
+            public const string FullTextStreet = "FullTextStreets";
             public const string Locality = "Localities";
             public const string Street = "Streets";
         }

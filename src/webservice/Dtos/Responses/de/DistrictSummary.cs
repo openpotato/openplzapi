@@ -38,9 +38,9 @@ namespace OpenPlzApi.DE
         /// <param name="district">Assigns data from <see cref="District"/></param>
         public DistrictSummary(District district)
         {
-            Key = district.RegionalKey;
+            Key = district.Key;
             Name = district.Name;
-            Type = (DistrictType)district.Type;
+            Type = district.Type.GetDisplayName();
         }
 
         /// <summary>
@@ -65,6 +65,6 @@ namespace OpenPlzApi.DE
         /// <example>Landkreis</example>
         [Required]
         [JsonPropertyOrder(3)]
-        public DistrictType Type { get; }
+        public string Type { get; }
     }
 }

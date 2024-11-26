@@ -38,7 +38,7 @@ namespace OpenPlzApi.DE
         /// <param name="governmentRegion">Assigns data from <see cref="GovernmentRegion"/></param>
         public GovernmentRegionSummary(GovernmentRegion governmentRegion)
         {
-            Key = governmentRegion.RegionalKey;
+            Key = governmentRegion.Key;
             Name = governmentRegion.Name;
         }
 

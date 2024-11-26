@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenPlzApi.DataLayer", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenPlzApi.CLI", "src\cli\OpenPlzApi.CLI.csproj", "{379FA71A-72E5-465E-8237-EE2D649DD75D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenPlzApi.CLI.XUnit", "test\datareader\Xunit\OpenPlzApi.CLI.XUnit.csproj", "{5BB63A45-6B00-4271-9D3D-4DDC2FB8C4BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenPlzApi.CLI.XUnit", "test\cli\Xunit\OpenPlzApi.CLI.XUnit.csproj", "{5BB63A45-6B00-4271-9D3D-4DDC2FB8C4BC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EAD239B6-0A06-47E9-87D7-66A0DD17AC3B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

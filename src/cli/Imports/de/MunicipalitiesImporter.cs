@@ -108,7 +108,7 @@ namespace OpenPlzApi.CLI.DE
                         {
                             Id = federalState.GetUniqueId(),
                             Name = federalState.Name,
-                            RegionalKey = federalState.RegionalCode,
+                            Key = federalState.RegionalCode,
                             SeatOfGovernment =federalState.SeatOfGovernment
                         });
 
@@ -124,7 +124,7 @@ namespace OpenPlzApi.CLI.DE
                         {
                             Id = governmentRegion.GetUniqueId(),
                             Name = governmentRegion.Name,
-                            RegionalKey = governmentRegion.RegionalCode,
+                            Key = governmentRegion.RegionalCode,
                             AdministrativeHeadquarters = governmentRegion.AdministrativeHeadquarters,
                             FederalStateId = governmentRegion.GetFederalStatenUniqueId()
                         });
@@ -141,7 +141,7 @@ namespace OpenPlzApi.CLI.DE
                         {
                             Id = district.GetUniqueId(),
                             Name = district.Name,
-                            RegionalKey = district.RegionalCode,
+                            Key = district.RegionalCode,
                             Type = (DistrictType)district.Type,
                             AdministrativeHeadquarters = district.AdministrativeHeadquarters,
                             FederalStateId = district.GetFederalStatenUniqueId(),
@@ -156,24 +156,25 @@ namespace OpenPlzApi.CLI.DE
                     {
                         using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-                        dbContext.Set<MunicipalAssociation>().Add(new MunicipalAssociation()
+                        if (association.Type != GV100AD.MunicipalAssociationType.VerbandsfreieGemeinde)
                         {
-                            Id = association.GetUniqueId(),
-                            Name = association.Name,
-                            RegionalKey = association.RegionalCode,
-                            Code = association.Association,
-                            Type = (MunicipalAssociationType)association.Type,
-                            AdministrativeHeadquarters = association.AdministrativeHeadquarters,
-                            DistrictId = association.GetDistrictUniqueId()
-                        });
+                            dbContext.Set<MunicipalAssociation>().Add(new MunicipalAssociation()
+                            {
+                                Id = association.GetUniqueId(),
+                                Name = association.Name,
+                                Key = association.RegionalCode + association.Association,
+                                Type = (MunicipalAssociationType)association.Type,
+                                AdministrativeHeadquarters = association.AdministrativeHeadquarters,
+                                DistrictId = association.GetDistrictUniqueId()
+                            });
 
-                        municipalAssociationCount++;
+                            municipalAssociationCount++;
 
-                        await dbContext.SaveChangesAsync(cancellationToken);
+                            await dbContext.SaveChangesAsync(cancellationToken);
+                        }
                     }
                     else if (gvRecord is GV100AD.Municipality municipality)
                     {
-
                         using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
 
                         dbContext.Set<Municipality>().Add(new Municipality()
@@ -181,7 +182,7 @@ namespace OpenPlzApi.CLI.DE
                             Id = municipality.GetUniqueId(),
                             Name = municipality.Name,
                             ShortName = municipality.GetShortName(),
-                            RegionalKey = municipality.RegionalCode,
+                            Key = municipality.RegionalCode,
                             Type = (MunicipalityType)municipality.Type,
                             AssociationId = municipality.GetMunicipalAssociationUniqueId(),
                             DistrictId = municipality.GetDistrictUniqueId(),

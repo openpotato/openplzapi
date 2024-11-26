@@ -20,6 +20,7 @@
 #endregion
 
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace OpenPlzApi.DataLayer
 {
@@ -43,12 +44,22 @@ namespace OpenPlzApi.DataLayer
             modelBuilder.Entity<AT.Municipality>();
             modelBuilder.Entity<AT.Locality>();
             modelBuilder.Entity<AT.Street>();
+            modelBuilder.Entity<AT.FullTextStreet>()
+                .HasGeneratedTsVectorColumn(
+                    x => x.SearchVector, "config_openplzapi", x => new { x.Name, x.PostalCode, x.Locality })
+                .HasIndex(p => p.SearchVector)
+                .HasMethod("GIN");
 
             modelBuilder.Entity<CH.Canton>();
             modelBuilder.Entity<CH.District>();
             modelBuilder.Entity<CH.Commune>();
             modelBuilder.Entity<CH.Locality>();
             modelBuilder.Entity<CH.Street>();
+            modelBuilder.Entity<CH.FullTextStreet>()
+                .HasGeneratedTsVectorColumn(
+                    x => x.SearchVector, "config_openplzapi", x => new { x.Name, x.PostalCode, x.Locality })
+                .HasIndex(p => p.SearchVector)
+                .HasMethod("GIN");
 
             modelBuilder.Entity<DE.FederalState>();
             modelBuilder.Entity<DE.GovernmentRegion>();
@@ -57,10 +68,20 @@ namespace OpenPlzApi.DataLayer
             modelBuilder.Entity<DE.Municipality>();
             modelBuilder.Entity<DE.Locality>();
             modelBuilder.Entity<DE.Street>();
+            modelBuilder.Entity<DE.FullTextStreet>()
+                .HasGeneratedTsVectorColumn(
+                    x => x.SearchVector, "config_openplzapi", x => new { x.Name, x.PostalCode, x.Locality })
+                .HasIndex(p => p.SearchVector)
+                .HasMethod("GIN");
 
             modelBuilder.Entity<LI.Commune>();
             modelBuilder.Entity<LI.Locality>();
             modelBuilder.Entity<LI.Street>();
+            modelBuilder.Entity<LI.FullTextStreet>()
+                .HasGeneratedTsVectorColumn(
+                    x => x.SearchVector, "config_openplzapi", x => new { x.Name, x.PostalCode, x.Locality })  
+                .HasIndex(p => p.SearchVector)
+                .HasMethod("GIN"); 
         }
     }
 }

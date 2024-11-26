@@ -38,9 +38,9 @@ namespace OpenPlzApi.DE
         /// <param name="municipalAssociation">Assigns data from <see cref="MunicipalAssociation"/></param>
         public MunicipalAssociationSummary(MunicipalAssociation municipalAssociation)
         {
-            Key = municipalAssociation.RegionalKey;
+            Key = municipalAssociation.Key;
             Name = municipalAssociation.Name;
-            Type = (MunicipalAssociationType)municipalAssociation.Type;
+            Type = municipalAssociation.Type.GetDisplayName();
         }
 
         /// <summary>
@@ -65,6 +65,6 @@ namespace OpenPlzApi.DE
         /// <example>Verbandsfreie_Gemeinde</example>
         [Required]
         [JsonPropertyOrder(3)]
-        public MunicipalAssociationType Type { get; }
+        public string Type { get; }
     }
 }

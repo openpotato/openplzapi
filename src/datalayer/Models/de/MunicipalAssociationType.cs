@@ -19,6 +19,8 @@
  */
 #endregion
 
+using System.ComponentModel.DataAnnotations;
+
 namespace OpenPlzApi.DataLayer.DE
 {
     /// <summary>
@@ -26,15 +28,28 @@ namespace OpenPlzApi.DataLayer.DE
     /// </summary>
     public enum MunicipalAssociationType
     {
-        None = 0,
-        VerbandsfreieGemeinde = 50,
+        [Display(Name = "Amt")]
         Amt = 51,
+
+        [Display(Name = "Samtgemeinde")]
         Samtgemeinde = 52,
-        Verbandsgemeinde = 53,
+
+        [Display(Name = "Verbandsgemeinde")]
+        Verbandsgemeinde = 53, 
+
+        [Display(Name = "Verwaltungsgemeinschaft")]
         Verwaltungsgemeinschaft = 54,
+
+        [Display(Name = "Kirchspielslandgemeinde")]
         Kirchspielslandgemeinde = 55,
+
+        [Display(Name = "Verwaltungsverband")]
         Verwaltungsverband = 56,
+
+        [Display(Name = "VG Trägermodell")]
         VGTraegermodell = 57,
+
+        [Display(Name = "Erfüllende Gemeinde")]
         ErfüllendeGemeinde = 58
     }
 }

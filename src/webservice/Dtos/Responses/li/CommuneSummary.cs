@@ -38,7 +38,6 @@ namespace OpenPlzApi.LI
         {
             Key = commune.Key;
             Name = commune.Name;
-            ElectoralDistrict = commune.ElectoralDistrict;
         }
 
         /// <summary>
@@ -56,13 +55,5 @@ namespace OpenPlzApi.LI
         [Required]
         [JsonPropertyOrder(2)]
         public string Name { get; }
-
-        /// <summary>
-        /// Electoral district (Wahlkreis)
-        /// </summary>
-        /// <example>Oberland</example>
-        [Required]
-        [JsonPropertyOrder(3)]
-        public string ElectoralDistrict { get; }
     }
 }

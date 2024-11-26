@@ -48,6 +48,23 @@ namespace OpenPlzApi.CH
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="StreetResponse"/> class.
+        /// </summary>
+        /// <param name="street">Assigns data from <see cref="FullTextStreet"/></param>
+        public StreetResponse(FullTextStreet street)
+            : base(street)
+        {
+            Canton = street.Commune?.District?.Canton != null ? new CantonSummary(street.Commune.District.Canton) : null;
+            Commune = street.Commune != null ? new CommuneSummary(street.Commune) : null;
+            District = street.Commune?.District != null ? new DistrictSummary(street.Commune.District) : null;
+            Key = street.Key;
+            Locality = street.Locality;
+            Name = street.Name;
+            PostalCode = street.PostalCode;
+            Status = (StreetStatus)street.Status;
+        }
+
+        /// <summary>
         /// Reference to canton (Kanton)
         /// </summary>
         [Required]

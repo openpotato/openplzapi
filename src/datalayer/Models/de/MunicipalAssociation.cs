@@ -30,7 +30,7 @@ namespace OpenPlzApi.DataLayer.DE
     /// Representation of a German municipal association (Gemeindeverband)
     /// </summary>
     [Table(DbTables.DE.MunicipalAssociation, Schema = DbSchemas.DE)]
-    [Index(nameof(RegionalKey), nameof(Code), IsUnique = true)]
+    [Index(nameof(Key), IsUnique = true)]
     [Comment("Representation of a German municipal association (Gemeindeverband)")]
     public class MunicipalAssociation : BaseEntity
     {
@@ -41,16 +41,16 @@ namespace OpenPlzApi.DataLayer.DE
         public string AdministrativeHeadquarters { get; set; }
 
         /// <summary>
-        /// Code (Code des Gemeindeverbandes)
-        /// </summary>
-        [Required]
-        [Comment("Code (Code des Gemeindeverbandes)")]
-        public string Code { get; set; }
-
-        /// <summary>
         /// Reference to district
         /// </summary>
         public virtual District District { get; set; }
+
+        /// <summary>
+        /// Regional key (Regionalschlüssel)
+        /// </summary>
+        [Required]
+        [Comment("Regional key (Regionalschlüssel)")]
+        public string Key { get; set; }
 
         /// <summary>
         /// Name (Name des Gemeindeverbandes)
@@ -58,14 +58,7 @@ namespace OpenPlzApi.DataLayer.DE
         [Required]
         [Comment("Name (Name des Gemeindeverbandes)")]
         public string Name { get; set; }
-
-        /// <summary>
-        /// Regional key (Regionalschlüssel)
-        /// </summary>
-        [Required]
-        [Comment("Regional key (Regionalschlüssel)")]
-        public string RegionalKey { get; set; }
-
+        
         /// <summary>
         /// Type (Kennzeichen)
         /// </summary>

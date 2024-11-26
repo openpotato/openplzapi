@@ -46,7 +46,7 @@ namespace OpenPlzApi.AT
             MultiplePostalCodes = municipality.MultiplePostalCodes;
             Name = municipality.Name;
             PostalCode = municipality.PostalCode;
-            Status = (MunicipalityStatus)municipality.Status;
+            Status = municipality.Status.GetDisplayName();
         }
 
         /// <summary>
@@ -106,9 +106,9 @@ namespace OpenPlzApi.AT
         /// <summary>
         /// Status (Gemeindestatus)
         /// </summary>
-        /// <example>TownWithCharter</example>
+        /// <example>Statutarstadt</example>
         [Required]
         [JsonPropertyOrder(10)]
-        public MunicipalityStatus Status { get; }
+        public string Status { get; }
     }
 }

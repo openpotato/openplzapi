@@ -30,7 +30,7 @@ namespace OpenPlzApi.DataLayer.DE
     /// Representation of a German district (Kreis)
     /// </summary>
     [Table(DbTables.DE.District, Schema = DbSchemas.DE)]
-    [Index(nameof(RegionalKey), IsUnique = true)]
+    [Index(nameof(Key), IsUnique = true)]
     [Comment("Representation of a German district (Kreis)")]
     public class District : BaseEntity
     {
@@ -51,19 +51,18 @@ namespace OpenPlzApi.DataLayer.DE
         public virtual GovernmentRegion GovernmentRegion { get; set; }
 
         /// <summary>
+        /// Regional key (Regionalschlüssel)
+        /// </summary>
+        [Required]
+        [Comment("Regional key (Regionalschlüssel)")]
+        public string Key { get; set; }
+
+        /// <summary>
         /// Name (Kreisname)
         /// </summary>
         [Required]
         [Comment("Name (Kreisname)")]
         public string Name { get; set; }
-
-        /// <summary>
-        /// Regional key (Regionalschlüssel)
-        /// </summary>
-        [Required]
-        [Comment("Regional key (Regionalschlüssel)")]
-        public string RegionalKey { get; set; }
-
         /// <summary>
         /// Type (Kennzeichen)
         /// </summary>

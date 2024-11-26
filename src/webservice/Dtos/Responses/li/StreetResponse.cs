@@ -46,6 +46,21 @@ namespace OpenPlzApi.LI
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="StreetResponse"/> class.
+        /// </summary>
+        /// <param name="street">Assigns data from <see cref="FullTextStreet"/></param>
+        public StreetResponse(FullTextStreet street)
+            : base(street)
+        {
+            Commune = street.Commune != null ? new CommuneSummary(street.Commune) : null;
+            Key = street.Key;
+            Locality = street.Locality;
+            Name = street.Name;
+            PostalCode = street.PostalCode;
+            Status = (StreetStatus)street.Status;
+        }
+
+        /// <summary>
         /// Reference to commune (Gemeinde)
         /// </summary>
         [Required]

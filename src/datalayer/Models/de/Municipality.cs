@@ -30,7 +30,7 @@ namespace OpenPlzApi.DataLayer.DE
     /// Representation of a German municipality (Gemeinde)
     /// </summary>
     [Table(DbTables.DE.Municipality, Schema = DbSchemas.DE)]
-    [Index(nameof(RegionalKey), IsUnique = true)]
+    [Index(nameof(Key), IsUnique = true)]
     [Comment("Representation of a German municipality (Gemeinde)")]
     public class Municipality : BaseEntity
     {
@@ -48,6 +48,13 @@ namespace OpenPlzApi.DataLayer.DE
         /// Reference to federal state
         /// </summary>
         public virtual FederalState FederalState { get; set; }
+
+        /// <summary>
+        /// Regional key (Regionalschlüssel)
+        /// </summary>
+        [Required]
+        [Comment("Regional key (Regionalschlüssel)")]
+        public string Key { get; set; }
 
         /// <summary>
         /// Multiple postcodes available? 
@@ -69,14 +76,7 @@ namespace OpenPlzApi.DataLayer.DE
         [Required]
         [Comment("Postal code of the administrative headquarters (Verwaltungssitz), if there are multiple postal codes available")]
         public string PostalCode { get; set; }
-
-        /// <summary>
-        /// Regional key (Regionalschlüssel)
-        /// </summary>
-        [Required]
-        [Comment("Regional key (Regionalschlüssel)")]
-        public string RegionalKey { get; set; }
-
+        
         /// <summary>
         /// Short Name (Verkürzter Gemeindename)
         /// </summary>

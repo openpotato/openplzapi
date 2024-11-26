@@ -39,7 +39,7 @@ namespace OpenPlzApi.DE
         public FederalStateResponse(FederalState federalState)
             : base(federalState)
         {
-            Key = federalState.RegionalKey;
+            Key = federalState.Key;
             Name = federalState.Name;
             SeatOfGovernment = federalState.SeatOfGovernment;
         }
