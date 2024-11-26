@@ -20,6 +20,7 @@
 #endregion
 
 using OpenPlzApi.DataLayer.LI;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -28,6 +29,7 @@ namespace OpenPlzApi.LI
     /// <summary>
     /// Reduced representation of a Liechtenstein commune (Gemeinde)
     /// </summary>
+    [SwaggerSchema(ReadOnly = true)]
     public class CommuneSummary
     {
         /// <summary>

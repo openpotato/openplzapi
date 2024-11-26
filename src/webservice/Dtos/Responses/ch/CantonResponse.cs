@@ -20,6 +20,7 @@
 #endregion
 
 using OpenPlzApi.DataLayer.CH;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -28,6 +29,7 @@ namespace OpenPlzApi.CH
     /// <summary>
     /// Representation of a Swiss canton (Kanton)
     /// </summary>
+    [SwaggerSchema(ReadOnly = true)]
     public class CantonResponse : BaseResponse
     {
         /// <summary>
