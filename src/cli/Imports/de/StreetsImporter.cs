@@ -100,11 +100,24 @@ namespace OpenPlzApi.CLI.DE
                         localityCount++;
                     }
 
+                    var streetId = Guid.NewGuid();
+
                     dbContext.Set<Street>().Add(new Street()
                     {
-                        Id = Guid.NewGuid(),
+                        Id = streetId,
                         Name = street.Name,
                         LocalityId = street.Locality.GetUniqueId(),
+                        Borough = string.IsNullOrEmpty(street.Borough) ? null : street.Borough,
+                        Suburb = string.IsNullOrEmpty(street.Suburb) ? null : street.Suburb
+                    });
+
+                    dbContext.Set<FullTextStreet>().Add(new FullTextStreet()
+                    {
+                        Id = streetId,
+                        Name = street.Name,
+                        Locality = street.Locality.Name,
+                        PostalCode = street.Locality.PostalCode,
+                        MunicipalityId = street.Locality.GetUniqueMunicipalityId(),
                         Borough = string.IsNullOrEmpty(street.Borough) ? null : street.Borough,
                         Suburb = string.IsNullOrEmpty(street.Suburb) ? null : street.Suburb
                     });

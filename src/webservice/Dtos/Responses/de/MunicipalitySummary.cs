@@ -38,9 +38,9 @@ namespace OpenPlzApi.DE
         /// <param name="municipality">Assigns data from <see cref="Municipality"/></param>
         public MunicipalitySummary(Municipality municipality)
         {
-            Key = municipality.RegionalKey;
+            Key = municipality.Key;
             Name = municipality.Name;
-            Type = (MunicipalityType)municipality.Type;
+            Type = municipality.Type.GetDisplayName();
         }
 
         /// <summary>
@@ -65,6 +65,6 @@ namespace OpenPlzApi.DE
         /// <example>Stadt</example>
         [Required]
         [JsonPropertyOrder(3)]
-        public MunicipalityType Type { get; }
+        public string Type { get; }
     }
 }

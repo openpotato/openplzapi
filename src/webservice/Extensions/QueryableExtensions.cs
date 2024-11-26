@@ -19,26 +19,37 @@
  */
 #endregion
 
+using Microsoft.EntityFrameworkCore;
+
 namespace OpenPlzApi
 {
     /// <summary>
-    /// Extension methods for <see cref="IQueryable{T}"/>
+    /// Extension methods for <see cref="IQueryable{TSource}"/>
     /// </summary>
     public static class QueryableExtensions
     {
         /// <summary>
-        /// Combines Skip() and the Take() commnad"/>
+        /// Asynchronously creates a <see cref="Page{TSource}" /> instance from an <see cref="IQueryable{TSource}" /> by first paging 
+        /// it and then enumerating it asynchronously.
         /// </summary>
-        /// <typeparam name="TSource">The type of the data in the data source</typeparam>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
         /// <param name="source">The data source</param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
-        /// <returns>Paged data source</returns>
-        public static IQueryable<TSource> Paging<TSource>(this IQueryable<TSource> source, int pageIndex, int pageSize)
+        /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a <see cref="Page{TSource}" /> that 
+        /// contains elements from the input sequence and corresponding paging information.</returns>
+        public static async Task<Page<TSource>> ToPageAsync<TSource>(this IQueryable<TSource> source, 
+            int pageIndex, int pageSize, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(source);
 
-            return source.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            var totalCount = await source.CountAsync(cancellationToken);
+
+            return new Page<TSource>(await source
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken), pageIndex, pageSize, totalCount);
         }
     }
 }

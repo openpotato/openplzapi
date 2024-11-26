@@ -42,9 +42,9 @@ namespace OpenPlzApi.DE
             AdministrativeHeadquarters = municipalAssociation.AdministrativeHeadquarters;
             District = municipalAssociation.District != null ? new DistrictSummary(municipalAssociation.District) : null;
             FederalState = municipalAssociation.District?.FederalState != null ? new FederalStateSummary(municipalAssociation.District.FederalState) : null;
-            Key = municipalAssociation.RegionalKey;
+            Key = municipalAssociation.Key;
             Name = municipalAssociation.Name;
-            Type = (MunicipalAssociationType)municipalAssociation.Type;
+            Type = municipalAssociation.Type.GetDisplayName();
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace OpenPlzApi.DE
         /// <summary>
         /// Regional key (Regionalschlüssel)
         /// </summary>
-        /// <example>07137</example>
+        /// <example>01051166</example>
         [Required]
         [JsonPropertyOrder(1)]
         public string Key { get; }
@@ -79,7 +79,7 @@ namespace OpenPlzApi.DE
         /// <summary>
         /// Name (Name des Gemeindeverbandes)
         /// </summary>
-        /// <example>Bendorf, Stadt</example>
+        /// <example>Marne-Nordsee</example>
         [Required]
         [JsonPropertyOrder(2)]
         public string Name { get; }
@@ -87,9 +87,9 @@ namespace OpenPlzApi.DE
         /// <summary>
         /// Type (Kennzeichen des Gemeindeverbandes)
         /// </summary>
-        /// <example>Verbandsfreie_Gemeinde</example>
+        /// <example>Amt</example>
         [Required]
         [JsonPropertyOrder(3)]
-        public MunicipalAssociationType Type { get; }
+        public string Type { get; }
     }
 }

@@ -65,11 +65,11 @@ namespace OpenPlzApi.CLI.Sources.AT
             while (await _csvReader.ReadAsync() > 1)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                yield return GetDistrict(timeStamp, federalProvinceCache);
+                yield return GenerateDistrict(timeStamp, federalProvinceCache);
             }
         }
 
-        private District GetDistrict(DateOnly timeStamp, Dictionary<string, District._FederalProvince> federalProvinceCache)
+        private District GenerateDistrict(DateOnly timeStamp, Dictionary<string, District._FederalProvince> federalProvinceCache)
         {
             var federalProvinceId = _csvReader.GetValue<string>("Bundeslandkennziffer");
 

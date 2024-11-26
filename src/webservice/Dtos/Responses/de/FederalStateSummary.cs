@@ -38,7 +38,7 @@ namespace OpenPlzApi.DE
         /// <param name="federalState">Assigns data from <see cref="FederalState"/></param>
         public FederalStateSummary(FederalState federalState)
         {
-            Key = federalState.RegionalKey;
+            Key = federalState.Key;
             Name = federalState.Name;
         }
 

@@ -47,6 +47,22 @@ namespace OpenPlzApi.AT
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="StreetResponse"/> class.
+        /// </summary>
+        /// <param name="street">Assigns data from <see cref="FullTextStreet"/></param>
+        public StreetResponse(FullTextStreet street)
+            : base(street)
+        {
+            District = street.Municipality?.District != null ? new DistrictSummary(street.Municipality?.District) : null;
+            FederalProvince = street.Municipality?.District?.FederalProvince != null ? new FederalProvinceSummary(street.Municipality.District.FederalProvince) : null;
+            Key = street.Key;
+            Locality = street.Locality;
+            Municipality = street.Municipality != null ? new MunicipalitySummary(street.Municipality) : null;
+            Name = street.Name;
+            PostalCode = street.PostalCode;
+        }
+
+        /// <summary>
         /// Reference to district (Bezirk)
         /// </summary>
         [Required]
@@ -54,7 +70,7 @@ namespace OpenPlzApi.AT
         public DistrictSummary District { get; }
 
         /// <summary>
-        /// Reference to federal province (Bunudesland)
+        /// Reference to federal province (Bundesland)
         /// </summary>
         [Required]
         [JsonPropertyOrder(7)]

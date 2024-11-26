@@ -19,6 +19,8 @@
  */
 #endregion
 
+using System.ComponentModel.DataAnnotations;
+
 namespace OpenPlzApi.DataLayer.AT
 {
     /// <summary>
@@ -26,9 +28,16 @@ namespace OpenPlzApi.DataLayer.AT
     /// </summary>
     public enum MunicipalityStatus
     {
-        None, 
+        [Display(Name = null)]
+        None,
+        
+        [Display(Name = "Statutarstadt")]
         TownWithCharter,
+        
+        [Display(Name = "Stadtgemeinde")]
         UrbanMunicipality,
+        
+        [Display(Name = "Marktgemeinde")]
         MarketTown  
     }
 }

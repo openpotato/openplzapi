@@ -19,6 +19,8 @@
  */
 #endregion
 
+using System.ComponentModel.DataAnnotations;
+
 namespace OpenPlzApi.DataLayer.DE
 {
     /// <summary>
@@ -26,11 +28,19 @@ namespace OpenPlzApi.DataLayer.DE
     /// </summary>
     public enum DistrictType
     {
-        None = 0,
+        [Display(Name = "Kreisfreie Stadt")]
         KreisfreieStadt = 41,
+
+        [Display(Name = "Stadtkreis")]
         Stadtkreis = 42,
+
+        [Display(Name = "Kreis")]
         Kreis = 43,
+
+        [Display(Name = "Landkreis")]
         Landkreis = 44,
-        Regionalverband = 45
+
+        [Display(Name = "Regionalverband")]
+        Regionalverband = 45 
     }
 }

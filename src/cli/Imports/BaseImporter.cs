@@ -29,9 +29,9 @@ namespace OpenPlzApi.CLI
 {
     public abstract class BaseImporter
     {
+        protected readonly ConsoleWriter _consoleWriter;
         protected readonly IDbContextFactory<AppDbContext> _dbContextFactory;
         protected readonly IDownloadHttpClient _httpClient;
-        protected readonly ConsoleWriter _consoleWriter;
 
         public BaseImporter(IDbContextFactory<AppDbContext> dbContextFactory, string caption)
         {

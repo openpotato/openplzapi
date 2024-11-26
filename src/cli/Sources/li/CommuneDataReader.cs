@@ -56,12 +56,11 @@ namespace OpenPlzApi.CLI.Sources.LI
             while (await _csvReader.ReadAsync() > 1)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                yield return GetCommune();
+                yield return GenerateCommune();
             }
         }
 
-
-        private Commune GetCommune()
+        private Commune GenerateCommune()
         {
             return new Commune()
             {

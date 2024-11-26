@@ -41,7 +41,7 @@ namespace OpenPlzApi.DE
         {
             AdministrativeHeadquarters = governmentRegion.AdministrativeHeadquarters;
             FederalState = governmentRegion.FederalState != null ? new FederalStateSummary(governmentRegion.FederalState) : null;
-            Key = governmentRegion.RegionalKey;
+            Key = governmentRegion.Key;
             Name = governmentRegion.Name;
         }
 

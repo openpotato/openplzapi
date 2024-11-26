@@ -29,7 +29,7 @@ namespace OpenPlzApi.CLI
         {
             var command = new Command("importdb", "Imports public data to the OpenPLZ API database")
             {
-                new Option<ImportSource>(new[] { "--source", "-s" }, "Name of data source")
+                new Option<ImportSource>(["--source", "-s"], "Name of data source")
                 {
                     IsRequired = true
                 }
@@ -46,7 +46,7 @@ namespace OpenPlzApi.CLI
         {
             var command = new Command("initdb", "Creates or migrates an OpenPLZ API database")
             {
-                new Option<bool>(new[] { "--import", "-i" }, "Imports public data")
+                new Option<bool>(["--import", "-i"], "Imports public data")
                 {
                     IsRequired = false
                 }

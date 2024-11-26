@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using NpgsqlTypes;
 using OpenPlzApi.DataLayer;
 
 #nullable disable
@@ -17,7 +18,7 @@ namespace OpenPlzAPI.DataLayer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -86,6 +87,58 @@ namespace OpenPlzAPI.DataLayer.Migrations
                     b.ToTable("FederalProvinces", "at", t =>
                         {
                             t.HasComment("Representation of an Austrian federal province (Bundesland)");
+                        });
+                });
+
+            modelBuilder.Entity("OpenPlzApi.DataLayer.AT.FullTextStreet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnOrder(0)
+                        .HasComment("Unique Id");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Key (Straßenkennziffer)");
+
+                    b.Property<string>("Locality")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Locality (Ortschaft)");
+
+                    b.Property<Guid>("MunicipalityId")
+                        .HasColumnType("uuid")
+                        .HasComment("Reference to municipality");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Name (Straßenname)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Postal code (Postleitzahl)");
+
+                    b.Property<NpgsqlTsVector>("SearchVector")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasComment("tsvector column for full text search")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "config_openplzapi")
+                        .HasAnnotation("Npgsql:TsVectorProperties", new[] { "Name", "PostalCode", "Locality" });
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MunicipalityId");
+
+                    b.HasIndex("SearchVector");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
+
+                    b.ToTable("FullTextStreets", "at", t =>
+                        {
+                            t.HasComment("Representation of an Austrian street (Straße) for full text search");
                         });
                 });
 
@@ -319,6 +372,63 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         });
                 });
 
+            modelBuilder.Entity("OpenPlzApi.DataLayer.CH.FullTextStreet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnOrder(0)
+                        .HasComment("Unique Id");
+
+                    b.Property<Guid>("CommuneId")
+                        .HasColumnType("uuid")
+                        .HasComment("Reference to commune (Gemeinde)");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Key (Straßenschlüssel)");
+
+                    b.Property<string>("Locality")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Locality (Ort)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Name (Straßenname)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Postal code (Postleitzahl)");
+
+                    b.Property<NpgsqlTsVector>("SearchVector")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasComment("tsvector column for full text search")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "config_openplzapi")
+                        .HasAnnotation("Npgsql:TsVectorProperties", new[] { "Name", "PostalCode", "Locality" });
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasComment("Status (Straßenstatus)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommuneId");
+
+                    b.HasIndex("SearchVector")
+                        .HasDatabaseName("IX_FullTextStreets_SearchVector1");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
+
+                    b.ToTable("FullTextStreets", "ch", t =>
+                        {
+                            t.HasComment("Representation of a Swiss street (Straße) for full text search");
+                        });
+                });
+
             modelBuilder.Entity("OpenPlzApi.DataLayer.CH.Locality", b =>
                 {
                     b.Property<Guid>("Id")
@@ -412,15 +522,15 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("uuid")
                         .HasComment("Reference to government region (Regierungsbezirk)");
 
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Regional key (Regionalschlüssel)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasComment("Name (Kreisname)");
-
-                    b.Property<string>("RegionalKey")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasComment("Regional key (Regionalschlüssel)");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer")
@@ -432,8 +542,9 @@ namespace OpenPlzAPI.DataLayer.Migrations
 
                     b.HasIndex("GovernmentRegionId");
 
-                    b.HasIndex("RegionalKey")
-                        .IsUnique();
+                    b.HasIndex("Key")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Districts_Key1");
 
                     b.ToTable("Districts", "de", t =>
                         {
@@ -448,15 +559,15 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnOrder(0)
                         .HasComment("Unique Id");
 
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Regional key (Regionalschlüssel)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasComment("Name (Bundeslandname)");
-
-                    b.Property<string>("RegionalKey")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasComment("Regional key (Regionalschlüssel)");
 
                     b.Property<string>("SeatOfGovernment")
                         .HasColumnType("text")
@@ -464,12 +575,69 @@ namespace OpenPlzAPI.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RegionalKey")
+                    b.HasIndex("Key")
                         .IsUnique();
 
                     b.ToTable("FederalStates", "de", t =>
                         {
                             t.HasComment("Representation of a German federal state (Bundesland)");
+                        });
+                });
+
+            modelBuilder.Entity("OpenPlzApi.DataLayer.DE.FullTextStreet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnOrder(0)
+                        .HasComment("Unique Id");
+
+                    b.Property<string>("Borough")
+                        .HasColumnType("text")
+                        .HasComment("Borough (Stadtbezirk)");
+
+                    b.Property<string>("Locality")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Locality (Ort)");
+
+                    b.Property<Guid?>("MunicipalityId")
+                        .HasColumnType("uuid")
+                        .HasComment("Reference to municipality (Gemeinde)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Name (Straßenname)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Postal code (Postleitzahl)");
+
+                    b.Property<NpgsqlTsVector>("SearchVector")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasComment("tsvector column for full text search")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "config_openplzapi")
+                        .HasAnnotation("Npgsql:TsVectorProperties", new[] { "Name", "PostalCode", "Locality" });
+
+                    b.Property<string>("Suburb")
+                        .HasColumnType("text")
+                        .HasComment("Suburb (Orts- oder Stadtteil)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MunicipalityId")
+                        .HasDatabaseName("IX_FullTextStreets_MunicipalityId1");
+
+                    b.HasIndex("SearchVector")
+                        .HasDatabaseName("IX_FullTextStreets_SearchVector2");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
+
+                    b.ToTable("FullTextStreets", "de", t =>
+                        {
+                            t.HasComment("Representation of a German street (Straße) for full text search");
                         });
                 });
 
@@ -488,21 +656,21 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("uuid")
                         .HasComment("Reference to federal state (Bundesland)");
 
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Regional key (Regionalschlüssel)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasComment("Name (Bezirksname)");
 
-                    b.Property<string>("RegionalKey")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasComment("Regional key (Regionalschlüssel)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FederalStateId");
 
-                    b.HasIndex("RegionalKey")
+                    b.HasIndex("Key")
                         .IsUnique();
 
                     b.ToTable("GovernmentRegions", "de", t =>
@@ -554,24 +722,19 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("text")
                         .HasComment("Administrative headquarters (Verwaltungssitz des Gemeindeverbandes)");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasComment("Code (Code des Gemeindeverbandes)");
-
                     b.Property<Guid?>("DistrictId")
                         .HasColumnType("uuid")
                         .HasComment("Reference to district (Kreis)");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Regional key (Regionalschlüssel)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasComment("Name (Name des Gemeindeverbandes)");
-
-                    b.Property<string>("RegionalKey")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasComment("Regional key (Regionalschlüssel)");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer")
@@ -581,7 +744,7 @@ namespace OpenPlzAPI.DataLayer.Migrations
 
                     b.HasIndex("DistrictId");
 
-                    b.HasIndex("RegionalKey", "Code")
+                    b.HasIndex("Key")
                         .IsUnique();
 
                     b.ToTable("MunicipalAssociations", "de", t =>
@@ -609,6 +772,11 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("uuid")
                         .HasComment("Reference to federal state (Bundesland)");
 
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Regional key (Regionalschlüssel)");
+
                     b.Property<bool>("MultiplePostalCodes")
                         .HasColumnType("boolean")
                         .HasComment("Multiple postcodes available?");
@@ -622,11 +790,6 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasComment("Postal code of the administrative headquarters (Verwaltungssitz), if there are multiple postal codes available");
-
-                    b.Property<string>("RegionalKey")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasComment("Regional key (Regionalschlüssel)");
 
                     b.Property<string>("ShortName")
                         .IsRequired()
@@ -646,7 +809,7 @@ namespace OpenPlzAPI.DataLayer.Migrations
 
                     b.HasIndex("FederalStateId");
 
-                    b.HasIndex("RegionalKey")
+                    b.HasIndex("Key")
                         .IsUnique();
 
                     b.ToTable("Municipalities", "de", t =>
@@ -702,7 +865,7 @@ namespace OpenPlzAPI.DataLayer.Migrations
                     b.Property<string>("ElectoralDistrict")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasComment("Electoral district (Wahlbezirk)");
+                        .HasComment("Electoral district (Wahlkreis)");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -723,6 +886,64 @@ namespace OpenPlzAPI.DataLayer.Migrations
                     b.ToTable("Communes", "li", t =>
                         {
                             t.HasComment("Representation of a Liechtenstein commune (Gemeinde)");
+                        });
+                });
+
+            modelBuilder.Entity("OpenPlzApi.DataLayer.LI.FullTextStreet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnOrder(0)
+                        .HasComment("Unique Id");
+
+                    b.Property<Guid>("CommuneId")
+                        .HasColumnType("uuid")
+                        .HasComment("Reference to commune (Gemeinde)");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Key (Straßenschlüssel)");
+
+                    b.Property<string>("Locality")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Locality");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Name (Straßenname)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Postal code (Postleitzahl)");
+
+                    b.Property<NpgsqlTsVector>("SearchVector")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasComment("tsvector column for full text search")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "config_openplzapi")
+                        .HasAnnotation("Npgsql:TsVectorProperties", new[] { "Name", "PostalCode", "Locality" });
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasComment("Status (Straßenstatus)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommuneId")
+                        .HasDatabaseName("IX_FullTextStreets_CommuneId1");
+
+                    b.HasIndex("SearchVector")
+                        .HasDatabaseName("IX_FullTextStreets_SearchVector3");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
+
+                    b.ToTable("FullTextStreets", "li", t =>
+                        {
+                            t.HasComment("Representation of a Liechtenstein street (Straße) for full text search");
                         });
                 });
 
@@ -813,6 +1034,17 @@ namespace OpenPlzAPI.DataLayer.Migrations
                     b.Navigation("FederalProvince");
                 });
 
+            modelBuilder.Entity("OpenPlzApi.DataLayer.AT.FullTextStreet", b =>
+                {
+                    b.HasOne("OpenPlzApi.DataLayer.AT.Municipality", "Municipality")
+                        .WithMany()
+                        .HasForeignKey("MunicipalityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Municipality");
+                });
+
             modelBuilder.Entity("OpenPlzApi.DataLayer.AT.Locality", b =>
                 {
                     b.HasOne("OpenPlzApi.DataLayer.AT.Municipality", "Municipality")
@@ -868,6 +1100,17 @@ namespace OpenPlzAPI.DataLayer.Migrations
                     b.Navigation("Canton");
                 });
 
+            modelBuilder.Entity("OpenPlzApi.DataLayer.CH.FullTextStreet", b =>
+                {
+                    b.HasOne("OpenPlzApi.DataLayer.CH.Commune", "Commune")
+                        .WithMany()
+                        .HasForeignKey("CommuneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Commune");
+                });
+
             modelBuilder.Entity("OpenPlzApi.DataLayer.CH.Locality", b =>
                 {
                     b.HasOne("OpenPlzApi.DataLayer.CH.Commune", "Commune")
@@ -905,6 +1148,15 @@ namespace OpenPlzAPI.DataLayer.Migrations
                     b.Navigation("FederalState");
 
                     b.Navigation("GovernmentRegion");
+                });
+
+            modelBuilder.Entity("OpenPlzApi.DataLayer.DE.FullTextStreet", b =>
+                {
+                    b.HasOne("OpenPlzApi.DataLayer.DE.Municipality", "Municipality")
+                        .WithMany()
+                        .HasForeignKey("MunicipalityId");
+
+                    b.Navigation("Municipality");
                 });
 
             modelBuilder.Entity("OpenPlzApi.DataLayer.DE.GovernmentRegion", b =>
@@ -968,6 +1220,17 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Locality");
+                });
+
+            modelBuilder.Entity("OpenPlzApi.DataLayer.LI.FullTextStreet", b =>
+                {
+                    b.HasOne("OpenPlzApi.DataLayer.LI.Commune", "Commune")
+                        .WithMany()
+                        .HasForeignKey("CommuneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Commune");
                 });
 
             modelBuilder.Entity("OpenPlzApi.DataLayer.LI.Locality", b =>

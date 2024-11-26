@@ -30,7 +30,7 @@ namespace OpenPlzApi.DataLayer.DE
     /// Representation of a German government region (Regierungsbezirk)
     /// </summary>
     [Table(DbTables.DE.GovernmentRegion, Schema = DbSchemas.DE)]
-    [Index(nameof(RegionalKey), IsUnique = true)]
+    [Index(nameof(Key), IsUnique = true)]
     [Comment("Representation of a German government region (Regierungsbezirk)")]
     public class GovernmentRegion : BaseEntity
     {
@@ -46,19 +46,18 @@ namespace OpenPlzApi.DataLayer.DE
         public virtual FederalState FederalState { get; set; }
 
         /// <summary>
+        /// Regional key (Regionalschlüssel)
+        /// </summary>
+        [Required]
+        [Comment("Regional key (Regionalschlüssel)")]
+        public string Key { get; set; }
+
+        /// <summary>
         /// Name (Bezirksname)
         /// </summary>
         [Required]
         [Comment("Name (Bezirksname)")]
         public string Name { get; set; }
-
-        /// <summary>
-        /// Regional key (Regionalschlüssel)
-        /// </summary>
-        [Required]
-        [Comment("Regional key (Regionalschlüssel)")]
-        public string RegionalKey { get; set; }
-
         #region Foreign keys
         [Comment("Reference to federal state (Bundesland)")]
         public Guid FederalStateId { get; set; }

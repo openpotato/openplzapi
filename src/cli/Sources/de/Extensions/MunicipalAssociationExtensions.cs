@@ -28,7 +28,7 @@ namespace OpenPlzApi.CLI.Sources.DE
     {
         public static Guid GetUniqueId(this MunicipalAssociation record)
         {
-            return IdFactory.CreateIdFromValue($"{record.RegionalCode.Substring(0, 5)}+{record.Association}");
+            return IdFactory.CreateIdFromValue($"{record.RegionalCode[..5]}{record.Association}");
         }
     }
 }

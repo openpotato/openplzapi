@@ -22,6 +22,7 @@
 using Enbrea.Csv;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
+using System.Net.Mime;
 using System.Text;
 
 namespace OpenPlzApi
@@ -36,7 +37,7 @@ namespace OpenPlzApi
         /// </summary>
         public CsvOutputFormatter()
         {
-            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/csv"));
+            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse(MediaTypeNames.Text.Csv));
             SupportedEncodings.Add(Encoding.UTF8);
             SupportedEncodings.Add(Encoding.Unicode);
         }
@@ -49,9 +50,9 @@ namespace OpenPlzApi
         /// <returns>A task which can write the response body.</returns>
         public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
         {
-            var buffer = new StringBuilder();
+            var sb = new StringBuilder();
 
-            using var strWriter = new StringWriter(buffer);
+            using var strWriter = new StringWriter(sb);
 
             var csvWriter = new CsvTableWriter(strWriter);
             csvWriter.SetTrueFalseString<bool>("true", "false");
@@ -137,7 +138,7 @@ namespace OpenPlzApi
                 WriteResponse(csvWriter, context.Object as IEnumerable<LI.StreetResponse>);
             }
 
-            await context.HttpContext.Response.WriteAsync(buffer.ToString(), selectedEncoding);
+            await context.HttpContext.Response.WriteAsync(sb.ToString(), selectedEncoding);
         }
 
         /// <summary>
@@ -679,6 +680,8 @@ namespace OpenPlzApi
                 "Name",
                 "PostalCode",
                 "Locality",
+                "Borough",
+                "Suburb",
                 "Municipality.Key",
                 "Municipality.Name",
                 "Municipality.Type",
@@ -693,6 +696,8 @@ namespace OpenPlzApi
                 csvWriter.SetValue("Name", street.Name);
                 csvWriter.SetValue("PostalCode", street.PostalCode);
                 csvWriter.SetValue("Locality", street.Locality);
+                csvWriter.SetValue("Borough", street.Borough);
+                csvWriter.SetValue("Suburb", street.Suburb);
                 csvWriter.SetValue("Municipality.Key", street.Municipality.Key);
                 csvWriter.SetValue("Municipality.Name", street.Municipality.Name);
                 csvWriter.SetValue("Municipality.Type", street.Municipality.Type);
@@ -738,8 +743,7 @@ namespace OpenPlzApi
                 "PostalCode",
                 "Name",
                 "Commune.Code",
-                "Commune.Name",
-                "Commune.ElectoralDistrict");
+                "Commune.Name");
 
             foreach (var localitiy in localities)
             {
@@ -747,7 +751,6 @@ namespace OpenPlzApi
                 csvWriter.SetValue("Name", localitiy.Name);
                 csvWriter.SetValue("Commune.Key", localitiy.Commune.Key);
                 csvWriter.SetValue("Commune.Name", localitiy.Commune.Name);
-                csvWriter.SetValue("Commune.ElectoralDistrict", localitiy.Commune.ElectoralDistrict);
 
                 csvWriter.Write();
             }
@@ -767,8 +770,7 @@ namespace OpenPlzApi
                 "Locality",
                 "Status",
                 "Commune.Key",
-                "Commune.Name",
-                "Commune.ElectoralDistrict");
+                "Commune.Name");
 
             foreach (var street in streets)
             {
@@ -779,7 +781,6 @@ namespace OpenPlzApi
                 csvWriter.SetValue("Status", street.Status);
                 csvWriter.SetValue("Commune.Key", street.Commune.Key);
                 csvWriter.SetValue("Commune.Name", street.Commune.Name);
-                csvWriter.SetValue("Commune.ElectoralDistrict", street.Commune.ElectoralDistrict);
 
                 csvWriter.Write();
             }

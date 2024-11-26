@@ -58,11 +58,11 @@ namespace OpenPlzApi.CLI.Sources.DE
             while (await _csvReader.ReadAsync() > 1)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                yield return GetStreet(localityCache);
+                yield return GenerateStreet(localityCache);
             }
         }
 
-        private Street GetStreet(Dictionary<string, Street._Locality> localityCache)
+        private Street GenerateStreet(Dictionary<string, Street._Locality> localityCache)
         {
             var localityId = $"{_csvReader.GetValue<string>("Name")}+{_csvReader.GetValue<string>("PostalCode")}+{_csvReader.GetValue<string>("RegionalKey")}";
 

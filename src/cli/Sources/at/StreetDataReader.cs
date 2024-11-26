@@ -66,11 +66,11 @@ namespace OpenPlzApi.CLI.Sources.AT
             while (await _csvReader.ReadAsync() > 1)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                yield return GetStreet(timeStamp, municipalityCache, localityCache);
+                yield return GenerateStreet(timeStamp, municipalityCache, localityCache);
             }
         }
 
-        private Street GetStreet(DateOnly timeStamp, Dictionary<string, Street._Locality._Municipality> municipalityCache, Dictionary<string, Street._Locality> localityCache)
+        private Street GenerateStreet(DateOnly timeStamp, Dictionary<string, Street._Locality._Municipality> municipalityCache, Dictionary<string, Street._Locality> localityCache)
         {
             var municipalityId = _csvReader.GetValue<string>("Gemeindecode");
 

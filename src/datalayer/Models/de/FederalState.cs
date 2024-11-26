@@ -29,23 +29,23 @@ namespace OpenPlzApi.DataLayer.DE
     /// Representation of a German federal state (Bundesland)
     /// </summary>
     [Table(DbTables.DE.FederalState, Schema = DbSchemas.DE)]
-    [Index(nameof(RegionalKey), IsUnique = true)]
+    [Index(nameof(Key), IsUnique = true)]
     [Comment("Representation of a German federal state (Bundesland)")]
     public class FederalState : BaseEntity
     {
+        /// <summary>
+        /// Regional key (Regionalschlüssel)
+        /// </summary>
+        [Required]
+        [Comment("Regional key (Regionalschlüssel)")]
+        public string Key { get; set; }
+
         /// <summary>
         /// Name (Bundeslandname)
         /// </summary>
         [Required]
         [Comment("Name (Bundeslandname)")]
         public string Name { get; set; }
-
-        /// <summary>
-        /// Regional key (Regionalschlüssel)
-        /// </summary>
-        [Required]
-        [Comment("Regional key (Regionalschlüssel)")]
-        public string RegionalKey { get; set; }
 
         /// <summary>
         /// Seat of government (Sitz der Landesregierung)

@@ -26,9 +26,24 @@ namespace OpenPlzApi.CLI.Sources.AT
     /// </summary>
     public enum MunicipalityStatus
     {
-        None, // Municipality without status
-        SR,   // Town with charter
-        ST,   // Urban municipality 
-        M,    // Market town  
+        /// <summary>
+        /// Municipality without status
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// Town with charter (Statutarstadt)
+        /// </summary>
+        SR,
+
+        /// <summary>
+        /// Urban municipality (Stadtgemeinde)
+        /// </summary>
+        ST,
+
+        /// <summary>
+        /// Market town (Marktgemeinde)
+        /// </summary>
+        M,    
     }
 }

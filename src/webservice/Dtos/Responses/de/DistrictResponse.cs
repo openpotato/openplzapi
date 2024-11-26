@@ -42,9 +42,9 @@ namespace OpenPlzApi.DE
             AdministrativeHeadquarters = district.AdministrativeHeadquarters;
             FederalState = district.FederalState != null ? new FederalStateSummary(district.FederalState) : null;
             GovernmentRegion = district.GovernmentRegion != null ? new GovernmentRegionSummary(district.GovernmentRegion) : null;
-            Key = district.RegionalKey;
+            Key = district.Key;
             Name = district.Name;
-            Type = (DistrictType)district.Type;
+            Type = district.Type.GetDisplayName();
         }
 
         /// <summary>
@@ -89,6 +89,6 @@ namespace OpenPlzApi.DE
         /// <example>Landkreis</example>
         [Required]
         [JsonPropertyOrder(3)]
-        public DistrictType Type { get; }
+        public string Type { get; }
     }
 }

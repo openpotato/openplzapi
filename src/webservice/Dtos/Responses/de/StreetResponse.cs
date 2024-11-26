@@ -50,6 +50,23 @@ namespace OpenPlzApi.DE
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="StreetResponse"/> class.
+        /// </summary>
+        /// <param name="street">Assigns data from <see cref="FullTextStreet"/></param>
+        public StreetResponse(FullTextStreet street)
+            : base(street)
+        {
+            District = street.Municipality?.District != null ? new DistrictSummary(street.Municipality.District) : null;
+            FederalState = street.Municipality?.FederalState != null ? new FederalStateSummary(street.Municipality.FederalState) : null;
+            Locality = street.Locality;
+            Municipality = street.Municipality != null ? new MunicipalitySummary(street.Municipality) : null;
+            Name = street.Name;
+            PostalCode = street.PostalCode;
+            Suburb = street.Suburb;
+            Borough = street.Borough;
+        }
+
+        /// <summary>
         /// Borough (Stadtbezirk)
         /// </summary>
         [Required]

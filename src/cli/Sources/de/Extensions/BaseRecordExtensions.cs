@@ -33,14 +33,14 @@ namespace OpenPlzApi.CLI.Sources.DE
 
         public static Guid GetFederalStatenUniqueId(this BaseRecord record)
         {
-            return IdFactory.CreateIdFromValue(record.RegionalCode.Substring(0, 2));
+            return IdFactory.CreateIdFromValue(record.RegionalCode[..2]);
         }
 
         public static Guid? GetGovernmentRegionUniqueId(this BaseRecord record)
         {
             if (record.RegionalCode.Substring(2, 1) != "0")
             {
-                return IdFactory.CreateIdFromValue(record.RegionalCode.Substring(0, 3));
+                return IdFactory.CreateIdFromValue(record.RegionalCode[..3]);
             }
             else 
             {
@@ -52,7 +52,7 @@ namespace OpenPlzApi.CLI.Sources.DE
         {
             if (record.RegionalCode.Substring(3, 2) != "00")
             {
-                return IdFactory.CreateIdFromValue(record.RegionalCode.Substring(0, 5));
+                return IdFactory.CreateIdFromValue(record.RegionalCode[..5]);
             }
             else
             {
