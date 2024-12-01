@@ -41,18 +41,28 @@ namespace OpenPlzApi.CH
         {
             Canton = district.Canton != null ? new CantonSummary(district.Canton) : null;
             Key = district.Key;
+            HistoricalCode = district.HistoricalCode;
             Name = district.Name;
+            ShortName = district.ShortName;
         }
 
         /// <summary>
         /// Reference to canton (Kanton)
         /// </summary>
         [Required]
-        [JsonPropertyOrder(3)]
+        [JsonPropertyOrder(5)]
         public CantonSummary Canton { get; }
 
         /// <summary>
-        /// Key (Bezirksnummer)
+        /// Historical code (Historisierte Nummer des Bezirks)
+        /// </summary>
+        /// <example>10236</example>
+        [Required]
+        [JsonPropertyOrder(2)]
+        public string HistoricalCode { get; }
+
+        /// <summary>
+        /// Key (Bfs-Nummer des Bezirks)
         /// </summary>
         /// <example>1302</example>
         [Required]
@@ -64,7 +74,15 @@ namespace OpenPlzApi.CH
         /// </summary>
         /// <example>Bezirk Laufen</example>
         [Required]
-        [JsonPropertyOrder(2)]
+        [JsonPropertyOrder(3)]
         public string Name { get; }
+
+        /// <summary>
+        /// Short name (Bezirksname, kurz)
+        /// </summary>
+        /// <example>Laufen</example>
+        [Required]
+        [JsonPropertyOrder(4)]
+        public string ShortName { get; }
     }
 }

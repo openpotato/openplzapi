@@ -84,7 +84,7 @@ builder.Services.AddSwaggerGen(setup =>
         {
             Title = "OpenPLZ API v1",
             Version = "v1",
-            Description = "Open Data API for street and postal code directories of Germany, Austria, Switzerland and Liechtenstein",
+            Description = "Open Data API for street and postal code directories of Austria, Germany, Liechtenstein and Switzerland",
             Contact = new OpenApiContact
             {
                 Name = "The OpenPLZ API Project",

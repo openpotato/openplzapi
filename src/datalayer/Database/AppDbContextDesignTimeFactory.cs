@@ -24,13 +24,22 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace OpenPlzApi.DataLayer
 {
+    /// <summary>
+    /// A factory for creating <see cref="AppDbContext" /> instances for use in 
+    /// design-time services.
+    /// </summary>
     class AppDbContextDesignTimeFactory : IDesignTimeDbContextFactory<AppDbContext>
     {
+        /// <summary>
+        /// Creates a new instance of a derived context.
+        /// </summary>
+        /// <param name="args">Arguments provided by the design-time service.</param>
+        /// <returns>An instance of <see cref="AppDbContext" /></returns>
         public AppDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
 
-            // remove-migration will fail, use with -Force option
+            // The remove-migration command will fail, use with -Force option
             optionsBuilder.UseNpgsql();
 
             return new AppDbContext(optionsBuilder.Options);

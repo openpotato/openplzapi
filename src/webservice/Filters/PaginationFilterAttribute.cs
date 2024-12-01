@@ -25,8 +25,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace OpenPlzApi
 {
     /// <summary>
-    /// A filter that injects pagination information from a <see cref="IPage" /> controller action result 
-    /// as http headers into the response.
+    /// A filter that injects pagination information from a <see cref="IPage" /> controller 
+    /// action result as http headers into the response.
     /// </summary>
     public class PaginationFilterAttribute : ActionFilterAttribute
     {

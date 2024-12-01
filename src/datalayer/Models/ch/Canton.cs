@@ -34,17 +34,17 @@ namespace OpenPlzApi.DataLayer.CH
     public class Canton : BaseEntity
     {
         /// <summary>
-        /// Code (Kantonskürzel)
+        /// Historical code (Historisierte Nummer des Kantons)
         /// </summary>
         [Required]
-        [Comment("Code (Kantonskürzel)")]
-        public string Code { get; set; }
+        [Comment("Historical code (Historisierte Nummer des Kantons)")]
+        public string HistoricalCode { get; set; }
 
         /// <summary>
-        /// Key (Kantonsnummer)
+        /// Key (Bfs-Nummer des Kantons)
         /// </summary>
         [Required]
-        [Comment("Key (Kantonsnummer)")]
+        [Comment("Key (Bfs-Nummer des Kantons)")]
         public string Key { get; set; }
 
         /// <summary>
@@ -53,5 +53,12 @@ namespace OpenPlzApi.DataLayer.CH
         [Required]
         [Comment("Name (Kantonsname)")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Short name (Kantonskürzel)
+        /// </summary>
+        [Required]
+        [Comment("Short name (Kantonskürzel)")]
+        public string ShortName { get; set; }
     }
 }

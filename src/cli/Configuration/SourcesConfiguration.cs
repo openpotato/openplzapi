@@ -68,7 +68,7 @@ namespace OpenPlzApi.CLI
         /// </summary>
         public class CHConfiguration
         {
-            public SingleFileConfiguration Communes { get; set; }
+            public ApiResponseFileConfiguration Communes { get; set; }
             public ZipFileConfiguration Streets { get; set; }
         }
 

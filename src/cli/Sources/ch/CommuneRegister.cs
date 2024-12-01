@@ -19,12 +19,11 @@
  */
 #endregion
 
-using ClosedXML.Excel;
-using System;
+using OpenPlzApi.AGVCH;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OpenPlzApi.CLI.Sources.CH
 {
@@ -59,16 +58,10 @@ namespace OpenPlzApi.CLI.Sources.CH
         public IList<District> Districts { get; }
 
         /// <summary>
-        /// Time stamp of the register
-        /// </summary>
-        public DateOnly? TimeStamp { get; internal set; }
-
-        /// <summary>
         /// Remove all loaded data
         /// </summary>
         public void Clear()
         {
-            TimeStamp = null;
             Communes.Clear();
             Districts.Clear();
             Cantons.Clear();
@@ -78,78 +71,47 @@ namespace OpenPlzApi.CLI.Sources.CH
         /// Loads the Swiss official commune register from the official Excel file.
         /// </summary>
         /// <param name="stream">File stream</param>
-        public void Load(Stream stream)
+        public async Task Load(Stream stream)
         {
             Clear();
 
-            using var xlsDocument = new XLWorkbook(stream);
+            var snapshot = AGVCHReader.ReadAsync<SnapshotRecord>(stream);
 
-            var firstWorksheetName = xlsDocument.Worksheets.Worksheet(1).Name;
-
-            TimeStamp = DateOnly.ParseExact(firstWorksheetName, "dd.MM.yyyy", CultureInfo.InvariantCulture);
-
-            LoadCantons(xlsDocument);
-            LoadDistricts(xlsDocument);
-            LoadCommunes(xlsDocument);
-        }
-
-        /// <summary>
-        /// Loads all cantons from the given Excel document
-        /// </summary>
-        /// <param name="xlsDocument">Excel document</param>
-        private void LoadCantons(XLWorkbook xlsDocument)
-        {
-            var xlsReader = new XlsReader(xlsDocument, "KT", 2, null);
-
-            while (xlsReader.ReadLine())
+            await foreach (var snapshotRecord in snapshot)
             {
-                Cantons.Add(new Canton()
+                if (snapshotRecord.Level == SnapshotLevel.Canton)
                 {
-                    Key = xlsReader.GetStringValue("A"),
-                    Code = xlsReader.GetStringValue("B"),
-                    Name = xlsReader.GetStringValue("C")
-                });
-            }
-        }
-
-        /// <summary>
-        /// Loads all communes from the given Excel document
-        /// </summary>
-        /// <param name="xlsDocument">Excel document</param>
-        private void LoadCommunes(XLWorkbook xlsDocument)
-        {
-            var xlsReader = new XlsReader(xlsDocument, "GDE", 2, null);
-
-            while (xlsReader.ReadLine())
-            {
-                Communes.Add(new Commune()
+                    Cantons.Add(new Canton()
+                    {
+                        Key = snapshotRecord.BfsCode,
+                        HistoricalCode = snapshotRecord.HistoricalCode,
+                        ShortName = snapshotRecord.ShortName,
+                        Name = snapshotRecord.Name,
+                    });
+                }
+                else if (snapshotRecord.Level == SnapshotLevel.District)
                 {
-                    Canton = Cantons.FirstOrDefault(c => c.Code == xlsReader.GetStringValue("A")),
-                    District = Districts.FirstOrDefault(c => c.Key == xlsReader.GetStringValue("B")),
-                    Key = xlsReader.GetStringValue("C"),
-                    Name = xlsReader.GetStringValue("D"),
-                    ShortName = xlsReader.GetStringValue("E"),
-                    LastModified = xlsReader.GetDateOnlyValue("H")
-                });
-            }
-        }
-
-        /// <summary>
-        /// Loads all districts from the given Excel document
-        /// </summary>
-        /// <param name="xlsDocument">Excel document</param>
-        private void LoadDistricts(XLWorkbook xlsDocument)
-        {
-            var xlsReader = new XlsReader(xlsDocument, "BZN", 2, null);
-
-            while (xlsReader.ReadLine())
-            {
-                Districts.Add(new District()
+                    Districts.Add(new District()
+                    {
+                        Key = snapshotRecord.BfsCode,
+                        HistoricalCode = snapshotRecord.HistoricalCode,
+                        ShortName = snapshotRecord.ShortName,
+                        Name = snapshotRecord.Name,
+                        Canton = Cantons.FirstOrDefault(c => c.HistoricalCode == snapshotRecord.Parent)
+                    });
+                }
+                else if (snapshotRecord.Level == SnapshotLevel.Commune)
                 {
-                    Key = xlsReader.GetStringValue("B"),
-                    Name = xlsReader.GetStringValue("C"),
-                    Canton = Cantons.FirstOrDefault(c => c.Code == xlsReader.GetStringValue("A"))
-                });
+                    Communes.Add(new Commune()
+                    {
+                        Key = snapshotRecord.BfsCode,
+                        HistoricalCode = snapshotRecord.HistoricalCode,
+                        Name = snapshotRecord.Name,
+                        ShortName = snapshotRecord.ShortName,
+                        District = Districts.FirstOrDefault(c => c.HistoricalCode == snapshotRecord.Parent),
+                        Canton = Districts.FirstOrDefault(c => c.HistoricalCode == snapshotRecord.Parent)?.Canton
+                    });
+                }
             }
         }
     }

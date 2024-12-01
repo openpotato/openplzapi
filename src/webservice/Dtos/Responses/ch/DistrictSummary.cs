@@ -41,6 +41,7 @@ namespace OpenPlzApi.CH
         {
             Key = district.Key;
             Name = district.Name;
+            ShortName = district.ShortName;
         }
 
         /// <summary>
@@ -58,5 +59,13 @@ namespace OpenPlzApi.CH
         [Required]
         [JsonPropertyOrder(2)]
         public string Name { get; }
+
+        /// <summary>
+        /// Short name (Bezirksname, kurz)
+        /// </summary>
+        /// <example>Laufen</example>
+        [Required]
+        [JsonPropertyOrder(3)]
+        public string ShortName { get; }
     }
 }

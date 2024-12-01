@@ -22,7 +22,6 @@
 using Enbrea.Csv;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
-using System.Net.Mime;
 using System.Text;
 
 namespace OpenPlzApi

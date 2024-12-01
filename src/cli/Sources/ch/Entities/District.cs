@@ -32,6 +32,16 @@ namespace OpenPlzApi.CLI.Sources.CH
         /// Refrence to canton
         /// </summary>
         public Canton Canton { get; set; }
+        
+        /// <summary>
+        /// Historical Code
+        /// </summary>
+        public string HistoricalCode { get; set; }
+
+        /// <summary>
+        /// Short name 
+        /// </summary>
+        public string ShortName { get; set; }
 
         /// <summary>
         /// Get a predictable unique id for this district

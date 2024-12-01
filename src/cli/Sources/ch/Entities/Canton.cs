@@ -29,9 +29,14 @@ namespace OpenPlzApi.CLI.Sources.CH
     public class Canton : BaseRecord
     {
         /// <summary>
-        /// Code
+        /// Historical Code
         /// </summary>
-        public string Code { get; set; }
+        public string HistoricalCode { get; set; }
+
+        /// <summary>
+        /// Short name
+        /// </summary>
+        public string ShortName { get; set; }
 
         /// <summary>
         /// Get a predictable unique id for this canton

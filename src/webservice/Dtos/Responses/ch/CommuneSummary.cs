@@ -44,7 +44,7 @@ namespace OpenPlzApi.CH
         }
 
         /// <summary>
-        /// Key (Gemeindenummer)
+        /// Key (Bfs-Nummer der Gemeinde)
         /// </summary>
         /// <example>2786</example>
         [Required]
