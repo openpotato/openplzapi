@@ -30,9 +30,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    Code = table.Column<string>(type: "text", nullable: false, comment: "Code (Kantonskürzel)"),
-                    Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Kantonsnummer)"),
-                    Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Kantonsname)")
+                    HistoricalCode = table.Column<string>(type: "text", nullable: false, comment: "Historical code (Historisierte Nummer des Kantons)"),
+                    Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Bfs-Nummer des Kantons)"),
+                    Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Kantonsname)"),
+                    ShortName = table.Column<string>(type: "text", nullable: false, comment: "Short name (Kantonskürzel)")
                 },
                 constraints: table =>
                 {
@@ -93,8 +94,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Bezirksnummer)"),
+                    HistoricalCode = table.Column<string>(type: "text", nullable: false, comment: "Historical code (Historisierte Nummer des Bezirks)"),
+                    Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Bfs-Nummer des Bezirks)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Bezirksname)"),
+                    ShortName = table.Column<string>(type: "text", nullable: false, comment: "Short name (Bezirksname, kurz)"),
                     CantonId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to canton (Kanton)")
                 },
                 constraints: table =>
@@ -216,7 +219,8 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, comment: "Unique Id"),
-                    Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Gemeindenummer)"),
+                    HistoricalCode = table.Column<string>(type: "text", nullable: false, comment: "Historical code (Historisierte Nummer der Gemeinde)"),
+                    Key = table.Column<string>(type: "text", nullable: false, comment: "Key (Bfs-Gemeindenummer)"),
                     Name = table.Column<string>(type: "text", nullable: false, comment: "Name (Amtlicher Gemeindename)"),
                     ShortName = table.Column<string>(type: "text", nullable: false, comment: "Short name (Gemeindename, kurz)"),
                     DistrictId = table.Column<Guid>(type: "uuid", nullable: false, comment: "Reference to district (Bezirk)")

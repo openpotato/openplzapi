@@ -20,6 +20,7 @@
 #endregion
 
 using OpenPlzApi.DataLayer.LI;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -28,6 +29,7 @@ namespace OpenPlzApi.LI
     /// <summary>
     /// Representation of a Swiss locality (Ort oder Stadt)
     /// </summary>
+    [SwaggerSchema(ReadOnly = true)]
     public class LocalityResponse : BaseResponse
     {
         /// <summary>

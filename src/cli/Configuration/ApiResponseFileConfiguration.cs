@@ -19,21 +19,11 @@
  */
 #endregion
 
-using System;
-
-namespace OpenPlzApi.CLI.Sources.LI
+namespace OpenPlzApi.CLI
 {
-    /// <summary>
-    /// Exception class for <see cref="XlsReader"/>.
-    /// </summary>
-    public class XlsReaderException : Exception
+    public class ApiResponseFileConfiguration
     {
-        /// <summary>
-        /// Initializes a new instance of <see cref="XlsReaderException"/>.
-        /// </summary>
-        /// <param name="message">The message that describes the error.</param>
-        public XlsReaderException(string message) : base(message)
-        {
-        }
+        public string Caption { get; set; }
+        public string LocalSourceFileName { get; set; }
     }
 }

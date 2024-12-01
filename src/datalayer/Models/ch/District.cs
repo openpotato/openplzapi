@@ -40,10 +40,17 @@ namespace OpenPlzApi.DataLayer.CH
         public virtual Canton Canton { get; set; }
 
         /// <summary>
-        /// Key (Bezirksnummer)
+        /// Historical code (Historisierte Nummer des Bezirks)
         /// </summary>
         [Required]
-        [Comment("Key (Bezirksnummer)")]
+        [Comment("Historical code (Historisierte Nummer des Bezirks)")]
+        public string HistoricalCode { get; set; }
+
+        /// <summary>
+        /// Key (Bfs-Nummer des Bezirks)
+        /// </summary>
+        [Required]
+        [Comment("Key (Bfs-Nummer des Bezirks)")]
         public string Key { get; set; }
 
         /// <summary>
@@ -52,6 +59,13 @@ namespace OpenPlzApi.DataLayer.CH
         [Required]
         [Comment("Name (Bezirksname)")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Short name (Bezirksname, kurz)
+        /// </summary>
+        [Required]
+        [Comment("Short name (Bezirksname, kurz)")]
+        public string ShortName { get; set; }
 
         #region Foreign keys
         [Comment("Reference to canton (Kanton)")]

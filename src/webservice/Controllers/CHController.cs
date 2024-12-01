@@ -99,7 +99,7 @@ namespace OpenPlzApi.CH
         {
             return await _dbContext.Set<Commune>()
                 .Include(x => x.District).ThenInclude(x => x.Canton)
-                .Where(x => x.District.Canton.Key == key)
+                .Where(x => x.District.Canton.Key == key || x.District.Canton.HistoricalCode == key)
                 .OrderBy(x => x.Key)
                 .Select(x => new CommuneResponse(x))
                 .AsNoTracking()
@@ -125,7 +125,7 @@ namespace OpenPlzApi.CH
         {
             return await _dbContext.Set<Commune>()
                 .Include(x => x.District).ThenInclude(x => x.Canton)
-                .Where(x => x.District.Key == key)
+                .Where(x => x.District.Key == key || x.District.HistoricalCode == key)
                 .OrderBy(x => x.Key)
                 .Select(x => new CommuneResponse(x))
                 .AsNoTracking()
@@ -151,7 +151,7 @@ namespace OpenPlzApi.CH
         {
             return await _dbContext.Set<District>()
                 .Include(x => x.Canton)
-                .Where(x => x.Canton.Key == key)
+                .Where(x => x.Canton.Key == key || x.Canton.HistoricalCode == key)
                 .OrderBy(x => x.Key)
                 .Select(x => new DistrictResponse(x))
                 .AsNoTracking()
@@ -213,7 +213,7 @@ namespace OpenPlzApi.CH
         {
             return await _dbContext.Set<Locality>()
                 .Include(x => x.Commune).ThenInclude(x => x.District).ThenInclude(x => x.Canton)
-                .Where(x => x.Commune.District.Canton.Key == key)
+                .Where(x => x.Commune.District.Canton.Key == key || x.Commune.District.Canton.HistoricalCode == key)
                 .OrderBy(x => x.PostalCode).ThenBy(x => x.Name)
                 .Select(x => new LocalityResponse(x))
                 .AsNoTracking()
@@ -238,7 +238,7 @@ namespace OpenPlzApi.CH
         {
             return await _dbContext.Set<Locality>()
                 .Include(x => x.Commune).ThenInclude(x => x.District).ThenInclude(x => x.Canton)
-                .Where(x => x.Commune.District.Key == key)
+                .Where(x => x.Commune.District.Key == key || x.Commune.District.HistoricalCode == key)
                 .OrderBy(x => x.PostalCode).ThenBy(x => x.Name)
                 .Select(x => new LocalityResponse(x))
                 .AsNoTracking()

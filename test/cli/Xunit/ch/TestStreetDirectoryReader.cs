@@ -112,7 +112,7 @@ namespace OpenPlzApi.CLI.Sources.CH.Tests
         private static string GetAssetsFolder()
         {
             // Get the full location of the assembly
-            string assemblyPath = System.Reflection.Assembly.GetAssembly(typeof(TestCommuneRegister)).Location;
+            string assemblyPath = System.Reflection.Assembly.GetAssembly(typeof(TestStreetDirectoryReader)).Location;
 
             // Get the folder that's in
             return Path.Combine(Path.GetDirectoryName(assemblyPath), "ch",  "Assets");

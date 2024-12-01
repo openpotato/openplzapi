@@ -21,6 +21,7 @@
 #endregion
 
 using OpenPlzApi.DataLayer.CH;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -29,6 +30,7 @@ namespace OpenPlzApi.CH
     /// <summary>
     /// Reduced representation of a Swiss district (Bezirk)
     /// </summary>
+    [SwaggerSchema(ReadOnly = true)]
     public class DistrictSummary
     {
         /// <summary>
@@ -39,6 +41,7 @@ namespace OpenPlzApi.CH
         {
             Key = district.Key;
             Name = district.Name;
+            ShortName = district.ShortName;
         }
 
         /// <summary>
@@ -56,5 +59,13 @@ namespace OpenPlzApi.CH
         [Required]
         [JsonPropertyOrder(2)]
         public string Name { get; }
+
+        /// <summary>
+        /// Short name (Bezirksname, kurz)
+        /// </summary>
+        /// <example>Laufen</example>
+        [Required]
+        [JsonPropertyOrder(3)]
+        public string ShortName { get; }
     }
 }

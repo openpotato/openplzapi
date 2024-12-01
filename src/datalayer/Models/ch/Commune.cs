@@ -40,10 +40,17 @@ namespace OpenPlzApi.DataLayer.CH
         public virtual District District { get; set; }
 
         /// <summary>
-        /// Key (Gemeindenummer)
+        /// Historical code (Historisierte Nummer der Gemeinde)
         /// </summary>
         [Required]
-        [Comment("Key (Gemeindenummer)")]
+        [Comment("Historical code (Historisierte Nummer der Gemeinde)")]
+        public string HistoricalCode { get; set; }
+        
+        /// <summary>
+        /// Key (Bfs-Gemeindenummer)
+        /// </summary>
+        [Required]
+        [Comment("Key (Bfs-Gemeindenummer)")]
         public string Key { get; set; }
 
         /// <summary>

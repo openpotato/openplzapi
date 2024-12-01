@@ -20,6 +20,8 @@
 #endregion
 
 using Microsoft.EntityFrameworkCore;
+using OpenPlzApi.AGVCH;
+using OpenPlzApi.CLI.Sources.CH;
 using OpenPlzApi.DataLayer;
 using OpenPlzApi.DataLayer.CH;
 using System;
@@ -32,12 +34,10 @@ namespace OpenPlzApi.CLI.CH
     public class CommunesImporter : BaseImporter
     {
         private readonly FileInfo _cachedSourceFile;
-        private readonly Uri _remoteSourceFile;
 
-        public CommunesImporter(IDbContextFactory<AppDbContext> dbContextFactory, string caption, Uri remoteSourceFile, FileInfo cachedSourceFile)
+        public CommunesImporter(IDbContextFactory<AppDbContext> dbContextFactory, string caption, FileInfo cachedSourceFile)
             : base(dbContextFactory, caption)
         {
-            _remoteSourceFile = remoteSourceFile;
             _cachedSourceFile = cachedSourceFile;
         }
 
@@ -55,7 +55,9 @@ namespace OpenPlzApi.CLI.CH
 
                 Directory.CreateDirectory(_cachedSourceFile.DirectoryName);
 
-                await _httpClient.DownloadAsync(_remoteSourceFile, _cachedSourceFile, cancellationToken);
+                var apiClient = AGVCHApiClientFactory.CreateClient();
+
+                await apiClient.DownloadSnapshotDocumentAsync(_cachedSourceFile, DateOnly.FromDateTime(DateTime.Now), cancellationToken);
 
                 _consoleWriter.FinishProgress();
             }
@@ -76,7 +78,7 @@ namespace OpenPlzApi.CLI.CH
 
                 var communeRegister = new Sources.CH.CommuneRegister();
 
-                communeRegister.Load(gvFileStream);
+                await communeRegister.Load(gvFileStream);
 
                 _consoleWriter.FinishProgress();
                 
@@ -88,12 +90,13 @@ namespace OpenPlzApi.CLI.CH
 
                     using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-                    dbContext.Set<Canton>().Add(new Canton()
+                    dbContext.Set<DataLayer.CH.Canton>().Add(new DataLayer.CH.Canton()
                     {
                         Id = canton.GetUniqueId(),
                         Key = canton.Key,
+                        HistoricalCode = canton.HistoricalCode,
                         Name = canton.Name,
-                        Code = canton.Code,
+                        ShortName = canton.ShortName
                     });
 
                     await dbContext.SaveChangesAsync(cancellationToken);
@@ -115,12 +118,14 @@ namespace OpenPlzApi.CLI.CH
 
                     using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-                    dbContext.Set<District>().Add(new District()
+                    dbContext.Set<DataLayer.CH.District>().Add(new DataLayer.CH.District()
                     {
                         Id = district.GetUniqueId(),
                         Key = district.Key,
+                        HistoricalCode = district.HistoricalCode,
                         Name = district.Name,
-                        CantonId =district.Canton.GetUniqueId(),
+                        ShortName = district.ShortName,
+                        CantonId = district.Canton.GetUniqueId()
                     });
 
                     await dbContext.SaveChangesAsync(cancellationToken);
@@ -142,13 +147,14 @@ namespace OpenPlzApi.CLI.CH
 
                     using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-                    dbContext.Set<Commune>().Add(new Commune()
+                    dbContext.Set<DataLayer.CH.Commune>().Add(new DataLayer.CH.Commune()
                     {
                         Id = commune.GetUniqueId(),
                         Key = commune.Key,
+                        HistoricalCode = commune.HistoricalCode,
                         Name = commune.Name,
                         ShortName = commune.ShortName,
-                        DistrictId = commune.District.GetUniqueId(),
+                        DistrictId = commune.District.GetUniqueId()
                     });
 
 

@@ -119,7 +119,6 @@ namespace OpenPlzApi.CLI
         {
             var importer = new CH.CommunesImporter(_dbContextFactory,
                 _appConfiguration.Sources.CH.Communes.Caption,
-                _appConfiguration.Sources.CH.Communes.RemoteSourceFile,
                 new FileInfo(Path.Combine(_appConfiguration.Sources.RootFolderName, _appConfiguration.Sources.CH.Communes.LocalSourceFileName)));
 
             await importer.ExecuteAsync(cancellationToken);

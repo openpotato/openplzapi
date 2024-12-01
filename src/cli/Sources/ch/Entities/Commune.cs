@@ -32,16 +32,15 @@ namespace OpenPlzApi.CLI.Sources.CH
         /// Refrence to canton
         /// </summary>
         public Canton Canton { get; set; }
-
         /// <summary>
         /// Refrence to district
         /// </summary>
         public District District { get; set; }
 
         /// <summary>
-        /// Date of last modification
+        /// Historical Code
         /// </summary>
-        public DateOnly? LastModified { get; set; }
+        public string HistoricalCode { get; set; }
 
         /// <summary>
         /// Short name 

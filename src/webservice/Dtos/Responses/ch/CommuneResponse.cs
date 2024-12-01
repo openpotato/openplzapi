@@ -19,9 +19,8 @@
  */
 #endregion
 
-using Microsoft.EntityFrameworkCore;
 using OpenPlzApi.DataLayer.CH;
-using System;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -30,6 +29,7 @@ namespace OpenPlzApi.CH
     /// <summary>
     /// Representation of a Swiss commune (Gemeinde)
     /// </summary>
+    [SwaggerSchema(ReadOnly = true)]
     public class CommuneResponse : BaseResponse
     {
         /// <summary>
@@ -42,6 +42,7 @@ namespace OpenPlzApi.CH
             Canton = commune.District?.Canton != null ? new CantonSummary(commune.District.Canton) : null;
             District = commune.District != null ? new DistrictSummary(commune.District) : null;
             Key = commune.Key;
+            HistoricalCode = commune.HistoricalCode;
             Name = commune.Name;
             ShortName = commune.ShortName;
         }
@@ -50,18 +51,26 @@ namespace OpenPlzApi.CH
         /// Reference to canton (Kanton)
         /// </summary>
         [Required]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(6)]
         public CantonSummary Canton { get; }
 
         /// <summary>
         /// Reference to district (Bezirk)
         /// </summary>
         [Required]
-        [JsonPropertyOrder(4)]
+        [JsonPropertyOrder(5)]
         public DistrictSummary District { get; }
 
         /// <summary>
-        /// Key (Gemeindenummer)
+        /// Historical code (Historisierte Nummer der Gemeinde)
+        /// </summary>
+        /// <example>13844</example>
+        [Required]
+        [JsonPropertyOrder(2)]
+        public string HistoricalCode { get; }
+
+        /// <summary>
+        /// Key (Bfs-Nummer der Gemeinde)
         /// </summary>
         /// <example>2786</example>
         [Required]
@@ -73,7 +82,7 @@ namespace OpenPlzApi.CH
         /// </summary>
         /// <example>Grellingen</example>
         [Required]
-        [JsonPropertyOrder(2)]
+        [JsonPropertyOrder(3)]
         public string Name { get; }
 
         /// <summary>
@@ -81,7 +90,7 @@ namespace OpenPlzApi.CH
         /// </summary>
         /// <example>Grellingen</example>
         [Required]
-        [JsonPropertyOrder(3)]
+        [JsonPropertyOrder(4)]
         public string ShortName { get; }
     }
 }

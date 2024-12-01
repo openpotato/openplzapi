@@ -273,20 +273,25 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnOrder(0)
                         .HasComment("Unique Id");
 
-                    b.Property<string>("Code")
+                    b.Property<string>("HistoricalCode")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasComment("Code (Kantonskürzel)");
+                        .HasComment("Historical code (Historisierte Nummer des Kantons)");
 
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasComment("Key (Kantonsnummer)");
+                        .HasComment("Key (Bfs-Nummer des Kantons)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasComment("Name (Kantonsname)");
+
+                    b.Property<string>("ShortName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Short name (Kantonskürzel)");
 
                     b.HasKey("Id");
 
@@ -310,10 +315,15 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("uuid")
                         .HasComment("Reference to district (Bezirk)");
 
+                    b.Property<string>("HistoricalCode")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Historical code (Historisierte Nummer der Gemeinde)");
+
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasComment("Key (Gemeindenummer)");
+                        .HasComment("Key (Bfs-Gemeindenummer)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -349,15 +359,25 @@ namespace OpenPlzAPI.DataLayer.Migrations
                         .HasColumnType("uuid")
                         .HasComment("Reference to canton (Kanton)");
 
+                    b.Property<string>("HistoricalCode")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Historical code (Historisierte Nummer des Bezirks)");
+
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasComment("Key (Bezirksnummer)");
+                        .HasComment("Key (Bfs-Nummer des Bezirks)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasComment("Name (Bezirksname)");
+
+                    b.Property<string>("ShortName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Short name (Bezirksname, kurz)");
 
                     b.HasKey("Id");
 

@@ -20,6 +20,7 @@
 #endregion
 
 using OpenPlzApi.DataLayer.CH;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -28,6 +29,7 @@ namespace OpenPlzApi.CH
     /// <summary>
     /// Representation of a Swiss canton (Kanton)
     /// </summary>
+    [SwaggerSchema(ReadOnly = true)]
     public class CantonResponse : BaseResponse
     {
         /// <summary>
@@ -37,21 +39,22 @@ namespace OpenPlzApi.CH
         public CantonResponse(Canton canton)
             : base(canton)
         {
-            Code = canton.Code;
             Key = canton.Key;
+            HistoricalCode = canton.HistoricalCode;
             Name = canton.Name;
+            ShortName = canton.ShortName;
         }
 
         /// <summary>
-        /// Code (Kantonskürzel)
+        /// Historical code (Historisierte Nummer des Kantons)
         /// </summary>
-        /// <example>BL</example>
+        /// <example>13</example>
         [Required]
         [JsonPropertyOrder(2)]
-        public string Code { get; }
+        public string HistoricalCode { get; }
 
         /// <summary>
-        /// Key (Kantonsnummer)
+        /// Key (Bfs-Nummer des Kantons)
         /// </summary>
         /// <example>13</example>
         [Required]
@@ -65,5 +68,13 @@ namespace OpenPlzApi.CH
         [Required]
         [JsonPropertyOrder(3)]
         public string Name { get; }
+
+        /// <summary>
+        /// Short name (Kantonskürzel)
+        /// </summary>
+        /// <example>BL</example>
+        [Required]
+        [JsonPropertyOrder(4)]
+        public string ShortName { get; }
     }
 }

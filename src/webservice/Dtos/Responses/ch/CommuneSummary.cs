@@ -19,9 +19,8 @@
  */
 #endregion
 
-using Microsoft.EntityFrameworkCore;
 using OpenPlzApi.DataLayer.CH;
-using System;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -30,6 +29,7 @@ namespace OpenPlzApi.CH
     /// <summary>
     /// Reduced representation of a Swiss commune (Gemeinde)
     /// </summary>
+    [SwaggerSchema(ReadOnly = true)]
     public class CommuneSummary
     {
         /// <summary>
@@ -44,7 +44,7 @@ namespace OpenPlzApi.CH
         }
 
         /// <summary>
-        /// Key (Gemeindenummer)
+        /// Key (Bfs-Nummer der Gemeinde)
         /// </summary>
         /// <example>2786</example>
         [Required]
