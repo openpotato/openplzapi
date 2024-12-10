@@ -41,7 +41,8 @@ builder.Services.AddCors(options =>
     {
         policy.AllowAnyOrigin()
               .WithMethods(WebRequestMethods.Http.Get)
-              .WithHeaders(HeaderNames.Accept);
+              .WithHeaders(HeaderNames.Accept)
+              .WithExposedHeaders("x-page", "x-page-size", "x-total-pages", "x-total-count");
     });
 });
 
