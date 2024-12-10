@@ -165,7 +165,7 @@ namespace OpenPlzApi.AT
                 .OrderBy(x => x.PostalCode).ThenBy(x => x.Name)
                 .Select(x => new LocalityResponse(x))
                 .AsNoTracking()
-                .ToListAsync();
+                .ToPageAsync(page, pageSize);
         }
 
         /// <summary>
