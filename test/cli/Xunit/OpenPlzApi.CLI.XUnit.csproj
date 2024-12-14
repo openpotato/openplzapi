@@ -8,7 +8,7 @@
     <Authors>STÜBER SYSTEMS GmbH</Authors>
     <Company>STÜBER SYSTEMS GmbH</Company>
     <Copyright>© 2024 STÜBER SYSTEMS GmbH</Copyright>
-    <Version>0.0.6</Version>
+    <Version>1.0.0</Version>
     <RootNamespace>OpenPlzApi.CLI.Test</RootNamespace>
   </PropertyGroup>
 
