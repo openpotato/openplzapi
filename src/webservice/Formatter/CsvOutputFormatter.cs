@@ -341,12 +341,16 @@ namespace OpenPlzApi
         {
             csvWriter.WriteHeaders(
                 "Key",
-                "Name");
+                "HistoricalCode",
+                "Name",
+                "ShortName");
 
             foreach (var canton in cantons)
             {
                 csvWriter.SetValue("Key", canton.Key);
+                csvWriter.SetValue("HistoricalCode", canton.HistoricalCode);
                 csvWriter.SetValue("Name", canton.Name);
+                csvWriter.SetValue("ShortName", canton.ShortName);
 
                 csvWriter.Write();
             }
@@ -361,16 +365,22 @@ namespace OpenPlzApi
         {
             csvWriter.WriteHeaders(
                 "Key",
+                "HistoricalCode",
                 "Name",
+                "ShortName",
                 "Canton.Key",
-                "Canton.Name");
+                "Canton.Name",
+                "Canton.ShortName");
 
             foreach (var district in districts)
             {
                 csvWriter.SetValue("Key", district.Key);
+                csvWriter.SetValue("HistoricalCode", district.HistoricalCode);
                 csvWriter.SetValue("Name", district.Name);
+                csvWriter.SetValue("ShortName", district.ShortName);
                 csvWriter.SetValue("Canton.Key", district.Canton.Key);
                 csvWriter.SetValue("Canton.Name", district.Canton.Name);
+                csvWriter.SetValue("Canton.ShortName", district.Canton.ShortName);
 
                 csvWriter.Write();
             }
@@ -385,22 +395,28 @@ namespace OpenPlzApi
         {
             csvWriter.WriteHeaders(
                 "Key",
+                "HistoricalCode",
                 "Name",
                 "ShortName",
                 "District.Key",
                 "District.Name",
+                "District.ShortName",
                 "Canton.Key",
-                "Canton.Name");
+                "Canton.Name",
+                "Canton.ShortName");
 
             foreach (var commune in communes)
             {
                 csvWriter.SetValue("Key", commune.Key);
+                csvWriter.SetValue("HistoricalCode", commune.HistoricalCode);
                 csvWriter.SetValue("Name", commune.Name);
                 csvWriter.SetValue("ShortName", commune.ShortName);
                 csvWriter.SetValue("District.Key", commune.District.Key);
                 csvWriter.SetValue("District.Name", commune.District.Name);
+                csvWriter.SetValue("District.ShortName", commune.District.ShortName);
                 csvWriter.SetValue("Canton.Key", commune.Canton.Key);
                 csvWriter.SetValue("Canton.Name", commune.Canton.Name);
+                csvWriter.SetValue("Canton.ShortName", commune.Canton.ShortName);
 
                 csvWriter.Write();
             }
@@ -421,8 +437,10 @@ namespace OpenPlzApi
                 "Commune.ShortName",
                 "District.Key",
                 "District.Name",
+                "District.ShortName",
                 "Canton.Key",
-                "Canton.Name");
+                "Canton.Name",
+                "Canton.ShortName");
 
             foreach (var localitiy in localities)
             {
@@ -433,8 +451,10 @@ namespace OpenPlzApi
                 csvWriter.SetValue("Commune.ShortName", localitiy.Commune.ShortName);
                 csvWriter.SetValue("District.Key", localitiy.District.Key);
                 csvWriter.SetValue("District.Name", localitiy.District.Name);
+                csvWriter.SetValue("District.ShortName", localitiy.District.ShortName);
                 csvWriter.SetValue("Canton.Key", localitiy.Canton.Key);
                 csvWriter.SetValue("Canton.Name", localitiy.Canton.Name);
+                csvWriter.SetValue("Canton.ShortName", localitiy.Canton.ShortName);
 
                 csvWriter.Write();
             }
@@ -455,10 +475,13 @@ namespace OpenPlzApi
                 "Status",
                 "Commune.Key",
                 "Commune.Name",
+                "Commune.ShortName",
                 "District.Key",
                 "District.Name",
+                "District.ShortName",
                 "Canton.Key",
-                "Canton.Name");
+                "Canton.Name",
+                "Canton.ShortName");
 
             foreach (var street in streets)
             {
@@ -469,10 +492,13 @@ namespace OpenPlzApi
                 csvWriter.SetValue("Status", street.Status);
                 csvWriter.SetValue("Commune.Key", street.Commune.Key);
                 csvWriter.SetValue("Commune.Name", street.Commune.Name);
+                csvWriter.SetValue("Commune.ShortName", street.Commune.ShortName);
                 csvWriter.SetValue("District.Key", street.District.Key);
                 csvWriter.SetValue("District.Name", street.District.Name);
+                csvWriter.SetValue("District.ShortName", street.District.ShortName);
                 csvWriter.SetValue("Canton.Key", street.Canton.Key);
                 csvWriter.SetValue("Canton.Name", street.Canton.Name);
+                csvWriter.SetValue("Canton.ShortName", street.Canton.ShortName);
 
                 csvWriter.Write();
             }
