@@ -79,7 +79,6 @@ namespace OpenPlzApi.CLI
                 default:
                     break;
             };
-
         }
 
         private async Task ImportATDistricts(CancellationToken cancellationToken)

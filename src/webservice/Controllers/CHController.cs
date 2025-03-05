@@ -43,6 +43,7 @@ namespace OpenPlzApi.CH
         /// <param name="searchTerm" example="8002 Zürich Bederstrasse">Search term for full text search</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <param name="cancellationToken">A cancellation token</param>
         /// <returns>Paged list of streets</returns>
         [HttpGet("FullTextSearch")]
         [ProducesResponseType(typeof(IEnumerable<StreetResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
@@ -52,7 +53,8 @@ namespace OpenPlzApi.CH
         public async Task<IEnumerable<StreetResponse>> FullTextSearchAsync(
             [FromQuery, Required] string searchTerm = null,
             [FromQuery, Range(1, int.MaxValue)] int page = 1,
-            [FromQuery, Range(1, 50)] int pageSize = 10)
+            [FromQuery, Range(1, 50)] int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
             return await _dbContext.Set<FullTextStreet>()
                 .Include(x => x.Commune).ThenInclude(x => x.District).ThenInclude(x => x.Canton)
@@ -66,12 +68,14 @@ namespace OpenPlzApi.CH
         /// <summary>
         /// Returns all cantons (Kantone).
         /// </summary>
+        /// <param name="cancellationToken">A cancellation token</param>
         /// <returns>List of cantons</returns>
         [HttpGet("Cantons")]
         [ProducesResponseType(typeof(IEnumerable<CantonResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
         [ProducesResponseType(typeof(ProblemDetails), statusCode: 400, MediaTypeNames.Application.ProblemDetails)]
         [ProducesResponseType(typeof(ProblemDetails), statusCode: 500, MediaTypeNames.Application.ProblemDetails)]
-        public async Task<IEnumerable<CantonResponse>> GetCantonsAsync()
+        public async Task<IEnumerable<CantonResponse>> GetCantonsAsync(
+            CancellationToken cancellationToken = default)
         {
             return await _dbContext.Set<Canton>()
                 .OrderBy(x => x.Key)
@@ -86,6 +90,7 @@ namespace OpenPlzApi.CH
         /// <param name="key" example="10">Key of the canton</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <param name="cancellationToken">A cancellation token</param>
         /// <returns>List of communes</returns>
         [HttpGet("Cantons/{key}/Communes")]
         [ProducesResponseType(typeof(IEnumerable<CommuneResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
@@ -95,7 +100,8 @@ namespace OpenPlzApi.CH
         public async Task<IEnumerable<CommuneResponse>> GetCommunesByCantonAsync(
             [FromRoute] string key,
             [FromQuery, Range(1, int.MaxValue)] int page = 1,
-            [FromQuery, Range(1, 50)] int pageSize = 10)
+            [FromQuery, Range(1, 50)] int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
             return await _dbContext.Set<Commune>()
                 .Include(x => x.District).ThenInclude(x => x.Canton)
@@ -112,6 +118,7 @@ namespace OpenPlzApi.CH
         /// <param name="key" example="1002">Key of the district</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <param name="cancellationToken">A cancellation token</param>
         /// <returns>List of communes</returns>
         [HttpGet("Districts/{key}/Communes")]
         [ProducesResponseType(typeof(IEnumerable<CommuneResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
@@ -121,7 +128,8 @@ namespace OpenPlzApi.CH
         public async Task<IEnumerable<CommuneResponse>> GetCommunesByDistrictAsync(
             [FromRoute] string key,
             [FromQuery, Range(1, int.MaxValue)] int page = 1,
-            [FromQuery, Range(1, 50)] int pageSize = 10)
+            [FromQuery, Range(1, 50)] int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
             return await _dbContext.Set<Commune>()
                 .Include(x => x.District).ThenInclude(x => x.Canton)
@@ -138,6 +146,7 @@ namespace OpenPlzApi.CH
         /// <param name="key" example="10">Key of the canton</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <param name="cancellationToken">A cancellation token</param>
         /// <returns>List of districts</returns>
         [HttpGet("Cantons/{key}/Districts")]
         [ProducesResponseType(typeof(IEnumerable<DistrictResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
@@ -147,7 +156,8 @@ namespace OpenPlzApi.CH
         public async Task<IEnumerable<DistrictResponse>> GetDistrictsByCantonAsync(
             [FromRoute] string key,
             [FromQuery, Range(1, int.MaxValue)] int page = 1,
-            [FromQuery, Range(1, 50)] int pageSize = 10)
+            [FromQuery, Range(1, 50)] int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
             return await _dbContext.Set<District>()
                 .Include(x => x.Canton)
@@ -165,6 +175,7 @@ namespace OpenPlzApi.CH
         /// <param name="name" example="Zürich">Name or regular expression</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <param name="cancellationToken">A cancellation token</param>
         /// <returns>Paged list of localities</returns>
         [HttpGet("Localities")]
         [ProducesResponseType(typeof(IEnumerable<LocalityResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
@@ -175,7 +186,8 @@ namespace OpenPlzApi.CH
             [FromQuery] string postalCode = null,
             [FromQuery] string name = null,
             [FromQuery, Range(1, int.MaxValue)] int page = 1,
-            [FromQuery, Range(1, 50)] int pageSize = 10)
+            [FromQuery, Range(1, 50)] int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
             if (!string.IsNullOrEmpty(name) || !string.IsNullOrEmpty(postalCode))
             {
@@ -200,6 +212,7 @@ namespace OpenPlzApi.CH
         /// <param name="key" example="7">Regional key of the canton</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <param name="cancellationToken">A cancellation token</param>
         /// <returns>Paged list of localities</returns>
         [HttpGet("Cantons/{key}/Localities")]
         [ProducesResponseType(typeof(IEnumerable<LocalityResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
@@ -209,7 +222,8 @@ namespace OpenPlzApi.CH
         public async Task<IEnumerable<LocalityResponse>> GetLocalitiesByCantonAsync(
             [FromRoute] string key,
             [FromQuery, Range(1, int.MaxValue)] int page = 1,
-            [FromQuery, Range(1, 50)] int pageSize = 10)
+            [FromQuery, Range(1, 50)] int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
             return await _dbContext.Set<Locality>()
                 .Include(x => x.Commune).ThenInclude(x => x.District).ThenInclude(x => x.Canton)
@@ -226,6 +240,7 @@ namespace OpenPlzApi.CH
         /// <param name="key" example="701">Regional key of the district</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <param name="cancellationToken">A cancellation token</param>
         /// <returns>Paged list of localities</returns>
         [HttpGet("Districts/{key}/Localities")]
         [ProducesResponseType(typeof(IEnumerable<LocalityResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
@@ -234,7 +249,8 @@ namespace OpenPlzApi.CH
         public async Task<IEnumerable<LocalityResponse>> GetLocalitiesByDistrictAsync(
             [FromRoute] string key,
             [FromQuery, Range(1, int.MaxValue)] int page = 1,
-            [FromQuery, Range(1, 50)] int pageSize = 10)
+            [FromQuery, Range(1, 50)] int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
             return await _dbContext.Set<Locality>()
                 .Include(x => x.Commune).ThenInclude(x => x.District).ThenInclude(x => x.Canton)
@@ -253,6 +269,7 @@ namespace OpenPlzApi.CH
         /// <param name="locality">Locality or regular expression</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <param name="cancellationToken">A cancellation token</param>
         /// <returns>Paged list of streets</returns>
         [HttpGet("Streets")]
         [ProducesResponseType(typeof(IEnumerable<StreetResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
@@ -264,7 +281,8 @@ namespace OpenPlzApi.CH
             [FromQuery] string postalCode = null,
             [FromQuery] string locality = null,
             [FromQuery, Range(1, int.MaxValue)] int page = 1,
-            [FromQuery, Range(1, 50)] int pageSize = 10)
+            [FromQuery, Range(1, 50)] int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
             if (!string.IsNullOrEmpty(name) || !string.IsNullOrEmpty(postalCode) || !string.IsNullOrEmpty(locality))
             {

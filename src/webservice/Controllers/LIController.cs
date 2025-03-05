@@ -43,6 +43,7 @@ namespace OpenPlzApi.LI
         /// <param name="searchTerm" example="Alte Landstrasse 9490 Vaduz">Search term for full text search</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <param name="cancellationToken">A cancellation token</param>
         /// <returns>Paged list of streets</returns>
         [HttpGet("FullTextSearch")]
         [ProducesResponseType(typeof(IEnumerable<StreetResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
@@ -52,7 +53,8 @@ namespace OpenPlzApi.LI
         public async Task<IEnumerable<StreetResponse>> FullTextSearchAsync(
             [FromQuery, Required] string searchTerm,
             [FromQuery, Range(1, int.MaxValue)] int page = 1,
-            [FromQuery, Range(1, 50)] int pageSize = 10)
+            [FromQuery, Range(1, 50)] int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
             return await _dbContext.Set<FullTextStreet>()
                 .Include(x => x.Commune)
@@ -66,12 +68,14 @@ namespace OpenPlzApi.LI
         /// <summary>
         /// Returns all communes (Gemeinden).
         /// </summary>
+        /// <param name="cancellationToken">A cancellation token</param>
         /// <returns>List of communes</returns>
         [HttpGet("Communes")]
         [ProducesResponseType(typeof(IEnumerable<CommuneResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
         [ProducesResponseType(typeof(ProblemDetails), statusCode: 400, MediaTypeNames.Application.ProblemDetails)]
         [ProducesResponseType(typeof(ProblemDetails), statusCode: 500, MediaTypeNames.Application.ProblemDetails)]
-        public async Task<IEnumerable<CommuneResponse>> GetCommunesAsync()
+        public async Task<IEnumerable<CommuneResponse>> GetCommunesAsync(
+            CancellationToken cancellationToken = default)
         {
             return await _dbContext.Set<Commune>()
                 .OrderBy(x => x.Key)
@@ -87,6 +91,7 @@ namespace OpenPlzApi.LI
         /// <param name="name" example="Vaduz">Name or regular expression</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <param name="cancellationToken">A cancellation token</param>
         /// <returns>Paged list of localities</returns>
         [HttpGet("Localities")]
         [ProducesResponseType(typeof(IEnumerable<LocalityResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
@@ -97,7 +102,8 @@ namespace OpenPlzApi.LI
             [FromQuery] string postalCode = null,
             [FromQuery] string name = null,
             [FromQuery, Range(1, int.MaxValue)] int page = 1,
-            [FromQuery, Range(1, 50)] int pageSize = 10)
+            [FromQuery, Range(1, 50)] int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
             if (!string.IsNullOrEmpty(name) || !string.IsNullOrEmpty(postalCode))
             {
@@ -124,6 +130,7 @@ namespace OpenPlzApi.LI
         /// <param name="locality" example="Vaduz">Locality or regular expression</param>
         /// <param name="page">Page number (starting with 1)</param>
         /// <param name="pageSize">Page size (maximum 50)</param>
+        /// <param name="cancellationToken">A cancellation token</param>
         /// <returns>Paged list of streets</returns>
         [HttpGet("Streets")]
         [ProducesResponseType(typeof(IEnumerable<StreetResponse>), statusCode: 200, MediaTypeNames.Application.Json, MediaTypeNames.Text.Json, MediaTypeNames.Text.Plain, MediaTypeNames.Text.Csv)]
@@ -135,7 +142,8 @@ namespace OpenPlzApi.LI
             [FromQuery] string postalCode = null,
             [FromQuery] string locality = null,
             [FromQuery, Range(1, int.MaxValue)] int page = 1,
-            [FromQuery, Range(1, 50)] int pageSize = 10)
+            [FromQuery, Range(1, 50)] int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
             if (!string.IsNullOrEmpty(name) || !string.IsNullOrEmpty(postalCode) || !string.IsNullOrEmpty(locality))
             {
