@@ -41,7 +41,7 @@ namespace OpenPlzApi
             {
                 if (context.Error is Exception exception)
                 {
-                    return controller.Problem(statusCode: 500, detail: exception.Message);
+                    return controller.Problem(statusCode: 400, detail: exception.Message);
                 }
             }
 
