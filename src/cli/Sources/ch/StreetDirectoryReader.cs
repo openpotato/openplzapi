@@ -99,7 +99,9 @@ namespace OpenPlzApi.CLI.Sources.CH
 
             foreach (var zipLabel in zipLabelList)
             {
-                if (!localityCache.TryGetValue(zipLabel, out var locality))
+                var localityId = $"{zipLabel}, {communeId}";
+
+                if (!localityCache.TryGetValue(localityId, out var locality))
                 {
                     locality = new Street._Locality()
                     {
@@ -108,7 +110,7 @@ namespace OpenPlzApi.CLI.Sources.CH
                         Commune = commune
                     };
 
-                    localityCache.Add(zipLabel, locality);
+                    localityCache.Add(localityId, locality);
                 }
                 street.Localities.Add(locality);
             }

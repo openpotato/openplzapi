@@ -31,7 +31,7 @@ namespace OpenPlzApi.DataLayer.LI
     /// Representation of a Liechtenstein locality (Ort oder Stadt)
     /// </summary>
     [Table(DbTables.LI.Locality, Schema = DbSchemas.LI)]
-    [Index(nameof(PostalCode), nameof(Name), IsUnique = true)]
+    [Index(nameof(CommuneId), nameof(PostalCode), nameof(Name), IsUnique = true)]
     [Comment("Representation of a Liechtenstein locality (Ort oder Stadt)")]
     public class Locality : BaseEntity
     {

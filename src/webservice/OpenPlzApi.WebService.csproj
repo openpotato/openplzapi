@@ -7,7 +7,7 @@
     <Authors>STÜBER SYSTEMS GmbH</Authors>
     <Company>STÜBER SYSTEMS GmbH</Company>
     <Copyright>© 2025 STÜBER SYSTEMS GmbH</Copyright>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -16,8 +16,8 @@
   <ItemGroup>
     <PackageReference Include="DateOnlyTimeOnly.AspNet.Swashbuckle" Version="2.1.1" />
     <PackageReference Include="Enbrea.Csv" Version="0.11.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="8.1.0" />
   </ItemGroup>
 
   <ItemGroup>

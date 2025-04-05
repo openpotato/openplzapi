@@ -13,7 +13,7 @@ using OpenPlzApi.DataLayer;
 namespace OpenPlzAPI.DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241130104317_Initial")]
+    [Migration("20250405072421_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace OpenPlzAPI.DataLayer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -475,9 +475,7 @@ namespace OpenPlzAPI.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommuneId");
-
-                    b.HasIndex("PostalCode", "Name")
+                    b.HasIndex("CommuneId", "PostalCode", "Name")
                         .IsUnique();
 
                     b.ToTable("Localities", "ch", t =>
@@ -993,12 +991,9 @@ namespace OpenPlzAPI.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommuneId")
-                        .HasDatabaseName("IX_Localities_CommuneId1");
-
-                    b.HasIndex("PostalCode", "Name")
+                    b.HasIndex("CommuneId", "PostalCode", "Name")
                         .IsUnique()
-                        .HasDatabaseName("IX_Localities_PostalCode_Name1");
+                        .HasDatabaseName("IX_Localities_CommuneId_PostalCode_Name1");
 
                     b.ToTable("Localities", "li", t =>
                         {

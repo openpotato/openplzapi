@@ -80,7 +80,7 @@ namespace OpenPlzApi.CLI.Sources.CH
             /// <returns>A guid value</returns>
             public Guid GetUniqueId()
             {
-                return IdFactory.CreateIdFromValue($"{PostalCode}.{Name}");
+                return IdFactory.CreateIdFromValue($"{PostalCode}.{Name}.{Commune.GetUniqueId()}");
             }
 
             /// <summary>

@@ -776,16 +776,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 column: "MunicipalityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Localities_CommuneId",
+                name: "IX_Localities_CommuneId_PostalCode_Name",
                 schema: "ch",
                 table: "Localities",
-                column: "CommuneId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Localities_PostalCode_Name",
-                schema: "ch",
-                table: "Localities",
-                columns: new[] { "PostalCode", "Name" },
+                columns: new[] { "CommuneId", "PostalCode", "Name" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -796,16 +790,10 @@ namespace OpenPlzAPI.DataLayer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Localities_CommuneId1",
+                name: "IX_Localities_CommuneId_PostalCode_Name1",
                 schema: "li",
                 table: "Localities",
-                column: "CommuneId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Localities_PostalCode_Name1",
-                schema: "li",
-                table: "Localities",
-                columns: new[] { "PostalCode", "Name" },
+                columns: new[] { "CommuneId", "PostalCode", "Name" },
                 unique: true);
 
             migrationBuilder.CreateIndex(

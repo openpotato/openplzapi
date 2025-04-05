@@ -21,9 +21,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using OpenPlzApi.AGVCH;
-using OpenPlzApi.CLI.Sources.CH;
 using OpenPlzApi.DataLayer;
-using OpenPlzApi.DataLayer.CH;
 using System;
 using System.IO;
 using System.Threading;
