@@ -56,9 +56,9 @@ namespace OpenPlzApi.CLI
             switch (source)
             {
                 case ImportSource.AT:
-                    //await ImportATDistricts(cancellationToken);
-                    //await ImportATMunicipalities(cancellationToken);
-                    //await ImportATStreets(cancellationToken);
+                    await ImportATDistricts(cancellationToken);
+                    await ImportATMunicipalities(cancellationToken);
+                    await ImportATStreets(cancellationToken);
                     break;
 
                 case ImportSource.CH:
@@ -67,8 +67,8 @@ namespace OpenPlzApi.CLI
                     break;
 
                 case ImportSource.DE:
-                    //await ImportDEMunicipalities(cancellationToken);
-                    //await ImportDEStreets(cancellationToken);
+                    await ImportDEMunicipalities(cancellationToken);
+                    await ImportDEStreets(cancellationToken);
                     break;
 
                 case ImportSource.LI:
