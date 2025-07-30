@@ -8,14 +8,14 @@
     <Authors>STÜBER SYSTEMS GmbH</Authors>
     <Company>STÜBER SYSTEMS GmbH</Company>
     <Copyright>© 2025 STÜBER SYSTEMS GmbH</Copyright>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <RootNamespace>OpenPlzApi.CLI.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

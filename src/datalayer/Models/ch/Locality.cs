@@ -30,7 +30,7 @@ namespace OpenPlzApi.DataLayer.CH
     /// Representation of a Swiss locality (Ort oder Stadt)
     /// </summary>
     [Table(DbTables.CH.Locality, Schema = DbSchemas.CH)]
-    [Index(nameof(PostalCode), nameof(Name), IsUnique = true)]
+    [Index(nameof(CommuneId), nameof(PostalCode), nameof(Name), IsUnique = true)]
     [Comment("Representation of a Swiss locality (Ort oder Stadt)")]
     public class Locality : BaseEntity
     {
