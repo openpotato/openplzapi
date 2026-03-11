@@ -363,3 +363,9 @@ FodyWeavers.xsd
 
 # No development configurations
 appsettings.Development.json
+
+# No Docker environment configurations
+.env
+
+# No downloads
+downloads/

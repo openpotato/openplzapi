@@ -38,6 +38,7 @@ namespace OpenPlzApi.CLI
                .AddJsonFile("appsettings.json", optional: false)
                .AddJsonFile("appsettings.Development.json", optional: true)
                .AddJsonFile("appsettings.Production.json", optional: true)
+               .AddEnvironmentVariables()
                .Build();
 
             // Bind configuration

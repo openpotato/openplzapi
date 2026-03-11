@@ -1,0 +1,20 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /App
+
+# Copy everything
+COPY ./cli ./
+COPY ./datalayer /datalayer
+# Restore as distinct layers
+RUN dotnet restore
+# Build and publish a release
+RUN dotnet publish -o out
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/runtime:10.0
+WORKDIR /App
+COPY --from=build /App/out .
+ENV Sources__RootFolderName=/downloads
+RUN mkdir /downloads
+ENTRYPOINT ["dotnet", "OpenPlzApi.CLI.dll"]
+# Default to showing help when no command is provided; user can pass any subcommand
+CMD ["-h"]

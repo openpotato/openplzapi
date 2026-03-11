@@ -1,0 +1,56 @@
+services:
+  db:
+    image: postgres:18-alpine
+    container_name: openplz-db
+    restart: unless-stopped
+    shm_size: 256mb
+    volumes:
+      - pgdata:/var/lib/postgresql
+    environment:
+      POSTGRES_DB: ${DATABASE}
+      POSTGRES_USER: ${DBUSERNAME}
+      POSTGRES_PASSWORD: ${DBPASSWORD}
+
+  api:
+    image: openplzapi-webservice:latest
+    build:
+      context: ./src
+      dockerfile: ./webservice/dockerfile
+    container_name: openplz-api
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ENVIRONMENT}
+      ASPNETCORE_HTTP_PORTS: 8080
+      Database__Server: db
+      Database__Database: ${DATABASE}
+      Database__Username: ${DBUSERNAME}
+      Database__Password: ${DBPASSWORD}
+      TZ: ${TZ:-Europe/Berlin}
+    ports:
+      - 8080:8080
+
+  cli:
+    image: openplzapi-cli:latest
+    build:
+      context: ./src
+      dockerfile: ./cli/dockerfile
+    container_name: openplz-cli
+    # uncomment the following line for initialization of the database, then comment it again for regular usage
+    # command: ["initdb","--import"]
+    restart: "no"
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ENVIRONMENT}
+      Database__Server: db
+      Database__Database: ${DATABASE}
+      Database__Username: ${DBUSERNAME}
+      Database__Password: ${DBPASSWORD}
+      TZ: ${TZ:-Europe/Berlin}
+    volumes:
+      - ./downloads:/downloads
+
+volumes:
+    pgdata:
